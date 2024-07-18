@@ -1,0 +1,3987 @@
+-----------------------------------------------------------------------------------------------------
+MATLAB Version: 9.9.0.1592791 (R2020b) Update 5
+MATLAB License Number: 40999577
+Operating System: Microsoft Windows 10 Pro Version 10.0 (Build 19041)
+Java Version: Java 1.8.0_202-b08 with Oracle Corporation Java HotSpot(TM) 64-Bit Server VM mixed mode
+-----------------------------------------------------------------------------------------------------
+Image Acquisition Toolbox                             Version 6.3         (R2020b)
+
+----------SUPPORT PACKAGE DIAGNOSTICS----------
+
+                                  Name                                   Version       Base Product       
+------------------------------------------------------------------------ ------- -------------------------
+Image Acquisition Toolbox Support Package for GenICam Interface          20.2.0  Image Acquisition Toolbox
+Image Acquisition Toolbox Support Package for GigE Vision Hardware       20.2.0  Image Acquisition Toolbox
+Image Acquisition Toolbox Support Package for OS Generic Video Interface 20.2.1  Image Acquisition Toolbox
+
+
+
+----------DATE/TIME----------
+
+17-Mar-2021 17:11:29
+
+
+----------DIRECTX----------
+
+DirectX Version: 12.0
+
+
+----------STAND ALONE HARDWARE DETECTION----------
+
+Hardware detection application for the R2020b version of Image Acquisition Toolbox.
+
+Detecting hardware for the winvideo adaptor.
+
+	Found device: Logitech HD Webcam C525
+		Found format: RGB24_640x480
+		Found format: RGB24_160x120
+		Found format: RGB24_176x144
+		Found format: RGB24_320x176
+		Found format: RGB24_320x240
+		Found format: RGB24_432x240
+		Found format: RGB24_352x288
+		Found format: RGB24_544x288
+		Found format: RGB24_640x360
+		Found format: RGB24_752x416
+		Found format: RGB24_800x448
+		Found format: RGB24_864x480
+		Found format: RGB24_960x544
+		Found format: RGB24_1024x576
+		Found format: RGB24_800x600
+		Found format: RGB24_1184x656
+		Found format: RGB24_960x720
+		Found format: RGB24_1280x720
+		Found format: RGB24_1392x768
+		Found format: RGB24_1504x832
+		Found format: RGB24_1600x896
+		Found format: RGB24_1280x960
+		Found format: I420_640x480
+		Found format: I420_160x120
+		Found format: I420_176x144
+		Found format: I420_320x176
+		Found format: I420_320x240
+		Found format: I420_432x240
+		Found format: I420_352x288
+		Found format: I420_544x288
+		Found format: I420_640x360
+		Found format: I420_752x416
+		Found format: I420_800x448
+		Found format: I420_864x480
+		Found format: I420_960x544
+		Found format: I420_1024x576
+		Found format: I420_800x600
+		Found format: I420_1184x656
+		Found format: I420_960x720
+		Found format: I420_1280x720
+		Found format: I420_1392x768
+		Found format: I420_1504x832
+		Found format: I420_1600x896
+		Found format: I420_1280x960
+
+	Found device: MJPEG Camera
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+		Found format: RGB24_960x736
+
+Unable to run the detector for the dcam.  The error was: 
+	The specified module could not be found.
+
+
+
+----------AVAILABLE HARDWARE----------
+
+    InstalledAdaptors: {'gentl'  'gige'  'winvideo'}
+        MATLABVersion: '9.9 (R2020b)'
+          ToolboxName: 'Image Acquisition Toolbox'
+       ToolboxVersion: '6.3 (R2020b)'
+
+
+----------THIRD PARTY ADAPTORS REGISTERED WITH IMAQREGISTER----------
+
+
+ans =
+
+  0×1 empty <a href="matlab:helpPopup cell" style="font-weight:bold">cell</a> array
+
+
+----------GENTL ADAPTOR----------
+
+Adaptor Name: gentl
+Adaptor DLL: C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gentl\adaptor\win64\mwgentlimaq.dll
+
+IMAQHWINFO: 
+       AdaptorDllName: 'C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gentl\adaptor\win64\mwgentlimaq.dll'
+    AdaptorDllVersion: '6.3 (R2020b)'
+          AdaptorName: 'gentl'
+            DeviceIDs: {[1]}
+           DeviceInfo: [1×1 struct]
+
+
+Available Devices: 
+
+	Device Name: Mako
+	Device ID: 1
+	Device File Supported: 0
+	Default Format: Mono8
+	Supported Formats: 
+
+    {'Mono10'}
+    {'Mono8' }
+
+
+----------GIGE ADAPTOR----------
+
+Adaptor Name: gige
+Adaptor DLL: C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gige\adaptor\win64\mwgigeimaq.dll
+
+IMAQHWINFO: 
+       AdaptorDllName: 'C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gige\adaptor\win64\mwgigeimaq.dll'
+    AdaptorDllVersion: '6.3 (R2020b)'
+          AdaptorName: 'gige'
+            DeviceIDs: {[1]}
+           DeviceInfo: [1×1 struct]
+
+
+Available Devices: 
+
+	Device Name: Mako G-131B (5080)
+	Device ID: 1
+	Device File Supported: 0
+	Default Format: Mono8
+	Supported Formats: 
+
+    {'Mono10'}
+    {'Mono8' }
+
+
+----------WINVIDEO ADAPTOR----------
+
+Adaptor Name: winvideo
+Adaptor DLL: C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\genericvideo\adaptor\win64\mwwinvideoimaq.dll
+
+IMAQHWINFO: 
+       AdaptorDllName: 'C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\genericvideo\adaptor\win64\mwwinvideoimaq.dll'
+    AdaptorDllVersion: '6.3 (R2020b)'
+          AdaptorName: 'winvideo'
+            DeviceIDs: {[1]  [2]}
+           DeviceInfo: [1×2 struct]
+
+
+Available Devices: 
+
+	Device Name: Logitech HD Webcam C525
+	Device ID: 1
+	Device File Supported: 0
+	Default Format: RGB24_640x480
+	Supported Formats: 
+
+    {'I420_1024x576' }
+    {'I420_1184x656' }
+    {'I420_1280x720' }
+    {'I420_1280x960' }
+    {'I420_1392x768' }
+    {'I420_1504x832' }
+    {'I420_1600x896' }
+    {'I420_160x120'  }
+    {'I420_176x144'  }
+    {'I420_320x176'  }
+    {'I420_320x240'  }
+    {'I420_352x288'  }
+    {'I420_432x240'  }
+    {'I420_544x288'  }
+    {'I420_640x360'  }
+    {'I420_640x480'  }
+    {'I420_752x416'  }
+    {'I420_800x448'  }
+    {'I420_800x600'  }
+    {'I420_864x480'  }
+    {'I420_960x544'  }
+    {'I420_960x720'  }
+    {'RGB24_1024x576'}
+    {'RGB24_1184x656'}
+    {'RGB24_1280x720'}
+    {'RGB24_1280x960'}
+    {'RGB24_1392x768'}
+    {'RGB24_1504x832'}
+    {'RGB24_1600x896'}
+    {'RGB24_160x120' }
+    {'RGB24_176x144' }
+    {'RGB24_320x176' }
+    {'RGB24_320x240' }
+    {'RGB24_352x288' }
+    {'RGB24_432x240' }
+    {'RGB24_544x288' }
+    {'RGB24_640x360' }
+    {'RGB24_640x480' }
+    {'RGB24_752x416' }
+    {'RGB24_800x448' }
+    {'RGB24_800x600' }
+    {'RGB24_864x480' }
+    {'RGB24_960x544' }
+    {'RGB24_960x720' }
+
+
+	Device Name: MJPEG Camera
+	Device ID: 2
+	Device File Supported: 0
+	Default Format: RGB24_960x736
+	Supported Formats: 
+
+    {'RGB24_960x736'}
+
+
+
+----------EXISTING VIDEOINPUT OBJECT DISPLAY----------
+
+	Adaptor Name: gentl
+	Device Name: Mako
+	Device ID: 1
+	VideoFormat: Mono8
+	Max Height: 1024
+	Max Width: 1280
+	Native Data Type: uint8
+	Total Sources: 1
+	Vendor Driver Description: Image Acquisition Toolbox GenTL Adaptor with Vimba GigE Transport Layer
+	Vendor Driver Version: 1.0.LIBRARY_BUILD_DATE_STRING with Allied Vision Technologies 1.8.0
+
+Trigger information (using TRIGGERINFO): 
+
+   Valid Trigger Configurations:
+
+      TriggerType:   TriggerCondition:   TriggerSource:   
+      'immediate'    'none'              'none'           
+      'manual'       'none'              'none'           
+      'hardware'     'DeviceSpecific'    'DeviceSpecific' 
+
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = DEV_000F315D277E-Stream-000
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        AcquisitionFrameCount = 1
+        AcquisitionFrameRateAbs = 8.9501
+        AcquisitionFrameRateLimit = 8.4582
+        BalanceRatioAbs = (Currently not accessible)
+        BalanceRatioSelector = (Currently not accessible)
+        BalanceWhiteAuto = (Currently not accessible)
+        BalanceWhiteAutoAdjustTol = (Currently not accessible)
+        BalanceWhiteAutoRate = (Currently not accessible)
+        BandwidthControlMode = StreamBytesPerSecond
+        BinningHorizontal = 1
+        BinningHorizontalMode = Sum
+        BinningVertical = 1
+        BinningVerticalMode = Sum
+        BlackLevel = 4
+        BlackLevelSelector = All
+        ColorTransformationMode = (Currently not accessible)
+        ColorTransformationSelector = (Currently not accessible)
+        ColorTransformationValue = (Currently not accessible)
+        ColorTransformationValueSelector = (Currently not accessible)
+        DecimationHorizontal = 1
+        DecimationVertical = 1
+        DefectMaskEnable = True
+        DeviceFirmwareVersion = 00.01.54.20700 
+        DeviceID = 50-0536976126
+        DeviceModelName = Mako G-131B
+        DevicePartNumber = 5080
+        DeviceScanType = Areascan
+        DeviceTemperature = 45.093
+        DeviceTemperatureSelector = Main
+        DeviceUserID = [0x0 string]
+        DeviceVendorName = Allied Vision Technologies
+        DSPSubregionBottom = 1024
+        DSPSubregionLeft = 0
+        DSPSubregionRight = 1280
+        DSPSubregionTop = 0
+        ExposureAuto = Off
+        ExposureAutoAdjustTol = 5
+        ExposureAutoAlg = Mean
+        ExposureAutoMax = 500000
+        ExposureAutoMin = 12
+        ExposureAutoOutliers = 0
+        ExposureAutoRate = 100
+        ExposureAutoTarget = 50
+        ExposureMode = Timed
+        ExposureTimeAbs = 118199
+        FirmwareVerBuild = 20700
+        FirmwareVerMajor = 1
+        FirmwareVerMinor = 54
+        Gain = 0
+        GainAuto = Off
+        GainAutoAdjustTol = 5
+        GainAutoMax = 24
+        GainAutoMin = 0
+        GainAutoOutliers = 0
+        GainAutoRate = 100
+        GainAutoTarget = 50
+        GainSelector = All
+        Gamma = 1
+        Hue = (Currently not accessible)
+        ImageSize = 1310720
+        IrisAutoTarget = (Currently not accessible)
+        IrisMode = (Currently not accessible)
+        IrisVideoLevel = (Currently not accessible)
+        IrisVideoLevelMax = (Currently not accessible)
+        IrisVideoLevelMin = (Currently not accessible)
+        LensDCDriveStrength = (Currently not accessible)
+        LensPIrisFrequency = (Currently not accessible)
+        LensPIrisNumSteps = (Currently not accessible)
+        LensPIrisPosition = (Currently not accessible)
+        NonImagePayloadSize = 0
+        ReverseX = False
+        ReverseY = False
+        Saturation = (Currently not accessible)
+        SensorBits = 10
+        SensorDigitizationTaps = (Currently not accessible)
+        SensorShutterMode = Global
+        SensorTaps = (Currently not accessible)
+        SensorType = Mono
+        StreamBytesPerSecond = 12400000
+        StreamFrameRateConstrain = True
+        StreamHoldCapacity = 48
+        StreamHoldEnable = Off
+        StrobeDelay = 0
+        StrobeDuration = 0
+        StrobeDurationMode = Source
+        StrobeSource = Exposing
+        SyncInGlitchFilter = 0
+        SyncInLevels = 0
+        SyncInSelector = SyncIn1
+        SyncOutLevels = 0
+        SyncOutPolarity = Normal
+        SyncOutSelector = SyncOut1
+        SyncOutSource = Exposing
+        TriggerActivation = RisingEdge
+        TriggerDelayAbs = 0
+        TriggerMode = Off
+        TriggerOverlap = Off
+        TriggerSelector = FrameStart
+        TriggerSource = Freerun
+        VsubValue = (Currently not accessible)
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    AcquisitionFrameCount
+    AcquisitionFrameRateAbs
+    BandwidthControlMode:[ {StreamBytesPerSecond} | SCPD | Both ]
+    BinningHorizontal
+    BinningHorizontalMode:[ {Sum} | Average ]
+    BinningVertical
+    BinningVerticalMode:[ {Sum} | Average ]
+    BlackLevel
+    BlackLevelSelector:[ {All} ]
+    DecimationHorizontal
+    DecimationVertical
+    DefectMaskEnable:[ {True} | False ]
+    DeviceTemperatureSelector:[ {Main} ]
+    DeviceUserID
+    DSPSubregionBottom
+    DSPSubregionLeft
+    DSPSubregionRight
+    DSPSubregionTop
+    ExposureAuto:[ {Off} | Continuous | Once ]
+    ExposureAutoAdjustTol
+    ExposureAutoAlg:[ {Mean} | FitRange ]
+    ExposureAutoMax
+    ExposureAutoMin
+    ExposureAutoOutliers
+    ExposureAutoRate
+    ExposureAutoTarget
+    ExposureMode:[ {Timed} ]
+    ExposureTimeAbs
+    Gain
+    GainAuto:[ {Off} | Continuous | Once ]
+    GainAutoAdjustTol
+    GainAutoMax
+    GainAutoMin
+    GainAutoOutliers
+    GainAutoRate
+    GainAutoTarget
+    GainSelector:[ {All} ]
+    Gamma
+    ReverseX:[ {False} | True ]
+    ReverseY:[ {False} | True ]
+    SensorShutterMode:[ {Global} | GlobalReset | Rolling ]
+    StreamBytesPerSecond
+    StreamFrameRateConstrain:[ {True} | False ]
+    StreamHoldEnable:[ {Off} | On ]
+    StrobeDelay
+    StrobeDuration
+    StrobeDurationMode:[ {Source} | Controlled ]
+    StrobeSource:[ {Exposing} | AcquisitionTriggerReady | FrameReadout | Acquiring | LineIn1 ]
+    SyncInGlitchFilter
+    SyncInSelector:[ {SyncIn1} ]
+    SyncOutLevels
+    SyncOutPolarity:[ {Normal} | Invert ]
+    SyncOutSelector:[ {SyncOut1} | SyncOut2 | SyncOut3 ]
+    SyncOutSource:[ {Exposing} | GPO | AcquisitionTriggerReady | FrameTriggerReady | FrameReadout | Imaging | Acquiring | LineIn1 | Strobe1 ]
+    TriggerActivation:[ {RisingEdge} | FallingEdge | AnyEdge | LevelHigh | LevelLow ]
+    TriggerDelayAbs
+    TriggerMode:[ {Off} | On ]
+    TriggerOverlap:[ {Off} | PreviousFrame ]
+    TriggerSelector:[ {FrameStart} | AcquisitionStart | AcquisitionEnd | AcquisitionRecord ]
+    TriggerSource:[ {Freerun} | Line1 | FixedRate | Software ]
+
+
+	Adaptor Name: gentl
+	Device Name: Mako
+	Device ID: 1
+	VideoFormat: Mono8
+	Max Height: 1024
+	Max Width: 1280
+	Native Data Type: uint8
+	Total Sources: 1
+	Vendor Driver Description: Image Acquisition Toolbox GenTL Adaptor with Vimba GigE Transport Layer
+	Vendor Driver Version: 1.0.LIBRARY_BUILD_DATE_STRING with Allied Vision Technologies 1.8.0
+
+Trigger information (using TRIGGERINFO): 
+
+   Valid Trigger Configurations:
+
+      TriggerType:   TriggerCondition:   TriggerSource:   
+      'immediate'    'none'              'none'           
+      'manual'       'none'              'none'           
+      'hardware'     'DeviceSpecific'    'DeviceSpecific' 
+
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = DEV_000F315D277E-Stream-000
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        AcquisitionFrameCount = 1
+        AcquisitionFrameRateAbs = 8.9501
+        AcquisitionFrameRateLimit = 8.4582
+        BalanceRatioAbs = (Currently not accessible)
+        BalanceRatioSelector = (Currently not accessible)
+        BalanceWhiteAuto = (Currently not accessible)
+        BalanceWhiteAutoAdjustTol = (Currently not accessible)
+        BalanceWhiteAutoRate = (Currently not accessible)
+        BandwidthControlMode = StreamBytesPerSecond
+        BinningHorizontal = 1
+        BinningHorizontalMode = Sum
+        BinningVertical = 1
+        BinningVerticalMode = Sum
+        BlackLevel = 4
+        BlackLevelSelector = All
+        ColorTransformationMode = (Currently not accessible)
+        ColorTransformationSelector = (Currently not accessible)
+        ColorTransformationValue = (Currently not accessible)
+        ColorTransformationValueSelector = (Currently not accessible)
+        DecimationHorizontal = 1
+        DecimationVertical = 1
+        DefectMaskEnable = True
+        DeviceFirmwareVersion = 00.01.54.20700 
+        DeviceID = 50-0536976126
+        DeviceModelName = Mako G-131B
+        DevicePartNumber = 5080
+        DeviceScanType = Areascan
+        DeviceTemperature = 45.093
+        DeviceTemperatureSelector = Main
+        DeviceUserID = [0x0 string]
+        DeviceVendorName = Allied Vision Technologies
+        DSPSubregionBottom = 1024
+        DSPSubregionLeft = 0
+        DSPSubregionRight = 1280
+        DSPSubregionTop = 0
+        ExposureAuto = Off
+        ExposureAutoAdjustTol = 5
+        ExposureAutoAlg = Mean
+        ExposureAutoMax = 500000
+        ExposureAutoMin = 12
+        ExposureAutoOutliers = 0
+        ExposureAutoRate = 100
+        ExposureAutoTarget = 50
+        ExposureMode = Timed
+        ExposureTimeAbs = 118199
+        FirmwareVerBuild = 20700
+        FirmwareVerMajor = 1
+        FirmwareVerMinor = 54
+        Gain = 0
+        GainAuto = Off
+        GainAutoAdjustTol = 5
+        GainAutoMax = 24
+        GainAutoMin = 0
+        GainAutoOutliers = 0
+        GainAutoRate = 100
+        GainAutoTarget = 50
+        GainSelector = All
+        Gamma = 1
+        Hue = (Currently not accessible)
+        ImageSize = 1310720
+        IrisAutoTarget = (Currently not accessible)
+        IrisMode = (Currently not accessible)
+        IrisVideoLevel = (Currently not accessible)
+        IrisVideoLevelMax = (Currently not accessible)
+        IrisVideoLevelMin = (Currently not accessible)
+        LensDCDriveStrength = (Currently not accessible)
+        LensPIrisFrequency = (Currently not accessible)
+        LensPIrisNumSteps = (Currently not accessible)
+        LensPIrisPosition = (Currently not accessible)
+        NonImagePayloadSize = 0
+        ReverseX = False
+        ReverseY = False
+        Saturation = (Currently not accessible)
+        SensorBits = 10
+        SensorDigitizationTaps = (Currently not accessible)
+        SensorShutterMode = Global
+        SensorTaps = (Currently not accessible)
+        SensorType = Mono
+        StreamBytesPerSecond = 12400000
+        StreamFrameRateConstrain = True
+        StreamHoldCapacity = 48
+        StreamHoldEnable = Off
+        StrobeDelay = 0
+        StrobeDuration = 0
+        StrobeDurationMode = Source
+        StrobeSource = Exposing
+        SyncInGlitchFilter = 0
+        SyncInLevels = 0
+        SyncInSelector = SyncIn1
+        SyncOutLevels = 0
+        SyncOutPolarity = Normal
+        SyncOutSelector = SyncOut1
+        SyncOutSource = Exposing
+        TriggerActivation = RisingEdge
+        TriggerDelayAbs = 0
+        TriggerMode = Off
+        TriggerOverlap = Off
+        TriggerSelector = FrameStart
+        TriggerSource = Freerun
+        VsubValue = (Currently not accessible)
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    AcquisitionFrameCount
+    AcquisitionFrameRateAbs
+    BandwidthControlMode:[ {StreamBytesPerSecond} | SCPD | Both ]
+    BinningHorizontal
+    BinningHorizontalMode:[ {Sum} | Average ]
+    BinningVertical
+    BinningVerticalMode:[ {Sum} | Average ]
+    BlackLevel
+    BlackLevelSelector:[ {All} ]
+    DecimationHorizontal
+    DecimationVertical
+    DefectMaskEnable:[ {True} | False ]
+    DeviceTemperatureSelector:[ {Main} ]
+    DeviceUserID
+    DSPSubregionBottom
+    DSPSubregionLeft
+    DSPSubregionRight
+    DSPSubregionTop
+    ExposureAuto:[ {Off} | Continuous | Once ]
+    ExposureAutoAdjustTol
+    ExposureAutoAlg:[ {Mean} | FitRange ]
+    ExposureAutoMax
+    ExposureAutoMin
+    ExposureAutoOutliers
+    ExposureAutoRate
+    ExposureAutoTarget
+    ExposureMode:[ {Timed} ]
+    ExposureTimeAbs
+    Gain
+    GainAuto:[ {Off} | Continuous | Once ]
+    GainAutoAdjustTol
+    GainAutoMax
+    GainAutoMin
+    GainAutoOutliers
+    GainAutoRate
+    GainAutoTarget
+    GainSelector:[ {All} ]
+    Gamma
+    ReverseX:[ {False} | True ]
+    ReverseY:[ {False} | True ]
+    SensorShutterMode:[ {Global} | GlobalReset | Rolling ]
+    StreamBytesPerSecond
+    StreamFrameRateConstrain:[ {True} | False ]
+    StreamHoldEnable:[ {Off} | On ]
+    StrobeDelay
+    StrobeDuration
+    StrobeDurationMode:[ {Source} | Controlled ]
+    StrobeSource:[ {Exposing} | AcquisitionTriggerReady | FrameReadout | Acquiring | LineIn1 ]
+    SyncInGlitchFilter
+    SyncInSelector:[ {SyncIn1} ]
+    SyncOutLevels
+    SyncOutPolarity:[ {Normal} | Invert ]
+    SyncOutSelector:[ {SyncOut1} | SyncOut2 | SyncOut3 ]
+    SyncOutSource:[ {Exposing} | GPO | AcquisitionTriggerReady | FrameTriggerReady | FrameReadout | Imaging | Acquiring | LineIn1 | Strobe1 ]
+    TriggerActivation:[ {RisingEdge} | FallingEdge | AnyEdge | LevelHigh | LevelLow ]
+    TriggerDelayAbs
+    TriggerMode:[ {Off} | On ]
+    TriggerOverlap:[ {Off} | PreviousFrame ]
+    TriggerSelector:[ {FrameStart} | AcquisitionStart | AcquisitionEnd | AcquisitionRecord ]
+    TriggerSource:[ {Freerun} | Line1 | FixedRate | Software ]
+
+
+----------VIDEOINPUT OBJECT CREATION - GENTL----------
+
+videoinput('gentl', 1, 'Mono10')--SUCCEEDED
+	Adaptor Name: gentl
+	Device Name: Mako
+	Device ID: 1
+	VideoFormat: Mono10
+	Max Height: 1024
+	Max Width: 1280
+	Native Data Type: uint16
+	Total Sources: 1
+	Vendor Driver Description: Image Acquisition Toolbox GenTL Adaptor with Vimba GigE Transport Layer
+	Vendor Driver Version: 1.0.LIBRARY_BUILD_DATE_STRING with Allied Vision Technologies 1.8.0
+
+Trigger information (using TRIGGERINFO): 
+
+   Valid Trigger Configurations:
+
+      TriggerType:   TriggerCondition:   TriggerSource:   
+      'immediate'    'none'              'none'           
+      'manual'       'none'              'none'           
+      'hardware'     'DeviceSpecific'    'DeviceSpecific' 
+
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = DEV_000F315D277E-Stream-000
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        AcquisitionFrameCount = 1
+        AcquisitionFrameRateAbs = 4.485
+        AcquisitionFrameRateLimit = 4.485
+        BalanceRatioAbs = (Currently not accessible)
+        BalanceRatioSelector = (Currently not accessible)
+        BalanceWhiteAuto = (Currently not accessible)
+        BalanceWhiteAutoAdjustTol = (Currently not accessible)
+        BalanceWhiteAutoRate = (Currently not accessible)
+        BandwidthControlMode = StreamBytesPerSecond
+        BinningHorizontal = 1
+        BinningHorizontalMode = Sum
+        BinningVertical = 1
+        BinningVerticalMode = Sum
+        BlackLevel = 4
+        BlackLevelSelector = All
+        ColorTransformationMode = (Currently not accessible)
+        ColorTransformationSelector = (Currently not accessible)
+        ColorTransformationValue = (Currently not accessible)
+        ColorTransformationValueSelector = (Currently not accessible)
+        DecimationHorizontal = 1
+        DecimationVertical = 1
+        DefectMaskEnable = True
+        DeviceFirmwareVersion = 00.01.54.20700 
+        DeviceID = 50-0536976126
+        DeviceModelName = Mako G-131B
+        DevicePartNumber = 5080
+        DeviceScanType = Areascan
+        DeviceTemperature = 45.093
+        DeviceTemperatureSelector = Main
+        DeviceUserID = [0x0 string]
+        DeviceVendorName = Allied Vision Technologies
+        DSPSubregionBottom = 1024
+        DSPSubregionLeft = 0
+        DSPSubregionRight = 1280
+        DSPSubregionTop = 0
+        ExposureAuto = Off
+        ExposureAutoAdjustTol = 5
+        ExposureAutoAlg = Mean
+        ExposureAutoMax = 500000
+        ExposureAutoMin = 12
+        ExposureAutoOutliers = 0
+        ExposureAutoRate = 100
+        ExposureAutoTarget = 50
+        ExposureMode = Timed
+        ExposureTimeAbs = 118199
+        FirmwareVerBuild = 20700
+        FirmwareVerMajor = 1
+        FirmwareVerMinor = 54
+        Gain = 0
+        GainAuto = Off
+        GainAutoAdjustTol = 5
+        GainAutoMax = 24
+        GainAutoMin = 0
+        GainAutoOutliers = 0
+        GainAutoRate = 100
+        GainAutoTarget = 50
+        GainSelector = All
+        Gamma = 1
+        Hue = (Currently not accessible)
+        ImageSize = 2621440
+        IrisAutoTarget = (Currently not accessible)
+        IrisMode = (Currently not accessible)
+        IrisVideoLevel = (Currently not accessible)
+        IrisVideoLevelMax = (Currently not accessible)
+        IrisVideoLevelMin = (Currently not accessible)
+        LensDCDriveStrength = (Currently not accessible)
+        LensPIrisFrequency = (Currently not accessible)
+        LensPIrisNumSteps = (Currently not accessible)
+        LensPIrisPosition = (Currently not accessible)
+        NonImagePayloadSize = 0
+        ReverseX = False
+        ReverseY = False
+        Saturation = (Currently not accessible)
+        SensorBits = 10
+        SensorDigitizationTaps = (Currently not accessible)
+        SensorShutterMode = Global
+        SensorTaps = (Currently not accessible)
+        SensorType = Mono
+        StreamBytesPerSecond = 12400000
+        StreamFrameRateConstrain = True
+        StreamHoldCapacity = 24
+        StreamHoldEnable = Off
+        StrobeDelay = 0
+        StrobeDuration = 0
+        StrobeDurationMode = Source
+        StrobeSource = Exposing
+        SyncInGlitchFilter = 0
+        SyncInLevels = 0
+        SyncInSelector = SyncIn1
+        SyncOutLevels = 0
+        SyncOutPolarity = Normal
+        SyncOutSelector = SyncOut1
+        SyncOutSource = Exposing
+        TriggerActivation = RisingEdge
+        TriggerDelayAbs = 0
+        TriggerMode = Off
+        TriggerOverlap = Off
+        TriggerSelector = FrameStart
+        TriggerSource = Freerun
+        VsubValue = (Currently not accessible)
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    AcquisitionFrameCount
+    AcquisitionFrameRateAbs
+    BandwidthControlMode:[ {StreamBytesPerSecond} | SCPD | Both ]
+    BinningHorizontal
+    BinningHorizontalMode:[ {Sum} | Average ]
+    BinningVertical
+    BinningVerticalMode:[ {Sum} | Average ]
+    BlackLevel
+    BlackLevelSelector:[ {All} ]
+    DecimationHorizontal
+    DecimationVertical
+    DefectMaskEnable:[ {True} | False ]
+    DeviceTemperatureSelector:[ {Main} ]
+    DeviceUserID
+    DSPSubregionBottom
+    DSPSubregionLeft
+    DSPSubregionRight
+    DSPSubregionTop
+    ExposureAuto:[ {Off} | Continuous | Once ]
+    ExposureAutoAdjustTol
+    ExposureAutoAlg:[ {Mean} | FitRange ]
+    ExposureAutoMax
+    ExposureAutoMin
+    ExposureAutoOutliers
+    ExposureAutoRate
+    ExposureAutoTarget
+    ExposureMode:[ {Timed} ]
+    ExposureTimeAbs
+    Gain
+    GainAuto:[ {Off} | Continuous | Once ]
+    GainAutoAdjustTol
+    GainAutoMax
+    GainAutoMin
+    GainAutoOutliers
+    GainAutoRate
+    GainAutoTarget
+    GainSelector:[ {All} ]
+    Gamma
+    ReverseX:[ {False} | True ]
+    ReverseY:[ {False} | True ]
+    SensorShutterMode:[ {Global} | GlobalReset | Rolling ]
+    StreamBytesPerSecond
+    StreamFrameRateConstrain:[ {True} | False ]
+    StreamHoldEnable:[ {Off} | On ]
+    StrobeDelay
+    StrobeDuration
+    StrobeDurationMode:[ {Source} | Controlled ]
+    StrobeSource:[ {Exposing} | AcquisitionTriggerReady | FrameReadout | Acquiring | LineIn1 ]
+    SyncInGlitchFilter
+    SyncInSelector:[ {SyncIn1} ]
+    SyncOutLevels
+    SyncOutPolarity:[ {Normal} | Invert ]
+    SyncOutSelector:[ {SyncOut1} | SyncOut2 | SyncOut3 ]
+    SyncOutSource:[ {Exposing} | GPO | AcquisitionTriggerReady | FrameTriggerReady | FrameReadout | Imaging | Acquiring | LineIn1 | Strobe1 ]
+    TriggerActivation:[ {RisingEdge} | FallingEdge | AnyEdge | LevelHigh | LevelLow ]
+    TriggerDelayAbs
+    TriggerMode:[ {Off} | On ]
+    TriggerOverlap:[ {Off} | PreviousFrame ]
+    TriggerSelector:[ {FrameStart} | AcquisitionStart | AcquisitionEnd | AcquisitionRecord ]
+    TriggerSource:[ {Freerun} | Line1 | FixedRate | Software ]
+
+
+videoinput('gentl', 1, 'Mono8')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = DEV_000F315D277E-Stream-000
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        AcquisitionFrameCount = 1
+        AcquisitionFrameRateAbs = 4.485
+        AcquisitionFrameRateLimit = 8.4582
+        BalanceRatioAbs = (Currently not accessible)
+        BalanceRatioSelector = (Currently not accessible)
+        BalanceWhiteAuto = (Currently not accessible)
+        BalanceWhiteAutoAdjustTol = (Currently not accessible)
+        BalanceWhiteAutoRate = (Currently not accessible)
+        BandwidthControlMode = StreamBytesPerSecond
+        BinningHorizontal = 1
+        BinningHorizontalMode = Sum
+        BinningVertical = 1
+        BinningVerticalMode = Sum
+        BlackLevel = 4
+        BlackLevelSelector = All
+        ColorTransformationMode = (Currently not accessible)
+        ColorTransformationSelector = (Currently not accessible)
+        ColorTransformationValue = (Currently not accessible)
+        ColorTransformationValueSelector = (Currently not accessible)
+        DecimationHorizontal = 1
+        DecimationVertical = 1
+        DefectMaskEnable = True
+        DeviceFirmwareVersion = 00.01.54.20700 
+        DeviceID = 50-0536976126
+        DeviceModelName = Mako G-131B
+        DevicePartNumber = 5080
+        DeviceScanType = Areascan
+        DeviceTemperature = 45.093
+        DeviceTemperatureSelector = Main
+        DeviceUserID = [0x0 string]
+        DeviceVendorName = Allied Vision Technologies
+        DSPSubregionBottom = 1024
+        DSPSubregionLeft = 0
+        DSPSubregionRight = 1280
+        DSPSubregionTop = 0
+        ExposureAuto = Off
+        ExposureAutoAdjustTol = 5
+        ExposureAutoAlg = Mean
+        ExposureAutoMax = 500000
+        ExposureAutoMin = 12
+        ExposureAutoOutliers = 0
+        ExposureAutoRate = 100
+        ExposureAutoTarget = 50
+        ExposureMode = Timed
+        ExposureTimeAbs = 118199
+        FirmwareVerBuild = 20700
+        FirmwareVerMajor = 1
+        FirmwareVerMinor = 54
+        Gain = 0
+        GainAuto = Off
+        GainAutoAdjustTol = 5
+        GainAutoMax = 24
+        GainAutoMin = 0
+        GainAutoOutliers = 0
+        GainAutoRate = 100
+        GainAutoTarget = 50
+        GainSelector = All
+        Gamma = 1
+        Hue = (Currently not accessible)
+        ImageSize = 1310720
+        IrisAutoTarget = (Currently not accessible)
+        IrisMode = (Currently not accessible)
+        IrisVideoLevel = (Currently not accessible)
+        IrisVideoLevelMax = (Currently not accessible)
+        IrisVideoLevelMin = (Currently not accessible)
+        LensDCDriveStrength = (Currently not accessible)
+        LensPIrisFrequency = (Currently not accessible)
+        LensPIrisNumSteps = (Currently not accessible)
+        LensPIrisPosition = (Currently not accessible)
+        NonImagePayloadSize = 0
+        ReverseX = False
+        ReverseY = False
+        Saturation = (Currently not accessible)
+        SensorBits = 10
+        SensorDigitizationTaps = (Currently not accessible)
+        SensorShutterMode = Global
+        SensorTaps = (Currently not accessible)
+        SensorType = Mono
+        StreamBytesPerSecond = 12400000
+        StreamFrameRateConstrain = True
+        StreamHoldCapacity = 48
+        StreamHoldEnable = Off
+        StrobeDelay = 0
+        StrobeDuration = 0
+        StrobeDurationMode = Source
+        StrobeSource = Exposing
+        SyncInGlitchFilter = 0
+        SyncInLevels = 0
+        SyncInSelector = SyncIn1
+        SyncOutLevels = 0
+        SyncOutPolarity = Normal
+        SyncOutSelector = SyncOut1
+        SyncOutSource = Exposing
+        TriggerActivation = RisingEdge
+        TriggerDelayAbs = 0
+        TriggerMode = Off
+        TriggerOverlap = Off
+        TriggerSelector = FrameStart
+        TriggerSource = Freerun
+        VsubValue = (Currently not accessible)
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    AcquisitionFrameCount
+    AcquisitionFrameRateAbs
+    BandwidthControlMode:[ {StreamBytesPerSecond} | SCPD | Both ]
+    BinningHorizontal
+    BinningHorizontalMode:[ {Sum} | Average ]
+    BinningVertical
+    BinningVerticalMode:[ {Sum} | Average ]
+    BlackLevel
+    BlackLevelSelector:[ {All} ]
+    DecimationHorizontal
+    DecimationVertical
+    DefectMaskEnable:[ {True} | False ]
+    DeviceTemperatureSelector:[ {Main} ]
+    DeviceUserID
+    DSPSubregionBottom
+    DSPSubregionLeft
+    DSPSubregionRight
+    DSPSubregionTop
+    ExposureAuto:[ {Off} | Continuous | Once ]
+    ExposureAutoAdjustTol
+    ExposureAutoAlg:[ {Mean} | FitRange ]
+    ExposureAutoMax
+    ExposureAutoMin
+    ExposureAutoOutliers
+    ExposureAutoRate
+    ExposureAutoTarget
+    ExposureMode:[ {Timed} ]
+    ExposureTimeAbs
+    Gain
+    GainAuto:[ {Off} | Continuous | Once ]
+    GainAutoAdjustTol
+    GainAutoMax
+    GainAutoMin
+    GainAutoOutliers
+    GainAutoRate
+    GainAutoTarget
+    GainSelector:[ {All} ]
+    Gamma
+    ReverseX:[ {False} | True ]
+    ReverseY:[ {False} | True ]
+    SensorShutterMode:[ {Global} | GlobalReset | Rolling ]
+    StreamBytesPerSecond
+    StreamFrameRateConstrain:[ {True} | False ]
+    StreamHoldEnable:[ {Off} | On ]
+    StrobeDelay
+    StrobeDuration
+    StrobeDurationMode:[ {Source} | Controlled ]
+    StrobeSource:[ {Exposing} | AcquisitionTriggerReady | FrameReadout | Acquiring | LineIn1 ]
+    SyncInGlitchFilter
+    SyncInSelector:[ {SyncIn1} ]
+    SyncOutLevels
+    SyncOutPolarity:[ {Normal} | Invert ]
+    SyncOutSelector:[ {SyncOut1} | SyncOut2 | SyncOut3 ]
+    SyncOutSource:[ {Exposing} | GPO | AcquisitionTriggerReady | FrameTriggerReady | FrameReadout | Imaging | Acquiring | LineIn1 | Strobe1 ]
+    TriggerActivation:[ {RisingEdge} | FallingEdge | AnyEdge | LevelHigh | LevelLow ]
+    TriggerDelayAbs
+    TriggerMode:[ {Off} | On ]
+    TriggerOverlap:[ {Off} | PreviousFrame ]
+    TriggerSelector:[ {FrameStart} | AcquisitionStart | AcquisitionEnd | AcquisitionRecord ]
+    TriggerSource:[ {Freerun} | Line1 | FixedRate | Software ]
+
+
+----------VIDEOINPUT OBJECT CREATION - GIGE----------
+
+videoinput('gige', 1, 'Mono10')--FAILED
+gige: Unable to open camera.  Verify that camera is connected and not in use.
+
+videoinput('gige', 1, 'Mono8')--FAILED
+gige: Unable to open camera.  Verify that camera is connected and not in use.
+
+----------VIDEOINPUT OBJECT CREATION - WINVIDEO----------
+
+videoinput('winvideo', 1, 'I420_1024x576')--SUCCEEDED
+	Adaptor Name: winvideo
+	Device Name: Logitech HD Webcam C525
+	Device ID: 1
+	VideoFormat: I420_1024x576
+	Max Height: 576
+	Max Width: 1024
+	Native Data Type: uint8
+	Total Sources: 1
+	Vendor Driver Description: Windows WDM Compatible Driver
+	Vendor Driver Version: DirectX 9.0
+
+Trigger information (using TRIGGERINFO): 
+
+   Valid Trigger Configurations:
+
+      TriggerType:   TriggerCondition:   TriggerSource:
+      'immediate'    'none'              'none'        
+      'manual'       'none'              'none'        
+
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1184x656')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1280x720')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1280x960')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1392x768')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1504x832')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_1600x896')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_160x120')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_176x144')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_320x176')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_320x240')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_352x288')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_432x240')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_544x288')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_640x360')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_640x480')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_752x416')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_800x448')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_800x600')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_864x480')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_960x544')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'I420_960x720')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1024x576')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1184x656')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1280x720')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1280x960')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1392x768')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1504x832')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_1600x896')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_160x120')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_176x144')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_320x176')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_320x240')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_352x288')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_432x240')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_544x288')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_640x360')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_640x480')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_752x416')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_800x448')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_800x600')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_864x480')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_960x544')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+videoinput('winvideo', 1, 'RGB24_960x720')--SUCCEEDED
+Current device specific property settings (using GET)
+      General Settings:
+        Parent = [1x1 videoinput]
+        Selected = on
+        SourceName = input1
+        Tag = [0x0 string]
+        Type = videosource
+
+      Device Specific Properties:
+        BacklightCompensation = on
+        Brightness = 128
+        Contrast = 32
+        Exposure = -7
+        ExposureMode = auto
+        Focus = 60
+        FocusMode = auto
+        FrameRate = 30.0000
+        Gain = 64
+        HorizontalFlip = off
+        Pan = 0
+        Saturation = 32
+        Sharpness = 22
+        Tilt = 0
+        VerticalFlip = off
+        WhiteBalance = 5500
+        WhiteBalanceMode = auto
+        Zoom = 1
+
+Available device specific property settings (using SET)
+   General Settings:
+    Tag
+
+  Device Specific Properties:
+    BacklightCompensation:[ {on} | off ]
+    Brightness
+    Contrast
+    Exposure
+    ExposureMode:[ {auto} | manual ]
+    Focus
+    FocusMode:[ {auto} | manual ]
+    FrameRate:[ {30.0000} | 24.0000 | 20.0000 | 15.0000 | 10.0000 | 7.5000 | 5.0000 ]
+    Gain
+    HorizontalFlip:[ {off} | on ]
+    Pan
+    Saturation
+    Sharpness
+    Tilt
+    VerticalFlip:[ {off} | on ]
+    WhiteBalance
+    WhiteBalanceMode:[ {auto} | manual ]
+    Zoom
+
+
+
+videoinput('winvideo', 2, 'RGB24_960x736')--FAILED
+winvideo: Image acquisition device is not accessible.
+The parameter is incorrect. 
+Make sure no other objects or applications are accessing the same device.
+
+
+----------MATLAB ROOT DIRECTORY----------
+
+	C:\Program Files\MATLAB\R2020b
+
+----------MATLAB PATH----------
+
+
+		MATLABPATH
+
+	C:\Users\Marcos\Documents\MATLAB
+	C:\Users\Marcos\AppData\Local\Temp\Editor_jairy
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\capabilities
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datafun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\elfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\elmat
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\funfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\general
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\iofun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\lang
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\matfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\mvm
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\ops
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\polyfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\randfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\sparfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\specfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\strfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\strfun\validators
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\timefun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\validators
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\desktop_variableeditor\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\desktop_workspacebrowser\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\calendarDuration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\categorical
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\codegen\categorical
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\shared\codegen
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\datetime
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\codegen\datetime
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\datetime_nonlibmatlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\duration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\codegen\duration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\shared\matlab_datatypes
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\tabular
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatypes\codegen\tabular
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\demos
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\plottools\inspector
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graph2d
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graph3d
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\annotation
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\axis
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\chart
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\color
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\function
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\illustration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\legacy
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\obsolete
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\printing
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\objectsystem
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\primitive
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\plottools
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\scribe
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\scribe\obsolete
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\specgraph
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uitools
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uitools\obsolete
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\hardware\stubs
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\images
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\iot
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\iot\connectivity
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\archive
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\datastore\array
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\ftp
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\functions
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\spreadsheet
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\text
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\io\xml
+	C:\Program Files\MATLAB\R2020b\toolbox\local
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\maps
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphics\maps
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\network
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\optimfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\bigdata
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\codeanalysis\reports\analysis
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\codetools
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\codetools\embeddedoutputs
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\codetools\embeddedoutputs\DataToolsRegistration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\codetools\liveapps
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datamanager
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datastoreio
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\dataui
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\depfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\graphfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\guide
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\helptools
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\icons
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\mapreduceio
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\parallel
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\parquetds
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\parquetio
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\strfun\pattern
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\measurement\core
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\measurement\ext
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\mock\core
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\performance\core
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\performance\ext
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\uiautomation
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\uitest
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\ui\toolstrip
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\unittest\core
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\obsolete
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\testframework\unittest\ext
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\verctrl
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\winfun
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\winfun\NET
+	C:\Program Files\MATLAB\R2020b\toolbox\simulink\configset_model\configset
+	C:\Program Files\MATLAB\R2020b\toolbox\simulink\configset_model\configset\derived
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\stateflow
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addons
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addons\cef
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addons\fileexchange
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addons\supportpackages
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addons_product
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\supportpackagemanagement
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addon_updates\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addon_enable_disable_management\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addressbar_plugins\browse_for_folder_button\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\addressbar_plugins\cd_up_one_dir_button\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\appcontainer\appcontainer
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\appdesigner\appdesigner
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\appdesigner\comparison
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\appdesigner\appdesigner\interface
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\appdesigner\appdesigner\runtime
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\apps
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\audiovideo
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\bluetooth
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\cefclient
+	C:\Program Files\MATLAB\R2020b\toolbox\coder\codedescriptor_core
+	C:\Program Files\MATLAB\R2020b\toolbox\coder\trace
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\comparisons
+	C:\Program Files\MATLAB\R2020b\toolbox\comparisons\view\edits
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\configtools
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\common
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\configuration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\connector
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\editor
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\figures
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\http
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\interpreter
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\logger
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\messageservice
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\mgg
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\nativebridge
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\restmatlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\session
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\shadowfiles
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\connector2\worker
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\cpp
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\reports
+	C:\Program Files\MATLAB\R2020b\toolbox\da
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\datatoolsservices\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\editorconverters\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\importtool\matlab\peer
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\importtool\matlab\server
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\inspector\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\inspector\registration
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\peermodel_mcos\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\plotstab\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\variableeditor\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\datatools\workspacebrowser\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\ddux
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\debugger
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\dependency\analysis
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\dependency\app
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\dependency\report
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\spc\src_ml
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\dsp\simulink\dsp
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\embeddedoutputs\figureoutputs
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\embeddedoutputs\outputs
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\embeddedoutputs\outpututilities
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\embeddedoutputs\variableoutputs
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\engines\engine_api
+	C:\Program Files\MATLAB\R2020b\examples\deeplearning_shared\data
+	C:\Program Files\MATLAB\R2020b\examples\graphics\data
+	C:\Program Files\MATLAB\R2020b\examples\images\data
+	C:\Program Files\MATLAB\R2020b\examples\imaq\data
+	C:\Program Files\MATLAB\R2020b\examples\matlab\data
+	C:\Program Files\MATLAB\R2020b\examples\matlabmobile\data
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\filebrowser
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\findfiles\m
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uitools\uicomponents\components
+	C:\Program Files\MATLAB\R2020b\toolbox\hdlcoder\hdllib\ml_lib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hadoopserializer
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\appdes\services
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwconnection
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\devicedetection
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\devices
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\providers
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\plugins
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\hwsetup
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwmanagerapp\devicedata
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwservices\hwinfo
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwsetup
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwsetup\hwwidgets
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwsetup\hwtemplates
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\hwsetup\launch
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwmanager\logger
+	C:\Program Files\MATLAB\R2020b\toolbox\images\colorspaces
+	C:\Program Files\MATLAB\R2020b\toolbox\images\images
+	C:\Program Files\MATLAB\R2020b\toolbox\images\imdata
+	C:\Program Files\MATLAB\R2020b\toolbox\images\imuitools
+	C:\Program Files\MATLAB\R2020b\toolbox\images\iptformats
+	C:\Program Files\MATLAB\R2020b\toolbox\images\iptutils
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\imagesci
+	C:\Program Files\MATLAB\R2020b\toolbox\images\deep
+	C:\Program Files\MATLAB\R2020b\toolbox\images\imdemos
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaq
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\apps\provider
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqdemos
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqblks\imaqblks
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqblks\imaqmex
+	C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqblks\imaqmasks
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\instrument
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\m3i
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\mex
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\mex
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mldatx
+	C:\Program Files\MATLAB\R2020b\ui\mw-webwindow\mw-webwindow-m
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\networklib
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\pathdataservice\pathdataservice-m
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\pathtool
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\cxxfe_mi\cxxfe_mi
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\polyspace
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\profileviewer
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\project
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\project\example
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\project\toolstrip
+	C:\Program Files\MATLAB\R2020b\toolbox\simulink\simulink\slproject
+	C:\Program Files\MATLAB\R2020b\toolbox\simulink\simulink\slproject\menu
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\project\dependency
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\python
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\resources_folder
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\richcontent_preview\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\rptgen\xmlcomp
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\serial
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_clike_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_plugins\rtclanguagesupport\rtc_js_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_java_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_tlc_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_verilog_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_vhdl_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\rtc_addons\rtclanguagesupport\rtc_xml_language_support\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\serialport
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\advisor
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\asynciolib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\blelib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\cgir_fe
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\cgxe\cgxe
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\cmlink\matlab
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\coder\coder
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\coder\coder\gpucoder
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\coder\reportinfo
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\codergui\codergui
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\coder\coder\lib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\configset
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\configset_view\m
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\controllib\general
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\controllib\graphics
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\controllib\graphics\utils
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\controllib\graphics\plotoptions
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\cxxfe\parser_mi\parser_mi
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\dastudio
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\deviceplugindetection
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hotpluglib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\hwconnectinstaller\common
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\imageslib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\imageio
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\imaqlib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\io\general
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\maputils
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlarrow
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\dom
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\dom\dom
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\dom\dom\help
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\fop
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\ppt
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\ppt\ppt
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\ppt\ppt\help
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\rpt
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\rpt\rpt
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\mlreportgen\utils
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\multimedia
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\networklib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\pointclouds
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\rptgen
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\seriallib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\siglib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\system\simulink_block
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\slcc_cov\slcc_cov
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\sl_coverage_configset
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\spreadsheet
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportpkgservices\legacysupportpkginfo
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportpkgservices\installservices
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportpkgservices\supportpackageroot
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportpkgservices\installedapi
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportsoftware\launcher
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportsoftware\services
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\supportsoftware\upgrade
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\system\sfun
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\testmeaslib\general
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\testmeaslib\graphics
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\testmeaslib\simulink
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\transportclients
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\transportlib
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\virtualfileio
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\simulink
+	C:\Program Files\MATLAB\R2020b\toolbox\coder\foundation\passmanager
+	C:\Program Files\MATLAB\R2020b\toolbox\simulink\simulink_data_dictionary\sldd
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\diagnostic
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\storage\matlabdrive
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\storage\mldrivedesktop
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\system
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\system\editor
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\template_core
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\timeseries
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\toolboxmanagement\matlab_api
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\toolbox_packaging
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\toolstrip
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents\plugin\appdesigner
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents\graphics
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents\style
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents\databrowser
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\uicomponents\uicomponents\uicontrol
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\spcuilib\unifiedscopes
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\updateinstaller
+	C:\Program Files\MATLAB\R2020b\toolbox\shared\viewmodel\viewmodel
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\webcam
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\webservices\http
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\json
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\webservices\restful
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\webservices
+	C:\Program Files\MATLAB\R2020b\toolbox\matlab\external\interfaces\webservices\wsdl
+	C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\genericvideo
+	C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gentl
+	C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gige
+	C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gige\gigevisionhardwareexamples
+
+----------C:\PROGRAMDATA\MATLAB\SUPPORTPACKAGES\R2020B\TOOLBOX\IMAQ\SUPPORTPACKAGES\GENTL\ADAPTOR\WIN64 Directory----------
+
+ Volume in drive C has no label.
+ Volume Serial Number is A64E-1FD6
+
+ Directory of C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gentl\adaptor\win64
+
+03/09/2021  02:09 PM    <DIR>          .
+03/09/2021  02:09 PM    <DIR>          ..
+07/30/2020  05:34 AM           271,872 genicamadaptor.dll
+07/30/2020  05:34 AM           881,664 genicamshared.dll
+07/30/2020  05:36 AM           832,512 mwgentlimaq.dll
+07/30/2020  05:36 AM            17,621 mwgentlimaq.imdf
+               4 File(s)      2,003,669 bytes
+               2 Dir(s)  95,465,320,448 bytes free
+
+----------C:\PROGRAMDATA\MATLAB\SUPPORTPACKAGES\R2020B\TOOLBOX\IMAQ\SUPPORTPACKAGES\GIGE\ADAPTOR\WIN64 Directory----------
+
+ Volume in drive C has no label.
+ Volume Serial Number is A64E-1FD6
+
+ Directory of C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\gige\adaptor\win64
+
+03/09/2021  02:10 PM    <DIR>          .
+03/09/2021  02:10 PM    <DIR>          ..
+07/30/2020  05:37 AM           271,872 genicamadaptor.dll
+07/30/2020  05:37 AM           881,664 genicamshared.dll
+07/30/2020  05:38 AM           521,216 gigeacquisition.dll
+07/30/2020  05:50 AM           541,184 gigecontroller.dll
+07/30/2020  07:22 AM           509,952 gigedevice.dll
+07/30/2020  06:00 AM           250,368 gigediscovery.dll
+07/30/2020  05:38 AM           585,728 gigegvcpnet.dll
+07/30/2020  05:37 AM           145,408 gigemlconverter.dll
+07/30/2020  05:36 AM            87,040 gigepacket.dll
+07/30/2020  05:35 AM            29,696 gigesupport.dll
+07/30/2020  05:37 AM           166,912 gigetestdevice.dll
+07/30/2020  05:58 AM           371,200 mwgigeimaq.dll
+07/30/2020  05:58 AM            18,813 mwgigeimaq.imdf
+              13 File(s)      4,381,053 bytes
+               2 Dir(s)  95,465,320,448 bytes free
+
+----------C:\PROGRAMDATA\MATLAB\SUPPORTPACKAGES\R2020B\TOOLBOX\IMAQ\SUPPORTPACKAGES\GENERICVIDEO\ADAPTOR\WIN64 Directory----------
+
+ Volume in drive C has no label.
+ Volume Serial Number is A64E-1FD6
+
+ Directory of C:\ProgramData\MATLAB\SupportPackages\R2020b\toolbox\imaq\supportpackages\genericvideo\adaptor\win64
+
+03/09/2021  02:16 PM    <DIR>          .
+03/09/2021  02:16 PM    <DIR>          ..
+07/30/2020  05:35 AM           153,600 mwwinvideoimaq.dll
+07/30/2020  05:35 AM            27,419 mwwinvideoimaq.imdf
+               2 File(s)        181,019 bytes
+               2 Dir(s)  95,465,320,448 bytes free
+
+----------CPU/SYSTEM INFORMATION----------
+
+
+--------------------CPUINFO--------------------
+
+CPU 1: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 2: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 3: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 4: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 5: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 6: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 7: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+CPU 8: Intel(R) Core(TM) i7-7700K CPU @ 4.20GHz
+
+--------------------SYSTEMINFO--------------------
+
+
+Host Name:                 MARCOS-DESKTOP1
+OS Name:                   Microsoft Windows 10 Pro
+OS Version:                10.0.19041 N/A Build 19041
+OS Manufacturer:           Microsoft Corporation
+OS Configuration:          Standalone Workstation
+OS Build Type:             Multiprocessor Free
+Registered Owner:          Windows User
+Registered Organization:   
+Product ID:                00330-80862-54629-AA605
+Original Install Date:     7/20/2020, 6:24:23 AM
+System Boot Time:          3/17/2021, 3:44:55 PM
+System Manufacturer:       MSI
+System Model:              MS-7A75
+System Type:               x64-based PC
+Processor(s):              1 Processor(s) Installed.
+                           [01]: Intel64 Family 6 Model 158 Stepping 9 GenuineIntel ~4200 Mhz
+BIOS Version:              American Megatrends Inc. 1.30, 7/28/2017
+Windows Directory:         C:\WINDOWS
+System Directory:          C:\WINDOWS\system32
+Boot Device:               \Device\HarddiskVolume5
+System Locale:             en-us;English (United States)
+Input Locale:              en-us;English (United States)
+Time Zone:                 (UTC-08:00) Pacific Time (US & Canada)
+Total Physical Memory:     32,736 MB
+Available Physical Memory: 23,688 MB
+Virtual Memory: Max Size:  37,600 MB
+Virtual Memory: Available: 26,408 MB
+Virtual Memory: In Use:    11,192 MB
+Page File Location(s):     C:\pagefile.sys
+Domain:                    WORKGROUP
+Logon Server:              \\MARCOS-DESKTOP1
+Hotfix(s):                 12 Hotfix(s) Installed.
+                           [01]: KB4601050
+                           [02]: KB4561600
+                           [03]: KB4566785
+                           [04]: KB4570334
+                           [05]: KB4577266
+                           [06]: KB4577586
+                           [07]: KB4580325
+                           [08]: KB4586864
+                           [09]: KB4593175
+                           [10]: KB4598481
+                           [11]: KB5000802
+                           [12]: KB5000858
+Network Card(s):           2 NIC(s) Installed.
+                           [01]: Intel(R) Ethernet Connection (2) I219-V
+                                 Connection Name: Ethernet
+                                 DHCP Enabled:    Yes
+                                 DHCP Server:     192.168.3.1
+                                 IP address(es)
+                                 [01]: 192.168.3.135
+                                 [02]: fe80::29ba:1088:d50b:5a4b
+                           [02]: TAP-Windows Adapter V9
+                                 Connection Name: Local Area Connection
+                                 Status:          Media disconnected
+Hyper-V Requirements:      VM Monitor Mode Extensions: Yes
+                           Virtualization Enabled In Firmware: Yes
+                           Second Level Address Translation: Yes
+                           Data Execution Prevention Available: Yes
+
+----------SETTINGS----------
+
+Use Little Endian DCAM = 0
+Packet Timeout = 500
+Heartbeat Timeout = 1000
+Packet Retries = 1
+Disable Force IP = 0
+Disable Packet Resend = 0
+Preview Full Bit Depth = 0
+
+----------DYNAMIC LOADER PATH----------
+
+
+--------------------PATH--------------------
+
+C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqextern\drivers\win64\genicam\GenICam_V3_1_0\bin\Win64_x64
+C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common
+C:\Program Files (x86)\Intel\iCLS Client\
+C:\Program Files\Intel\iCLS Client\
+C:\WINDOWS\system32
+C:\WINDOWS
+C:\WINDOWS\System32\Wbem
+C:\WINDOWS\System32\WindowsPowerShell\v1.0\
+C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL
+C:\Program Files\Intel\Intel(R) Management Engine Components\DAL
+C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT
+C:\Program Files\Intel\Intel(R) Management Engine Components\IPT
+C:\Program Files (x86)\Windows Kits\8.1\Windows Performance Toolkit\
+C:\WINDOWS\System32\OpenSSH\
+C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\Binn\
+C:\Program Files (x86)\Microsoft SQL Server\120\Tools\Binn\
+C:\Program Files\Microsoft SQL Server\120\Tools\Binn\
+C:\Program Files\Microsoft SQL Server\120\DTS\Binn\
+C:\Program Files\PuTTY\
+C:\Program Files\MATLAB\R2012a\bin
+C:\Program Files\Common Files\Pleora
+C:\Program Files\Common Files\Pleora\log4cxx\x64\Release
+C:\Program Files\Common Files\OISGDEV
+C:\Program Files\Common Files\Hamamatsu\GenICam\2_2\bin\Win64_x64
+C:\Program Files\Common Files\Hamamatsu\GenICam\2_2\bin\Win64_x64\GenApi\Generic
+C:\Program Files (x86)\Common Files\Pleora
+C:\Program Files (x86)\Common Files\Pleora\log4cxx\Release
+C:\Program Files (x86)\Common Files\OISGDEV
+C:\Program Files (x86)\Common Files\Hamamatsu\GenICam\2_2\bin\Win32_i86
+C:\Program Files (x86)\Common Files\Hamamatsu\GenICam\2_2\bin\Win32_i86\GenApi\Generic
+C:\Program Files\MATLAB\R2020b\bin
+C:\Users\Marcos\AppData\Local\Microsoft\WindowsApps
+
+----------ENVIRONMENT VARIABLES----------
+
+
+--------------------GENICAM--------------------
+
+GENICAM_CACHE_V3_1_0 = C:\Users\Marcos\AppData\Roaming\MathWorks\MATLAB\R2020b\GenICamXMLCache
+	 C:\Users\Marcos\AppData\Roaming\MathWorks\MATLAB\R2020b\GenICamXMLCache present.
+
+GENICAM_LOG_CONFIG_V3_1_0 = C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqextern\drivers\win64\genicam\GenICam_V3_1_0\log\config\DefaultLogging.properties
+	 C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqextern\drivers\win64\genicam\GenICam_V3_1_0\log\config\DefaultLogging.properties present.
+
+GENICAM_ROOT_V3_1_0 = C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqextern\drivers\win64\genicam\GenICam_V3_1_0
+	 C:\Program Files\MATLAB\R2020b\toolbox\imaq\imaqextern\drivers\win64\genicam\GenICam_V3_1_0 present.
+
+MWIMAQ_GENICAM_XML_FILES = 
+
+--------------------GENTL--------------------
+
+GENICAM_GENTL64_PATH = C:\Program Files\Allied Vision\Vimba_4.2\Vimba1394TL\Bin\Win64;C:\Program Files\Allied Vision\Vimba_4.2\VimbaGigETL\Bin\Win64;C:\Program Files\Allied Vision\Vimba_4.2\VimbaCLConfigTL\Bin\Win64
+
+Producer found = C:\Program Files\Allied Vision\Vimba_4.2\Vimba1394TL\Bin\Win64\Vimba1394TL.cti
+
+Producer found = C:\Program Files\Allied Vision\Vimba_4.2\VimbaGigETL\Bin\Win64\VimbaGigETL.cti
+
+Producer found = C:\Program Files\Allied Vision\Vimba_4.2\VimbaCLConfigTL\Bin\Win64\VimbaCLConfigTL.cti
+
+--------------------END TEST--------------------
+
+This information has been saved in the text file: 
+imaqsupport.txt
+
+If any errors occurred, please e-mail this information to:
+support@mathworks.com
