@@ -1,0 +1,114 @@
+function IBIS_6(camera)
+% Created 24-February-2022
+% This function will build a GUI to read from a single camera connected to the
+% network.
+% The major addition in this revision is adding more camera control buttons
+% 05/16/2022 added h.AutoSave parametr instead of alwasys saving the image
+% during the hardware tringgering
+
+
+    GUI.name        =  append('IBIS Viewer. ', camera.Tag);
+    GUI.pixelSize   = camera.pixelCalibration;
+    GUI.divisor     = 2;
+    GUI.flip_v      = camera.flip_v;
+    GUI.flip_h      = camera.flip_h;
+
+    
+%% ----------- Open Camera   
+    GUI.vid                         = MakoCaller(camera.ID);
+    clear vidObj;
+    GUI.camObj                      = get(GUI.vid,'Source');
+    GUI.vid.ReturnedColorSpace      ='grayscale';
+    GUI.vidRes                      = get(GUI.vid, 'VideoResolution');
+    GUI.nBands                      = get(GUI.vid, 'NumberOfBands');
+    GUI.autoSave                    = false;
+    GUI.Threshold                   = 0;
+    GUI.frameCounter                = 0;
+    
+% triggerconfig(h.vid, 'manual');        % debug line. should be Hardware
+%     h.vid.TriggerRepeat = 1000;            %   keep repeating trigger infinitely
+                                    %^ move to initialization .m file
+    GUI.vid.FramesPerTrigger        = 1;       % each trigger should only give one image
+            % this can't be used to configure averaging since  >1 will free
+            % run after an initial trigger
+              
+    GUI.vid.FramesAcquiredFcnCount  = 1;   % this can be changed to a larger number to average!
+    GUI.vid.LoggingMode             = 'memory';
+    
+    
+    %% -------- create gui elements
+    % first create the figure so that the handle can be passed to the m-file
+    GUI.figure=figure(...             
+        'PaperPositionMode','auto',...
+        'Toolbar','figure',...
+        'Menubar', 'none',...
+        'NumberTitle','Off',...
+        'Name', GUI.name,...
+        'unit','pixels',...
+        'Position',[100,100,200+GUI.vidRes(1)/GUI.divisor+125,280+GUI.vidRes(2)/GUI.divisor],...
+        'CloseRequestFcn',{@CloseRequest_Callback}...
+        );
+    
+    GUI = IBIS_initialization(GUI);   % calls the external script that sets up the GUI.
+
+    % -- End of GUI element creation
+    
+    %% ----Set-up access to camera functions
+        % Set numbers for the standard values for the shutter and gain
+    
+    GUI.CamCtrl.shutter.String  = num2str(get(GUI.camObj,'ExposureTimeAbs'));
+    GUI.CamCtrl.gain.String     = num2str(get(GUI.camObj,'Gain'));
+    
+
+    
+    %% ------ Specify acquisition callbacks
+    GUI.vid.TriggerFcn          = @TriggerFcn_Callback;     %called this way since it is local
+                            % this is called whenever the camera is
+                            % triggered
+    GUI.vid.FramesAcquiredFcn   = {@FramesAcquiredFcn_Callback,GUI};
+                            % this will be called when all the frames are
+                            % acquired. This is the best callback to use
+                            % to process data
+    
+
+        start(GUI.vid);
+        % start camera operation and gain exclusive use to to allow (but 
+        % not start) for acquiring image data this also calls the video
+        % object's StartFcn callback
+
+    if triggerconfig(GUI.vid).TriggerType == "manual"
+        trigger(GUI.vid)
+    end
+
+
+    %% ---Helper Functions
+    function stampedpath=timepath(timestamp,header)
+        stampstr=datestr(timestamp,'yyyymmddTHHMMSS_FFF');
+        stampedpath=string([header, stampstr]);
+    end
+
+    %% ---- ALL the GUI callbacks
+    function CloseRequest_Callback(~,~)
+%         stoppreview(vid)        
+        callerHandle.Enable='on';   % allow button interaction
+        callerHandle.Value=callerHandle.Min;    %set the button to high
+        stop(GUI.vid)
+        delete(GUI.vid)
+        clear h.vid
+        delete(GUI.figure)
+    end
+
+%% ------Image Acquisition callbacks
+    function TriggerFcn_Callback(~,~)
+%         disp('triggered')
+%         pause(1)
+%         vid.Logging
+    end
+    function StartFcn(obj, event)
+        disp('startFcn called')
+%         trigger(h.vid)
+    end
+
+%% ------ ND Filter Wheel Callbacks
+    
+end
