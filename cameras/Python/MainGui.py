@@ -1,67 +1,38 @@
-# %%
-
-# %%
-# Imports
 import sys
 import os
 import numpy as np
 
-from PyQt6.QtCore import QThread, pyqtSignal
+
 from PyQt6.QtWidgets import QApplication
 from PyQt6 import uic
 
 from PIL import Image
 from datetime import datetime
 from collections import deque
-from utils import fit_gaussian_with_offset, Settings, FilterWheel, computeQueueMean
+from utils import fit_gaussian_with_offset, Settings, computeQueueMean, SteeringMagnets, ImageAcquisition, FilterWheel
 from scipy.ndimage import rotate
 
 import pyqtgraph as pg
-from vimba import Vimba
+import pandas as pd
+import concurrent.futures
 
-# Define camera settings
+''' 
+WORK TO BE DONE
+Add info to scanData including calibration, camera label and SN, filterwheel
+
+
+'''
+
 defined_settings = {
-    '50-0536999326':{'COM':'COM4', 'label':'Cam Laser', 'SN':'50-0536999326', 'ID':'DEV_000F315D821E', 'calibration':17.5/1024},
-    '50-0537035519':{'COM':'COM7', 'label':'Cam 2', 'SN':'50-0537035519', 'ID':'DEV_000F315E0F7F', 'calibration':18/1029},
+    '50-0537011139':{'label':'Cam 1', 'COM':'COM2', 'SN':'50-0537011139', 'ID':'DEV_000F315DB043', 'calibration':18/736},
+    '50-0537035519':{'label':'Cam 2', 'COM':'COM4', 'SN':'50-0537035519', 'ID':'DEV_000F315E0F7F', 'calibration':18/1029},
+    '50-0536999326':{'label':'Cam Laser', 'COM':None, 'SN':'50-0536999326', 'ID':'DEV_000F315D821E', 'calibration':17.5/1024},
+    '50-0536976126':{'label':'Cam 4', 'COM':'COM6', 'SN':'50-0536976126', 'ID':'DEV_000F315D277E', 'calibration':18/1024},
+    '50-0536999325':{'label':'Beam Dump', 'COM':'COM7', 'SN':'50-0536999325', 'ID':'DEV_000F315D821D', 'calibration':18/1074},
 }
-    
-class ImageAcquisition(QThread):
-    image_ready = pyqtSignal(list)
-
-    def __init__(self, ID):
-        super().__init__()
-        self.acquiring = False
-        self.ID = ID
-        self.gain = 0
-
-    def run(self):
-        print(f'Starting Cam {self.ID}')
-
-        self.acquiring = True
-        with Vimba.get_instance() as system:
-            with system.get_camera_by_id(self.ID) as cam:
-                while self.is_acquiring():
-                    cam.get_feature_by_name('Gain').set(self.gain)
-
-                    frame = cam.get_frame()
-                    image = frame.as_numpy_ndarray()
-                    self.image_ready.emit([image])
-
-    def is_acquiring(self):
-        return self.acquiring
-    
-    def stop(self):
-        print(f'Stopping Cam {self.ID}')
-        self.acquiring = False
-        self.wait()
-
-    def set(self, attribute, value):
-        setattr(self, attribute, value)
-
-
 
 # GUI Window Class
-mw_Ui, mw_Base = uic.loadUiType('main_window_2.0.ui')
+mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
     
     def __init__(self, *args, **kwargs):
@@ -69,10 +40,12 @@ class MainWindow(mw_Base, mw_Ui):
         self.setupUi(self)
 
         # Setup
-        # self.loadStylesheet('styles.css')
         self.setupGraphics() 
         self.setupCameras()
+        self.setupFilterWheels()
         self.setupQueues()
+        self.magnets = SteeringMagnets()
+
 
         # Connect to ImageAcquisition class
         self.imageAcq = ImageAcquisition(self.get_setting('ID'))
@@ -83,6 +56,10 @@ class MainWindow(mw_Base, mw_Ui):
         #----- Signals and slots (in order of gui) -----#
         # Acquisition
         self.acquireButton.clicked.connect(self.toggleAcquisition)
+        self.acquireButton.setCheckable(True)
+        self.acquireFlag = False
+        
+
 
         # Camera
         self.cameraCombo.currentIndexChanged.connect(self.changeCamera)
@@ -92,57 +69,50 @@ class MainWindow(mw_Base, mw_Ui):
         # Background
         self.setButton.clicked.connect(self.setBackground)
         self.subtractButton.clicked.connect(self.toggleBackgroundSubtraction)
+        self.subtractButton.setCheckable(True)
+        self.subtractFlag = False
 
         # Saving
         self.singleButton.clicked.connect(self.saveImage)
         self.continuousButton.clicked.connect(self.toggleSaveContinuous)
+        self.continuousButton.setCheckable(True)
+        self.continuousFlag = False
+
 
         # Filter Wheel
         self.fwCombo.currentIndexChanged.connect(self.changeFilterWheel)
 
         # Image Analysis
         self.analyzeButton.clicked.connect(self.toggleAnalysis)
+        self.analyzeButton.setCheckable(True)
+        self.analysisFlag = False
+
         self.ellipseButton.clicked.connect(self.toggleEllipse)
+        self.ellipseButton.setCheckable(True)
+        self.ellipseFlag = False
+
+
         self.resetButton.clicked.connect(self.resetQueues)
 
         self.roiButton.clicked.connect(self.toggleROI)
-
-
-        #----- Flags and checkable buttons -----#
-        self.acquireFlag = False
-        self.acquireButton.setCheckable(True)
-
-        self.roiFlag = False
         self.roiButton.setCheckable(True)
+        self.roiFlag = False
 
-        self.subtractFlag = False
-        self.subtractButton.setCheckable(True)
+        # Scan
+        self.runscanButton.clicked.connect(self.toggleScan)
+        self.runscanButton.setCheckable(True)
+        self.scanFlag = False
 
-        self.continuousFlag = False
-        self.continuousButton.setCheckable(True)
 
-        self.analysisFlag = False
-        self.analyzeButton.setCheckable(True)
-
-        self.ellipseFlag = False
-        self.ellipseButton.setCheckable(True)
-    
+    #---- Functions to access gui settings -----#    
     def get_setting(self, attribute):
         return getattr(self.settings[self.menu_index], attribute)
     
     def set_setting(self, attribute, value):
         setattr(self.settings[self.menu_index], attribute, value)
 
-    def update_progress(self, value):
-        print(f"Scan progress: {value}%")
-        # Update progress in GUI (e.g., a progress bar)
 
     #----- Setup Functions -----#
-    def loadStylesheet(self, filename):
-        with open(filename, 'r') as file:
-            stylesheet = file.read()
-            self.setStyleSheet(stylesheet)
-
     def setupGraphics(self):
         # Create graphicsScene, add to graphicsView
         self.imageView = pg.ImageView()
@@ -152,42 +122,45 @@ class MainWindow(mw_Base, mw_Ui):
         self.roi_item = pg.RectROI([1280//4, 1280//4], [1280//2, 1280//2], pen='r')
         self.roi_item.setVisible(False)
         self.imageView.addItem(self.roi_item)
+        self.imageView.setColorMap(pg.colormap.get('viridis')) #'viridis', 'plasma', 'inferno', 'magma', 'cividis'
 
         self.imageView.ui.roiBtn.hide()  # Hide default ROI button
         self.imageView.ui.histogram.hide()  # Hide histogram
         self.imageView.ui.menuBtn.hide()  # Hide the menu button (if available)
-        self.imageView.getView().setRange(xRange=(0, 1280), yRange=(0,1280), padding=0)
+
+        view = self.imageView.getView()
+        view.setRange(xRange=(0, 1280), yRange=(0,1280), padding=0)
+        view.setBackgroundColor('w')
 
         # Ellipse
         self.ellipse = pg.PlotDataItem(pen=pg.mkPen(None), width=2)
         self.imageView.addItem(self.ellipse)
 
-
-
     def setupCameras(self):
-        # Build cameraCombo, settings, and filterwheels in user-defined order
+        ''' Create settings object and initialize camera combobox'''
         self.cameraCombo.clear()
         self.settings = []
-        self.filter_wheels = []
 
-        # unordered_indicies = [SN_to_index[SN] for SN in unordered_SNs]
         for SN, settings in defined_settings.items():
-
-            # Add to combobox and settings list
             self.cameraCombo.addItem(settings['label'], settings['ID'])
             self.settings.append(Settings(**settings))
-            self.filter_wheels.append(FilterWheel(COM=settings['COM']))
 
         self.menu_index = 0
-        return
     
+    def setupFilterWheels(self):
+        ''' Initialize FilterWheel objects. '''
+        self.filter_wheels = []
+        for _, settings in defined_settings.items():
+            self.filter_wheels.append(FilterWheel(COM=settings['COM']))
+
+
     def setupQueues(self):
+        ''' Setup Queues for image stat averages.'''
         self.queue_size = 20
         self.xcQueue = deque(maxlen=self.queue_size)
         self.ycQueue = deque(maxlen=self.queue_size)
         self.xrmsQueue = deque(maxlen=self.queue_size)
         self.yrmsQueue = deque(maxlen=self.queue_size)
-        return
 
     #----- Acquisition Functions -----#
     def toggleAcquisition(self):
@@ -201,7 +174,7 @@ class MainWindow(mw_Base, mw_Ui):
         print('Stop camera')
         self.imageAcq.stop()
 
-        # Change camera ID and restart
+        # Change camera ID in imageAcq and restart
         self.imageAcq.set('ID', self.get_setting('ID'))
         self.imageAcq.start()
 
@@ -209,7 +182,6 @@ class MainWindow(mw_Base, mw_Ui):
         self.gainInput.setValue(self.get_setting('gain'))
         self.exposureInput.setValue(self.get_setting('exposure'))
         self.fwCombo.setCurrentIndex(self.get_setting('FWindex'))
-        return
     
     def updateGain(self, gain):
         self.settings[self.menu_index].gain = gain
@@ -218,45 +190,62 @@ class MainWindow(mw_Base, mw_Ui):
         # Background subtraction should be redone when changing gain
         self.subtractFlag = False
         self.subtractButton.setChecked(False)
-        return
     
     def updateExposure(self, exposure):
         self.settings[self.menu_index].exposure = exposure
-        return
     
     #----- Background Functions -----#
     def setBackground(self):
         if not self.subtractFlag:
             self.background = self.image
-        return
+
 
     def toggleBackgroundSubtraction(self):
         self.subtractFlag = not self.subtractFlag
-        return
 
     #----- Saving Functions -----#
     def saveImage(self):
-        pil_image = Image.fromarray((self.image*255).astype(np.uint8))
+        pil_image = Image.fromarray(self.image)
 
         # Ensure image directory for today's date
         datestamp = datetime.now().strftime("%Y-%m-%d")
-        self.image_dir = os.path.join('Images', datestamp)
-        if not os.path.exists(self.image_dir):
-            os.makedirs(self.image_dir)
+        image_dir = os.path.join('Images', datestamp)
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
 
         # Save image
         timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-        filepath = os.path.join(self.image_dir, f'{timestamp}.png')
+        filepath = os.path.join(image_dir, f'{timestamp}.png')
         pil_image.save(filepath)
-        return
 
     def toggleSaveContinuous(self):
         self.continuousFlag = not self.continuousFlag
-        return
 
-    #----- Filter Wheel FUnctions -----#
+    #----- Scan Functions -----#
+    def toggleScan(self):
+        # Reset scanData or save to file
+        if not self.scanFlag:
+            self.scanData = []
+        else:
+            # Ensure image directory for today's date
+            datestamp = datetime.now().strftime("%Y-%m-%d")
+            scan_dir = os.path.join('Scans', datestamp)
+            if not os.path.exists(scan_dir):
+                os.makedirs(scan_dir)
+
+            # Save scan data
+            timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+            filepath = os.path.join(scan_dir, f'{timestamp}.csv')
+            pd.DataFrame(self.scanData).to_csv(filepath, index=False)
+
+        # Toggle flag
+        self.scanFlag = not self.scanFlag
+        
+
+    #----- Filter Wheel Functions -----#
     def changeFilterWheel(self, FWindex):
-        self.filter_wheels[self.menu_index].move(FWindex)
+        #FWindex counts from 0, FilterWheel counts from 1
+        self.filter_wheels[self.menu_index].move(FWindex+1) 
         self.settings[self.menu_index].FWindex = FWindex
 
 
@@ -303,21 +292,19 @@ class MainWindow(mw_Base, mw_Ui):
         else:
             self.gainLabel.setStyleSheet("background-color: white; color: black;")
 
-        # Remove background
+        # Remove background (convert to int16 to handle negatives)
         if self.subtractFlag:
-            self.image -= self.background
+            difference = self.image.astype(np.int16) - self.background.astype(np.int16)
+            self.image = np.clip(difference, 0, 255).astype(np.uint8)
 
         # Save image
         if self.continuousFlag:
             self.saveImage()
 
-        # Show new image        
-        view = self.imageView.getView()
-        zoom_state = view.viewRange()
-        self.imageView.setImage(self.image.T) #pyqtgraph plots axes along x,y. Numpy plots along y,x
-        view.setRange(xRange=zoom_state[0], yRange=zoom_state[1], padding=0)
+        # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
+        self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
 
-        # Apply ROI
+        # Read ROI
         if self.roiFlag:
             x1, y1 = self.roi_item.pos()
             w, h = self.roi_item.size()
@@ -365,7 +352,7 @@ class MainWindow(mw_Base, mw_Ui):
             centroid_x, centroid_y, xrms, yrms = 0, 0, 0, 0
 
 
-        # Print instantaneous beam stats
+        # Print instantaneous beam stats and roi dimensions
         self.xcInstant.setText(self.format_units(centroid_x))
         self.ycInstant.setText(self.format_units(centroid_y))
         self.xrmsInstant.setText(self.format_units(xrms))
@@ -388,21 +375,35 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsAvg.setText(self.format_units(computeQueueMean(self.xrmsQueue)))
         self.yrmsAvg.setText(self.format_units(computeQueueMean(self.yrmsQueue)))
 
+        # Append image stats and magnet values to scanData
+        if self.scanFlag:
+            currentStats = {
+                'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms,
+                'x1':self.magnets.X1.get_setpoint(),
+                'y1':self.magnets.Y1.get_setpoint(),
+                'x2':self.magnets.X2.get_setpoint(),
+                'y2':self.magnets.Y2.get_setpoint(),
+            }
+            self.scanData.append(currentStats)
+
+
     def format_units(self, pixels):
         #Return as mm or um.
         dist = pixels * self.get_setting('calibration')
-        return f'{dist:.2f}mm' if dist>=1 else f'{dist/1000:.0f}um'
+        return f'{dist:.2f}mm' if dist>=1 else f'{dist*1000:.0f}um'
 
         
     def closeEvent(self, event):
+        # Stop cameras
         self.imageAcq.stop()
-        
+
+        # Close filter wheels in parallel (take 10sec for each connection to close)
         print('Closing filter wheels')
-        for fw in self.filter_wheels:
-            fw.close_conn()
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            executor.map(lambda conn:conn.close_conn(), self.filter_wheels)
 
         print('Closing window')
-        event.accept()  # Ensure that the window is closed
+        event.accept()
 
 
 # Run Application

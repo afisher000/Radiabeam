@@ -8,6 +8,81 @@ import re
 import time
 from epics import caput, caget
 
+from PyQt6.QtCore import QThread, pyqtSignal
+from vimba import Vimba
+
+
+class FilterWheel:
+    def __init__(self, COM):
+        self.testing = False
+        self.COM = COM
+        self.baud_rate = 19200
+        self.timeout = 5
+
+        
+        if not self.testing and self.COM:
+            # Test communication
+            self.conn = serial.Serial(self.COM, self.baud_rate, timeout=self.timeout)
+            self.conn.write(b'WSMODE\n')
+            time.sleep(.1)
+            try:
+                response = self.conn.readline().decode().strip()
+            except Exception as e:
+                print(f'Could not get response from IFW driver: {e}')
+                raise
+
+            # Home filter wheel
+            if response=="!":
+                self.conn.write(b'WFILTR\n')
+                time.sleep(.1)
+                self.filterID = int(re.search(r'\d+', self.conn.readline().decode().strip()).group())
+                time.sleep(.1)
+                self.conn.write(b'WHOME\n')
+
+    
+    def move(self, FWindex):
+        if not self.testing and self.COM:
+            # Move filter wheel
+            self.conn.write(b'WFILTR\n')
+            time.sleep(.2)
+            self.conn.write(f'WGOTO{FWindex}\n'.encode())
+
+    def close_conn(self):
+        if not self.testing and self.COM:
+            self.conn.close()
+
+            
+class ImageAcquisition(QThread):
+    image_ready = pyqtSignal(list)
+
+    def __init__(self, ID):
+        super().__init__()
+        self.acquiring = False
+        self.ID = ID
+        self.gain = 0
+
+    def run(self):
+        print(f'Starting Cam {self.ID}')
+
+        self.acquiring = True
+        with Vimba.get_instance() as system:
+            with system.get_camera_by_id(self.ID) as cam:
+                while self.acquiring:
+                    cam.get_feature_by_name('Gain').set(self.gain)
+
+                    frame = cam.get_frame()
+                    image = frame.as_numpy_ndarray()
+                    self.image_ready.emit([image])
+
+    def stop(self):
+        print(f'Stopping Cam {self.ID}')
+        self.acquiring = False
+        self.wait() #wait for thread to stop
+
+    def set(self, attribute, value):
+        setattr(self, attribute, value)
+
+
 class SteeringMagnets:
     def __init__(self):
         self.X1 = SteeringMagnet('BUN1_STM01_X')
