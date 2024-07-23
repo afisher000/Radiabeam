@@ -6,7 +6,33 @@ import matplotlib.pyplot as plt
 import serial
 import re
 import time
+from epics import caput, caget
 
+class SteeringMagnets:
+    def __init__(self):
+        self.X1 = SteeringMagnet('BUN1_STM01_X')
+        self.Y1 = SteeringMagnet('BUN1_STM01_Y')
+        self.X2 = SteeringMagnet('BUN1_STM02_X')
+        self.Y2 = SteeringMagnet('BUN1_STM02_Y')
+        self.X3 = SteeringMagnet('BUN1_STM03_X')
+        self.Y3 = SteeringMagnet('BUN1_STM03_Y')
+        self.X4 = SteeringMagnet('BUN1_STM04_X')
+        self.Y4 = SteeringMagnet('BUN1_STM04_Y')
+
+class SteeringMagnet:
+    def __init__(self, label):
+        self.label = label
+
+    def get_status(self):
+        status = caget(self.label + '_SupplyOn_RB')
+        # print(f'{self.label} status: {status}')
+        return status
+    
+    def get_setpoint(self):
+        current = caget(self.label + '_Current_RB')
+        # print(f'{self.label} current: {current}')
+        return current
+    
 class Settings:
     def __init__(self, SN='', COM='', label='', ID='', calibration=None):
         # Camera inputs
@@ -22,44 +48,7 @@ class Settings:
         self.FWindex = 0
         return
     
-class FilterWheel:
-    def __init__(self, COM):
-        self.testing = 1
-        self.COM = COM
-        self.baud_rate = 19200
-        self.timeout = 5
 
-        
-        if not self.testing:
-            # Test communication
-            self.conn = serial.Serial(self.COM, self.baud_rate, timeout=self.timeout)
-            self.conn.write(b'WSMODE\n')
-            time.sleep(.1)
-            try:
-                response = self.conn.readline().decode().strip()
-            except Exception as e:
-                print(f'Could not get response from IFW driver: {e}')
-                raise
-
-            # Home filter wheel
-            if response=="!":
-                self.conn.write(b'WFILTR\n')
-                time.sleep(.1)
-                self.filterID = int(re.search(r'\d+', self.conn.readline().decode().strip()).group())
-                time.sleep(.1)
-                self.conn.write(b'WHOME\n')
-
-    
-    def move(self, FWindex):
-        if not self.testing:
-            # Move filter wheel
-            self.conn.write(b'WFILTR\n')
-            time.sleep(.2)
-            self.conn.write(f'WGOTO{FWindex}\n'.encode())
-
-    def close_conn(self):
-        if not self.testing:
-            self.conn.close()
 
     
 

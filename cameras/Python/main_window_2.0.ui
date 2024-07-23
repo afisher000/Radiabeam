@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>861</width>
-    <height>621</height>
+    <width>1005</width>
+    <height>658</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -31,13 +31,17 @@
     <widget class="QWidget" name="widget" native="true">
      <property name="minimumSize">
       <size>
-       <width>500</width>
-       <height>0</height>
+       <width>640</width>
+       <height>640</height>
       </size>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0">
       <item>
-       <layout class="QVBoxLayout" name="imageLayout"/>
+       <layout class="QVBoxLayout" name="imageLayout" stretch="">
+        <property name="spacing">
+         <number>24</number>
+        </property>
+       </layout>
       </item>
      </layout>
     </widget>
@@ -361,6 +365,22 @@
             </widget>
            </item>
           </layout>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="title">
+         <string>Scan</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QPushButton" name="runscanButton">
+           <property name="text">
+            <string>Run</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
