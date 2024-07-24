@@ -51,7 +51,7 @@ class FilterWheel:
         if not self.testing and self.COM:
             self.conn.close()
 
-            
+
 class ImageAcquisition(QThread):
     image_ready = pyqtSignal(list)
 
@@ -103,10 +103,20 @@ class SteeringMagnet:
         # print(f'{self.label} status: {status}')
         return status
     
-    def get_setpoint(self):
+    def get_current(self):
         current = caget(self.label + '_Current_RB')
         # print(f'{self.label} current: {current}')
         return current
+    
+    def set_current(self, current):
+        if abs(current)>4:
+            raise ValueError('Max current limit is 4 amps')
+        
+        caput(self.label+'_Setpoint_SET', current)
+        caput(self.label+'_Apply_SET.PROC', 1)
+        time.sleep(.1)
+        caput(self.label+'_Apply_SET.PROC', 1)
+
     
 class Settings:
     def __init__(self, SN='', COM='', label='', ID='', calibration=None):
