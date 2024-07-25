@@ -40,6 +40,8 @@ class MainWindow(mw_Base, mw_Ui):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
+        self.image_h = 1024
+        self.image_w = 1280
 
         # Setup
         self.setupGraphics() 
