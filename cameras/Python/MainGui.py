@@ -18,7 +18,9 @@ import concurrent.futures
 
 ''' 
 WORK TO BE DONE
-Add info to scanData including calibration, camera label and SN, filterwheel
+ - Add info to scanData including calibration, camera label and SN, filterwheel
+ - Ellipse fitting is very slow?
+ - Add exposure to camera
 
 
 '''
