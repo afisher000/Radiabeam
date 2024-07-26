@@ -2,8 +2,7 @@ import sys
 import os
 import numpy as np
 
-
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QInputDialog, QLineEdit
 from PyQt6 import uic
 
 from PIL import Image
@@ -47,8 +46,10 @@ class MainWindow(mw_Base, mw_Ui):
         self.setupGraphics() 
         self.setupCameras()
         self.setupFilterWheels()
-        self.setupQueues()
+        self.setupQueues(self.shotsInput.value())
         self.magnets = SteeringMagnets()
+        self.triggerCombo.addItems(["Freerun", "Trigger"])
+
 
 
         # Connect to ImageAcquisition class
@@ -63,6 +64,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.acquireButton.setCheckable(True)
         self.acquireFlag = False
         
+        self.triggerCombo.currentIndexChanged.connect(self.updateTriggerMode)
 
 
         # Camera
@@ -95,7 +97,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.ellipseButton.setCheckable(True)
         self.ellipseFlag = False
 
-
+        self.shotsInput.valueChanged.connect(self.updateShots)
         self.resetButton.clicked.connect(self.resetQueues)
 
         self.roiButton.clicked.connect(self.toggleROI)
@@ -118,12 +120,17 @@ class MainWindow(mw_Base, mw_Ui):
 
     #----- Setup Functions -----#
     def setupGraphics(self):
+        # Set widget to correct size
+        scale = 0.5
+        # self.imageWidget.setFixedSize(int(self.image_w*scale), int(self.image_h*scale))
+
         # Create graphicsScene, add to graphicsView
         self.imageView = pg.ImageView()
         self.imageLayout.addWidget(self.imageView)
 
+
         # Create ROI
-        self.roi_item = pg.RectROI([1280//4, 1280//4], [1280//2, 1280//2], pen='r')
+        self.roi_item = pg.RectROI([self.image_w//4, self.image_h//4], [self.image_w//2, self.image_h//2], pen='r')
         self.roi_item.setVisible(False)
         self.imageView.addItem(self.roi_item)
         self.imageView.setColorMap(pg.colormap.get('viridis')) #'viridis', 'plasma', 'inferno', 'magma', 'cividis'
@@ -133,7 +140,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.imageView.ui.menuBtn.hide()  # Hide the menu button (if available)
 
         view = self.imageView.getView()
-        view.setRange(xRange=(0, 1280), yRange=(0,1280), padding=0)
+        view.setRange(xRange=(0, self.image_w), yRange=(0,self.image_h), padding=0)
         view.setBackgroundColor('w')
 
         # Ellipse
@@ -158,17 +165,21 @@ class MainWindow(mw_Base, mw_Ui):
             self.filter_wheels.append(FilterWheel(COM=settings['COM']))
 
 
-    def setupQueues(self):
+    def setupQueues(self, queue_size):
         ''' Setup Queues for image stat averages.'''
-        self.queue_size = 20
-        self.xcQueue = deque(maxlen=self.queue_size)
-        self.ycQueue = deque(maxlen=self.queue_size)
-        self.xrmsQueue = deque(maxlen=self.queue_size)
-        self.yrmsQueue = deque(maxlen=self.queue_size)
+        self.xcQueue = deque(maxlen=queue_size)
+        self.ycQueue = deque(maxlen=queue_size)
+        self.xrmsQueue = deque(maxlen=queue_size)
+        self.yrmsQueue = deque(maxlen=queue_size)
+        self.pixelSumQueue = deque(maxlen=queue_size)
 
     #----- Acquisition Functions -----#
     def toggleAcquisition(self):
         self.acquireFlag = not self.acquireFlag
+
+    def updateTriggerMode(self, index):
+        triggerMode = self.triggerCombo.itemText(index)
+        self.imageAcq.set('triggerMode', triggerMode)
 
     #----- Camera Functions -----#
     def changeCamera(self, index):
@@ -197,6 +208,7 @@ class MainWindow(mw_Base, mw_Ui):
     
     def updateExposure(self, exposure):
         self.settings[self.menu_index].exposure = exposure
+        self.imageAcq.set('exposure', exposure)
     
     #----- Background Functions -----#
     def setBackground(self):
@@ -237,9 +249,13 @@ class MainWindow(mw_Base, mw_Ui):
             if not os.path.exists(scan_dir):
                 os.makedirs(scan_dir)
 
-            # Save scan data
+            # Window to name file
             timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
-            filepath = os.path.join(scan_dir, f'{timestamp}.csv')
+            default_filename = f'{timestamp}_measurement.csv'
+            filename, ok = QInputDialog.getText(self, 'File Name', 'Enter the file name:', QLineEdit.EchoMode.Normal, default_filename)
+                
+            # Save scan data
+            filepath = os.path.join(scan_dir, filename)
             pd.DataFrame(self.scanData).to_csv(filepath, index=False)
 
         # Toggle flag
@@ -276,11 +292,15 @@ class MainWindow(mw_Base, mw_Ui):
             self.ellipseButton.setChecked(False)
         pass
 
+    def updateShots(self, shots):
+        self.setupQueues(shots)
+
     def resetQueues(self):
         self.xcQueue.clear()
         self.ycQueue.clear()
         self.xrmsQueue.clear()
         self.yrmsQueue.clear()
+        self.pixelSumQueue.clear()
     
     #----- Main Image acquisition -----#
 
@@ -303,10 +323,16 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Save image
         if self.continuousFlag:
-            self.saveImage()
+           self.saveImage()
 
         # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
         self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
+        # view = self.imageView.getView()
+        # self.imageView.getView().setLimits(minXRange=0, maxXRange=self.image_w, minYRange=0, maxYRange=self.image_h)#Min=0, yMin=0, xMax=self.image_w, yMax=self.image_h)
+
+        # view.setLimits( maxXRange=self.image_w)
+        # view.setLimits( maxYRange=self.image_h)
+        # view.setLimits(yMin=0, yMax=self.image_h, maxYRange=self.image_h)
 
         # Read ROI
         if self.roiFlag:
@@ -325,7 +351,7 @@ class MainWindow(mw_Base, mw_Ui):
             _, centroid_y, yrms, ybg = fit_gaussian_with_offset(roi_image.sum(axis=1))
             centroid_x += int(x1)
             centroid_y += int(y1)
-            
+            pixelSum = roi_image.sum()
             if self.ellipseFlag:
                 bg = xbg/w + ybg/h
                 rot45image = rotate(roi_image, 45, cval = bg)
@@ -353,7 +379,7 @@ class MainWindow(mw_Base, mw_Ui):
                 self.ellipse.setData(xpoints, ypoints)
 
         else:
-            centroid_x, centroid_y, xrms, yrms = 0, 0, 0, 0
+            centroid_x, centroid_y, xrms, yrms, pixelSum = 0, 0, 0, 0, 0
 
 
         # Print instantaneous beam stats and roi dimensions
@@ -361,6 +387,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.ycInstant.setText(self.format_units(centroid_y))
         self.xrmsInstant.setText(self.format_units(xrms))
         self.yrmsInstant.setText(self.format_units(yrms))
+        self.pixelSumInstant.setText(self.format_counts(pixelSum))
         if self.roiFlag:
             self.deltaxInstant.setText(self.format_units(w))
             self.deltayInstant.setText(self.format_units(h))
@@ -374,19 +401,34 @@ class MainWindow(mw_Base, mw_Ui):
         self.ycQueue.append(centroid_y)
         self.xrmsQueue.append(xrms)
         self.yrmsQueue.append(yrms)
+        self.pixelSumQueue.append(pixelSum)
         self.xcAvg.setText(self.format_units(computeQueueMean(self.xcQueue)))
         self.ycAvg.setText(self.format_units(computeQueueMean(self.ycQueue)))
         self.xrmsAvg.setText(self.format_units(computeQueueMean(self.xrmsQueue)))
         self.yrmsAvg.setText(self.format_units(computeQueueMean(self.yrmsQueue)))
+        self.pixelSumAvg.setText(self.format_counts(computeQueueMean(self.pixelSumQueue)))
 
         # Append image stats and magnet values to scanData
         if self.scanFlag:
             currentStats = {
-                'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms,
-                'x1':self.magnets.X1.get_setpoint(),
-                'y1':self.magnets.Y1.get_setpoint(),
-                'x2':self.magnets.X2.get_setpoint(),
-                'y2':self.magnets.Y2.get_setpoint(),
+                # Image stats
+                'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
+
+                # Settings
+                'FWindex':self.get_setting('FWindex'),
+                'gain':self.get_setting('gain'),
+                'exposure':self.get_setting('exposure'),
+                'camera':self.get_setting('label'),
+
+                # Magnet currents
+                'x1':self.magnets.X1.get_current(),
+                'y1':self.magnets.Y1.get_current(),
+                'x2':self.magnets.X2.get_current(),
+                'y2':self.magnets.Y2.get_current(),
+                'x3':self.magnets.X3.get_current(),
+                'y3':self.magnets.Y3.get_current(),
+                'x4':self.magnets.X4.get_current(),
+                'y4':self.magnets.Y4.get_current(),
             }
             self.scanData.append(currentStats)
 
@@ -396,7 +438,10 @@ class MainWindow(mw_Base, mw_Ui):
         dist = pixels * self.get_setting('calibration')
         return f'{dist:.2f}mm' if dist>=1 else f'{dist*1000:.0f}um'
 
-        
+    def format_counts(self, count):
+        return f'{count:.2e}'
+            
+
     def closeEvent(self, event):
         # Stop cameras
         self.imageAcq.stop()

@@ -39,7 +39,6 @@ class FilterWheel:
                 time.sleep(.1)
                 self.conn.write(b'WHOME\n')
 
-    
     def move(self, FWindex):
         if not self.testing and self.COM:
             # Move filter wheel
@@ -60,6 +59,8 @@ class ImageAcquisition(QThread):
         self.acquiring = False
         self.ID = ID
         self.gain = 0
+        self.exposure = 1000
+        self.triggerMode = 'FreeRun'
 
     def run(self):
         print(f'Starting Cam {self.ID}')
@@ -67,9 +68,22 @@ class ImageAcquisition(QThread):
         self.acquiring = True
         with Vimba.get_instance() as system:
             with system.get_camera_by_id(self.ID) as cam:
-                while self.acquiring:
-                    cam.get_feature_by_name('Gain').set(self.gain)
+                cam.get_feature_by_name('TriggerSource').set('Line1')  # or 'Software' if you want to trigger via software
 
+                # Camera properties can only be changed within a "with" statement.
+                while self.acquiring:
+
+                    # Set features
+                    cam.get_feature_by_name('Gain').set(self.gain)
+                    cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
+
+                    if self.triggerMode == 'FreeRun':
+                        cam.get_feature_by_name('TriggerMode').set('Off')
+                        # time.sleep(.2)
+                    elif self.triggerMode == 'Triggered':
+                        cam.get_feature_by_name('TriggerMode').set('On')
+
+                    # Get image and send to maingui 
                     frame = cam.get_frame()
                     image = frame.as_numpy_ndarray()
                     self.image_ready.emit([image])
@@ -81,6 +95,7 @@ class ImageAcquisition(QThread):
 
     def set(self, attribute, value):
         setattr(self, attribute, value)
+        print(f'Set {attribute} to {value}')
 
 
 class SteeringMagnets:
