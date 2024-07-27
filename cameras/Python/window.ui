@@ -31,7 +31,7 @@
     <widget class="QWidget" name="imageWidget" native="true">
      <property name="minimumSize">
       <size>
-       <width>350</width>
+       <width>450</width>
        <height>0</height>
       </size>
      </property>

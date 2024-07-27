@@ -111,6 +111,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.runscanButton.setCheckable(True)
         self.scanFlag = False
 
+
     #----- Setup Functions -----#
     def setupGraphics(self):
         # Set image widget to correct aspect ratio
@@ -120,6 +121,8 @@ class MainWindow(mw_Base, mw_Ui):
         # Create graphicsScene, add to graphicsView
         self.imageView = pg.ImageView()
         self.imageLayout.addWidget(self.imageView)
+        self.imageView.setImage(np.zeros((self.image_w, self.image_h)), autoLevels=False, levels=(0,255), autoRange=False) 
+
 
         # Create ROI
         self.ROI = pg.RectROI([self.image_w//4, self.image_h//4], [self.image_w//2, self.image_h//2], pen='r')
@@ -143,6 +146,7 @@ class MainWindow(mw_Base, mw_Ui):
         # Ellipse
         self.ellipse = pg.PlotDataItem(pen=pg.mkPen(None), width=2)
         self.imageView.addItem(self.ellipse)
+
 
 
     def setupQueues(self, queue_size):
@@ -213,7 +217,7 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Save image with timestamp and label
         label = self.get_setting('label')
-        timestamp = datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+        timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
         filepath = os.path.join(image_dir, f'{timestamp}_{label}.png')
         pil_image.save(filepath)
 
@@ -233,8 +237,8 @@ class MainWindow(mw_Base, mw_Ui):
                 os.makedirs(scan_dir)
 
             # Window to name file
-            timestamp = datetime.now().strftime("%H.%M.%S")
-            default_filename = f'{timestamp}_measurement.csv'
+            timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+            default_filename = f'{timestamp} measurement.csv'
             filename, confirmation = QInputDialog.getText(self, 'File Name', 'Enter the file name:', QLineEdit.EchoMode.Normal, default_filename)
             
             # Save scan data
@@ -316,6 +320,10 @@ class MainWindow(mw_Base, mw_Ui):
         if self.roiFlag:
             x1, y1 = self.ROI.pos()
             w, h = self.ROI.size()
+            x1 = max(0, x1)
+            y1 = max(0, y1)
+            w = min(self.image_w-x1, w)
+            h = min(self.image_h-y1, h)
         else:
             x1, y1 = 0, 0
             h, w = self.image.shape
@@ -341,13 +349,12 @@ class MainWindow(mw_Base, mw_Ui):
 
 
                 sigmaxy     = np.abs((sigma45**2-sigma135**2)/2)
-
                 beam_matrix = np.array([[xrms**2, -sigmaxy], [-sigmaxy, yrms**2]])
                 eigvalues, eigvectors = np.linalg.eig(beam_matrix)
 
                 # Draw ellipse
-                semi_major = np.sqrt(eigvalues[0])
-                semi_minor = np.sqrt(eigvalues[1])
+                semi_major = np.sqrt(np.abs(eigvalues[0]))
+                semi_minor = np.sqrt(np.abs(eigvalues[1]))
                 angle = np.degrees(np.arctan2(eigvectors[1, 0], eigvectors[0, 0]))
 
                 t = np.linspace(0, 2*np.pi, 100)

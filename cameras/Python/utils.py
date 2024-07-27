@@ -75,6 +75,7 @@ class Camera(QThread):
                 xc, yc = np.array([height//2, width//2]) + 0*100*np.random.random(2)
                 xrms, yrms = np.array([20,20]) + 0*2*np.random.random(2)
                 image = (10 + 1.5**self.gain) * np.exp(-((X - xc)**2 / (2 * xrms**2) + (Y - yc)**2 / (2 * yrms**2)))
+                image += 5*np.random.random(image.shape)
                 image = np.clip(image, 0, 255)
                 self.image_ready.emit([image.astype(np.uint8)])
                 time.sleep(.2)
@@ -193,11 +194,15 @@ def fit_gaussian_with_offset(proj):
     initial_guess = [np.max(proj)-np.min(proj), np.argmax(proj), 10, np.min(proj)]
     
     # Perform the curve fitting
-    x = np.arange(len(proj))
-    params, _ = curve_fit(gaussian_with_offset, x, proj, p0=initial_guess)
-    amplitude, mean, sigma, offset = params
-
-    return amplitude, mean, sigma, offset
+    try:
+        x = np.arange(len(proj))
+        lbs = [0, 0, 0, 0]
+        ubs = [np.max(proj), len(proj), len(proj)/2, np.max(proj)]
+        maxfev = 1000
+        params, _ = curve_fit(gaussian_with_offset, x, proj, p0=initial_guess, bounds=(lbs, ubs), maxfev=maxfev)
+        return params #amplitude, mean, sigma, offset
+    except:
+        return (0, 0, 0, 0)
 
 def computeQueueMean(queue):
     return 0 if len(queue)==0 else sum(queue)/len(queue)
