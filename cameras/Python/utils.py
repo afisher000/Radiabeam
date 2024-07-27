@@ -2,25 +2,22 @@
 # %%
 import numpy as np
 from scipy.optimize import curve_fit
-import matplotlib.pyplot as plt
 import serial
 import re
 import time
 from epics import caput, caget
-
 from PyQt6.QtCore import QThread, pyqtSignal
-from vimba import Vimba
 
 
 class FilterWheel:
-    def __init__(self, COM):
-        self.testing = False
+    def __init__(self, COM, TESTING):
+        self.TESTING = TESTING
         self.COM = COM
         self.baud_rate = 19200
         self.timeout = 5
 
         
-        if not self.testing and self.COM:
+        if not self.TESTING and self.COM:
             # Test communication
             self.conn = serial.Serial(self.COM, self.baud_rate, timeout=self.timeout)
             self.conn.write(b'WSMODE\n')
@@ -40,53 +37,71 @@ class FilterWheel:
                 self.conn.write(b'WHOME\n')
 
     def move(self, FWindex):
-        if not self.testing and self.COM:
+        if not self.TESTING and self.COM:
             # Move filter wheel
             self.conn.write(b'WFILTR\n')
             time.sleep(.2)
             self.conn.write(f'WGOTO{FWindex}\n'.encode())
 
-    def close_conn(self):
-        if not self.testing and self.COM:
+    def closeConnection(self):
+        if not self.TESTING and self.COM:
             self.conn.close()
 
 
-class ImageAcquisition(QThread):
+class Camera(QThread):
     image_ready = pyqtSignal(list)
 
-    def __init__(self, ID):
+    def __init__(self, ID, TESTING):
         super().__init__()
+        if not TESTING:
+            from vimba import Vimba
+        self.TESTING = TESTING
         self.acquiring = False
         self.ID = ID
         self.gain = 0
         self.exposure = 1000
-        self.triggerMode = 'FreeRun'
+        self.acqmode = 'FreeRun'
 
     def run(self):
+        self.acquiring = True
         print(f'Starting Cam {self.ID}')
 
-        self.acquiring = True
-        with Vimba.get_instance() as system:
-            with system.get_camera_by_id(self.ID) as cam:
-                cam.get_feature_by_name('TriggerSource').set('Line1')  # or 'Software' if you want to trigger via software
+        if self.TESTING:
+            # Generate 2d gaussian image
+            while self.acquiring:
+                width = 1280
+                height = 1024                
+                X, Y = np.meshgrid( np.arange(width), np.arange(height))
+                xc, yc = np.array([height//2, width//2]) + 0*100*np.random.random(2)
+                xrms, yrms = np.array([20,20]) + 0*2*np.random.random(2)
+                image = (10 + 1.5**self.gain) * np.exp(-((X - xc)**2 / (2 * xrms**2) + (Y - yc)**2 / (2 * yrms**2)))
+                image = np.clip(image, 0, 255)
+                self.image_ready.emit([image.astype(np.uint8)])
+                time.sleep(.2)
 
-                # Camera properties can only be changed within a "with" statement.
-                while self.acquiring:
+        else:
+            # Actual data images
+            with Vimba.get_instance() as system:
+                with system.get_camera_by_id(self.ID) as cam:
+                    cam.get_feature_by_name('TriggerSource').set('Line1')  # or 'Software' if you want to trigger via software
 
-                    # Set features
-                    cam.get_feature_by_name('Gain').set(self.gain)
-                    cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
+                    # Camera properties can only be changed within a "with" statement.
+                    while self.acquiring:
 
-                    if self.triggerMode == 'FreeRun':
-                        cam.get_feature_by_name('TriggerMode').set('Off')
-                        # time.sleep(.2)
-                    elif self.triggerMode == 'Triggered':
-                        cam.get_feature_by_name('TriggerMode').set('On')
+                        # Set features
+                        cam.get_feature_by_name('Gain').set(self.gain)
+                        cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
 
-                    # Get image and send to maingui 
-                    frame = cam.get_frame()
-                    image = frame.as_numpy_ndarray()
-                    self.image_ready.emit([image])
+                        if self.acqmode == 'FreeRun':
+                            cam.get_feature_by_name('TriggerMode').set('Off')
+                            # time.sleep(.2)
+                        elif self.acqmode == 'Triggered':
+                            cam.get_feature_by_name('TriggerMode').set('On')
+
+                        # Get image and send to maingui 
+                        frame = cam.get_frame()
+                        image = frame.as_numpy_ndarray()
+                        self.image_ready.emit([image])
 
     def stop(self):
         print(f'Stopping Cam {self.ID}')
@@ -99,40 +114,56 @@ class ImageAcquisition(QThread):
 
 
 class SteeringMagnets:
-    def __init__(self):
-        self.X1 = SteeringMagnet('BUN1_STM01_X')
-        self.Y1 = SteeringMagnet('BUN1_STM01_Y')
-        self.X2 = SteeringMagnet('BUN1_STM02_X')
-        self.Y2 = SteeringMagnet('BUN1_STM02_Y')
-        self.X3 = SteeringMagnet('BUN1_STM03_X')
-        self.Y3 = SteeringMagnet('BUN1_STM03_Y')
-        self.X4 = SteeringMagnet('BUN1_STM04_X')
-        self.Y4 = SteeringMagnet('BUN1_STM04_Y')
+    def __init__(self, TESTING):
+        if TESTING:
+            self.X1 = SteeringMagnetEmpty()
+            self.Y1 = SteeringMagnetEmpty()
+            self.X2 = SteeringMagnetEmpty()
+            self.Y2 = SteeringMagnetEmpty()
+            self.X3 = SteeringMagnetEmpty()
+            self.Y3 = SteeringMagnetEmpty()
+            self.X4 = SteeringMagnetEmpty()
+            self.Y4 = SteeringMagnetEmpty()
+        else:
+            self.X1 = SteeringMagnet('BUN1_STM01_X')
+            self.Y1 = SteeringMagnet('BUN1_STM01_Y')
+            self.X2 = SteeringMagnet('BUN1_STM02_X')
+            self.Y2 = SteeringMagnet('BUN1_STM02_Y')
+            self.X3 = SteeringMagnet('BUN1_STM03_X')
+            self.Y3 = SteeringMagnet('BUN1_STM03_Y')
+            self.X4 = SteeringMagnet('BUN1_STM04_X')
+            self.Y4 = SteeringMagnet('BUN1_STM04_Y')
 
 class SteeringMagnet:
     def __init__(self, label):
         self.label = label
 
-    def get_status(self):
+    def setStatus(self):
         status = caget(self.label + '_SupplyOn_RB')
-        # print(f'{self.label} status: {status}')
         return status
     
-    def get_current(self):
+    def getCurrent(self):
         current = caget(self.label + '_Current_RB')
-        # print(f'{self.label} current: {current}')
         return current
     
-    def set_current(self, current):
+    def setCurrent(self, current):
         if abs(current)>4:
             raise ValueError('Max current limit is 4 amps')
-        
-        caput(self.label+'_Setpoint_SET', current)
-        caput(self.label+'_Apply_SET.PROC', 1)
-        time.sleep(.1)
-        caput(self.label+'_Apply_SET.PROC', 1)
+        else:
+            caput(self.label+'_Setpoint_SET', current)
+            caput(self.label+'_Apply_SET.PROC', 1)
+            time.sleep(.1)
+            caput(self.label+'_Apply_SET.PROC', 1)
 
-    
+
+class SteeringMagnetEmpty:
+    def getStatus(self):
+        return 0
+    def getCurrent(self):
+        return 0
+    def setCurrent(self):
+        return
+
 class Settings:
     def __init__(self, SN='', COM='', label='', ID='', calibration=None):
         # Camera inputs
@@ -145,11 +176,8 @@ class Settings:
         # GUI parameters
         self.gain = 0
         self.exposure = 1000
-        self.FWindex = 0
+        self.filter_index = 0
         return
-    
-
-
     
 
 def gaussian_with_offset(x, amplitude, mean, sigma, offset):
@@ -166,7 +194,7 @@ def fit_gaussian_with_offset(proj):
     
     # Perform the curve fitting
     x = np.arange(len(proj))
-    params, params_covariance = curve_fit(gaussian_with_offset, x, proj, p0=initial_guess)
+    params, _ = curve_fit(gaussian_with_offset, x, proj, p0=initial_guess)
     amplitude, mean, sigma, offset = params
 
     return amplitude, mean, sigma, offset
