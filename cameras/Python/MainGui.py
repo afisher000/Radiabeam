@@ -28,9 +28,10 @@ WORK TO BE DONE
 # GUI Window Class
 mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
-    TESTING = True
+    TESTING = False
     image_h = 1024
     image_w = 1280
+    SCAN_MAX_SHOTS = 1000
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -43,8 +44,8 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Fill combo menus
         self.cameraCombo.addItems([label for label in camera_settings['label']])
-        self.acqmodeCombo.addItems(["Freerun", "Trigger"])
-        self.colormapCombo.addItems(['turbo','viridis', 'plasma', 'inferno', 'magma'])
+        self.acqmodeCombo.addItems(["FreeRun", "Triggered"])
+        self.colormapCombo.addItems(['viridis', 'turbo', 'plasma', 'inferno', 'magma'])
         self.filterCombo.addItems(['100%', '50%', '10%', '1%', '0%'])
 
         # Setup 
@@ -79,6 +80,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.subtractButton.clicked.connect(self.toggleBackgroundSubtraction)
         self.subtractButton.setCheckable(True)
         self.subtractFlag = False
+        self.setFlag = False
 
         # Saving
         self.singleButton.clicked.connect(self.saveImage)
@@ -163,6 +165,7 @@ class MainWindow(mw_Base, mw_Ui):
 
     def changeAcqMode(self, index):
         acqmode = self.acqmodeCombo.itemText(index)
+        print(f'{acqmode}')
         self.camera.set('acqMode', acqmode)
 
     #----- Camera Functions -----#
@@ -172,7 +175,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.camera.stop()
 
         # Change camera ID in camera and restart
-        ID = self.get_settings('ID')
+        ID = self.get_setting('ID')
         self.camera.set('ID', ID)
         self.camera.start()
 
@@ -201,9 +204,11 @@ class MainWindow(mw_Base, mw_Ui):
     def setBackground(self):
         if not self.subtractFlag:
             self.background = self.image
+            self.setFlag = True
 
     def toggleBackgroundSubtraction(self):
-        self.subtractFlag = not self.subtractFlag
+        if self.setFlag:
+            self.subtractFlag = not self.subtractFlag
 
     #----- Saving Functions -----#
     def saveImage(self):
@@ -226,8 +231,11 @@ class MainWindow(mw_Base, mw_Ui):
 
     #----- Scan Functions -----#
     def toggleScan(self):
+        # Toggle scan flag
+        self.scanFlag = not self.scanFlag
+
         # Reset scanData or save to file
-        if not self.scanFlag:
+        if self.scanFlag:
             self.scanData = []
         else:
             # Ensure image directory for today's date
@@ -245,10 +253,7 @@ class MainWindow(mw_Base, mw_Ui):
             if confirmation:
                 filepath = os.path.join(scan_dir, filename)
                 pd.DataFrame(self.scanData).to_csv(filepath, index=False)
-
-        # Toggle flag
-        self.scanFlag = not self.scanFlag
-        
+              
 
     #----- Filter Wheel Functions -----#
     def changeFilter(self, filter_index):
@@ -391,33 +396,45 @@ class MainWindow(mw_Base, mw_Ui):
         self.xcAvg.setText(self.format_units(computeQueueMean(self.xcQueue)))
         self.ycAvg.setText(self.format_units(computeQueueMean(self.ycQueue)))
         self.xrmsAvg.setText(self.format_units(computeQueueMean(self.xrmsQueue)))
-        self.yrmsAvg.setText(self.format_units(computeQueueMean(self.yrmsQueue)))
+        self.yrmsAvg.setText(self.format_units(computeQueueMean(self.yrmsQueue))) 
         self.pixelSumAvg.setText(self.format_counts(computeQueueMean(self.pixelSumQueue)))
+        self.avgLabel.setText(f'Avg. ({len(self.xcQueue)})')
+
+        self.currentStats = {}
+            #     # Timestamp
+            #     'current_time':datetime.now().strftime("%Y-%m-%d %H-%M-%S-%f"),
+
+            #     # Image stats
+            #     'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
+
+            #     # Settings
+            #     'filter_index':self.get_setting('filter_index'),
+            #     'gain':self.get_setting('gain'),
+            #     'exposure':self.get_setting('exposure'),
+            #     'camera':self.get_setting('label'),
+            #     'serial':self.get_setting('SN'),
+
+            #     # Magnet currents
+            #     'x1':self.magnets.X1.getCurrent(),
+            #     'y1':self.magnets.Y1.getCurrent(),
+            #     'x2':self.magnets.X2.getCurrent(),
+            #     'y2':self.magnets.Y2.getCurrent(),
+            #     'x3':self.magnets.X3.getCurrent(),
+            #     'y3':self.magnets.Y3.getCurrent(),
+            #     'x4':self.magnets.X4.getCurrent(),
+            #     'y4':self.magnets.Y4.getCurrent(),
+            # }
+        
 
         # Append image stats and magnet values to scanData
         if self.scanFlag:
-            currentStats = {
-                # Image stats
-                'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
 
-                # Settings
-                'filter_index':self.get_setting('filter_index'),
-                'gain':self.get_setting('gain'),
-                'exposure':self.get_setting('exposure'),
-                'camera':self.get_setting('label'),
-                'serial':self.get_setting('SN'),
-
-                # Magnet currents
-                'x1':self.magnets.X1.getCurrent(),
-                'y1':self.magnets.Y1.getCurrent(),
-                'x2':self.magnets.X2.getCurrent(),
-                'y2':self.magnets.Y2.getCurrent(),
-                'x3':self.magnets.X3.getCurrent(),
-                'y3':self.magnets.Y3.getCurrent(),
-                'x4':self.magnets.X4.getCurrent(),
-                'y4':self.magnets.Y4.getCurrent(),
-            }
             self.scanData.append(currentStats)
+
+            # Terminate if scanData > 100 shots (raise later)
+            if len(self.scanData)>self.SCAN_MAX_SHOTS:
+                self.runscanButton.setChecked(False)
+                self.toggleScan() # call callback function manually
 
 
 

@@ -7,12 +7,12 @@ import re
 import time
 from epics import caput, caget
 from PyQt6.QtCore import QThread, pyqtSignal
-
+from vimba import Vimba
 
 class FilterWheel:
     def __init__(self, COM, TESTING):
         self.TESTING = TESTING
-        self.COM = COM
+        self.COM = COM if COM!='None' else None
         self.baud_rate = 19200
         self.timeout = 5
 
@@ -53,14 +53,12 @@ class Camera(QThread):
 
     def __init__(self, ID, TESTING):
         super().__init__()
-        if not TESTING:
-            from vimba import Vimba
         self.TESTING = TESTING
         self.acquiring = False
         self.ID = ID
         self.gain = 0
         self.exposure = 1000
-        self.acqmode = 'FreeRun'
+        self.acqMode = 'FreeRun'
 
     def run(self):
         self.acquiring = True
@@ -92,17 +90,17 @@ class Camera(QThread):
                         # Set features
                         cam.get_feature_by_name('Gain').set(self.gain)
                         cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
-
-                        if self.acqmode == 'FreeRun':
+                        if self.acqMode == 'FreeRun':
                             cam.get_feature_by_name('TriggerMode').set('Off')
-                            # time.sleep(.2)
-                        elif self.acqmode == 'Triggered':
+                            time.sleep(.2)
+                        elif self.acqMode == 'Triggered':
                             cam.get_feature_by_name('TriggerMode').set('On')
 
                         # Get image and send to maingui 
                         frame = cam.get_frame()
                         image = frame.as_numpy_ndarray()
                         self.image_ready.emit([image])
+
 
     def stop(self):
         print(f'Stopping Cam {self.ID}')
