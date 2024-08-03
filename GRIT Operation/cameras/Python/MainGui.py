@@ -12,7 +12,7 @@ from PyQt6 import uic
 from PIL import Image
 from datetime import datetime
 from collections import deque
-from utils import fit_gaussian_with_offset, Settings, computeQueueMean, SteeringMagnets, Camera, FilterWheel
+from utils import fit_gaussian_with_offset, Settings, computeQueueMean, Camera, FilterWheel, getEpicsData
 from scipy.ndimage import rotate
 
 import pyqtgraph as pg
@@ -28,9 +28,10 @@ WORK TO BE DONE
 # GUI Window Class
 mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
-    TESTING = False
+    TESTING = True
     image_h = 1024
     image_w = 1280
+    hist_min = 100
     SCAN_MAX_SHOTS = 1000
 
     def __init__(self, *args, **kwargs):
@@ -51,9 +52,7 @@ class MainWindow(mw_Base, mw_Ui):
         # Setup 
         self.setupGraphics() 
         self.setupQueues(self.shotsInput.value())
-
-        # Establish communication with epics for reading/writing magnets
-        self.magnets = SteeringMagnets(self.TESTING)
+        self.setupDirectories()
 
         # Connect to camera, connect callback, and start
         self.camera = Camera(self.get_setting('ID'), self.TESTING)
@@ -84,10 +83,12 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Saving
         self.singleButton.clicked.connect(self.saveImage)
-        self.continuousButton.clicked.connect(self.toggleSaveContinuous)
-        self.continuousButton.setCheckable(True)
-        self.continuousFlag = False
-
+        self.imagescanButton.clicked.connect(self.toggleImageScan)
+        self.imagescanButton.setCheckable(True)
+        self.imagescanFlag = False
+        self.scanButton.clicked.connect(self.toggleScan)
+        self.scanButton.setCheckable(True)
+        self.scanFlag = False
 
         # Filter Wheel
         self.filterCombo.currentIndexChanged.connect(self.changeFilter)
@@ -108,10 +109,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.roiButton.setCheckable(True)
         self.roiFlag = False
 
-        # Scan
-        self.runscanButton.clicked.connect(self.toggleScan)
-        self.runscanButton.setCheckable(True)
-        self.scanFlag = False
+
 
 
     #----- Setup Functions -----#
@@ -119,12 +117,21 @@ class MainWindow(mw_Base, mw_Ui):
         # Set image widget to correct aspect ratio
         scale = .5
         self.imageWidget.setFixedSize(int(self.image_w*scale), int(self.image_h*scale))
+        self.histWidget.setFixedSize(int(self.image_w*scale), int(0.2*self.image_h*scale))
 
-        # Create graphicsScene, add to graphicsView
+        # Create Image and pixel histogram
         self.imageView = pg.ImageView()
         self.imageLayout.addWidget(self.imageView)
         self.imageView.setImage(np.zeros((self.image_w, self.image_h)), autoLevels=False, levels=(0,255), autoRange=False) 
 
+        self.histPlot = pg.PlotWidget()
+        self.histLayout.addWidget(self.histPlot)
+        self.histPlot.clear()
+        self.histPlot.plot(np.arange(257), np.zeros(256), stepMode=True, fillLevel=0, brush=(0, 0, 255, 150))
+        self.histPlot.setXRange(self.hist_min, 255)
+        self.histPlot.setYRange(0, 1)
+        self.histPlot.getAxis('bottom').setVisible(False)
+        self.histPlot.getAxis('left').setVisible(False)
 
         # Create ROI
         self.ROI = pg.RectROI([self.image_w//4, self.image_h//4], [self.image_w//2, self.image_h//2], pen='r')
@@ -158,6 +165,19 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsQueue = deque(maxlen=queue_size)
         self.yrmsQueue = deque(maxlen=queue_size)
         self.pixelSumQueue = deque(maxlen=queue_size)
+
+    def setupDirectories(self):
+        datestamp = datetime.now().strftime("%Y-%m-%d")
+
+        # Ensure image directory for today's date
+        self.scan_dir = os.path.join('Scans', datestamp)
+        if not os.path.exists(self.scan_dir):
+            os.makedirs(self.scan_dir)
+
+        # Ensure image directory for today's date
+        self.image_dir = os.path.join('Images', datestamp)
+        if not os.path.exists(self.image_dir):
+            os.makedirs(self.image_dir)
 
     #----- Acquisition Functions -----#
     def toggleAcquisition(self):
@@ -211,49 +231,73 @@ class MainWindow(mw_Base, mw_Ui):
             self.subtractFlag = not self.subtractFlag
 
     #----- Saving Functions -----#
-    def saveImage(self):
+    def saveImage(self, imagescan=False):
         pil_image = Image.fromarray(self.image)
 
-        # Ensure image directory for today's date
-        datestamp = datetime.now().strftime("%Y-%m-%d")
-        image_dir = os.path.join('Images', datestamp)
-        if not os.path.exists(image_dir):
-            os.makedirs(image_dir)
+        # Save image and stats
+        if imagescan:
+            # Create scan directory
+            scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
+            if not os.path.exists(scanimages_dir):
+                os.makedirs(scanimages_dir)
 
-        # Save image with timestamp and label
-        label = self.get_setting('label')
-        timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
-        filepath = os.path.join(image_dir, f'{timestamp}_{label}.png')
-        pil_image.save(filepath)
-
-    def toggleSaveContinuous(self):
-        self.continuousFlag = not self.continuousFlag
-
-    #----- Scan Functions -----#
-    def toggleScan(self):
-        # Toggle scan flag
-        self.scanFlag = not self.scanFlag
-
-        # Reset scanData or save to file
-        if self.scanFlag:
-            self.scanData = []
-        else:
-            # Ensure image directory for today's date
-            datestamp = datetime.now().strftime("%Y-%m-%d")
-            scan_dir = os.path.join('Scans', datestamp)
-            if not os.path.exists(scan_dir):
-                os.makedirs(scan_dir)
-
-            # Window to name file
+            label = self.get_setting('label')
             timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
-            default_filename = f'{timestamp} measurement.csv'
-            filename, confirmation = QInputDialog.getText(self, 'File Name', 'Enter the file name:', QLineEdit.EchoMode.Normal, default_filename)
+            filepath = os.path.join(scanimages_dir, f'{timestamp}_{label}')
+
+        else:
+            stats = self.getStats()
+            label = self.get_setting('label')
+            timestamp = stats['timestamp']
+            filepath = os.path.join(self.image_dir, f'{timestamp}_{label}_{self.descriptionEdit.text()}')
+            pd.Series(stats).to_csv(filepath + '.csv')
+
+        pil_image.save(filepath + '.png')
+        
+
+    def toggleImageScan(self):
+        # Only allow click if scanButton not already clicked
+        if self.scanButton.isChecked():
+            self.imagescanButton.setChecked(False)
+        else:
+            self.imagescanFlag = not self.imagescanFlag
+            self.toggleScanFlag()
+
+            if self.scanFlag:
+                self.scanData = []
+            else:
+                self.saveScanData(imagescan=True)
             
-            # Save scan data
-            if confirmation:
-                filepath = os.path.join(scan_dir, filename)
-                pd.DataFrame(self.scanData).to_csv(filepath, index=False)
-              
+    def toggleScanFlag(self):
+        # Lock descriptionEdit if currently scanning
+        self.scanFlag = not self.scanFlag
+        self.descriptionEdit.setReadOnly(self.scanFlag)
+
+
+    def toggleScan(self):
+        # Only allow click if imagescanButton not already clicked
+        if self.imagescanButton.isChecked():
+            self.scanButton.setChecked(False)
+        else:
+            self.toggleScanFlag()
+
+            if self.scanFlag:
+                self.scanData = []
+            else:
+                self.saveScanData(imagescan=False)
+
+
+
+    def saveScanData(self, imagescan):
+        # Window to name file
+        timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+        if imagescan:
+            scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
+            filepath = os.path.join(scanimages_dir, 'settings.csv')
+        else:
+            filepath = os.path.join(self.scan_dir, f'{timestamp}_{self.descriptionEdit.text()}.csv')
+        pd.DataFrame(self.scanData).to_csv(filepath, index=False)
+
 
     #----- Filter Wheel Functions -----#
     def changeFilter(self, filter_index):
@@ -315,11 +359,8 @@ class MainWindow(mw_Base, mw_Ui):
             self.image = np.clip(difference, 0, 255).astype(np.uint8)
 
         # Save image
-        if self.continuousFlag:
-           self.saveImage()
-
-        # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
-        self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
+        if self.imagescanFlag:
+           self.saveImage(imagescan=True)
 
         # Read ROI
         if self.roiFlag:
@@ -332,10 +373,19 @@ class MainWindow(mw_Base, mw_Ui):
         else:
             x1, y1 = 0, 0
             h, w = self.image.shape
+        roi_image = self.image[int(y1):int(y1+h), int(x1):int(x1+w)]
+
+        # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
+        self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
+
+        hist, bin_edges = np.histogram(roi_image, bins=256, range=(self.hist_min, 255))
+        hist_normalized = hist / max(1, hist.max())
+        self.histPlot.clear()
+        self.histPlot.plot(bin_edges, hist_normalized, stepMode=True, fillLevel=0, brush=(0, 0, 255, 150))
+
 
         # Compute centroid and rms from gaussian fits (Can move to utils)
         if self.analysisFlag:
-            roi_image = self.image[int(y1):int(y1+h), int(x1):int(x1+w)]
 
             # Apply gaussian fits
             _, centroid_x, xrms, xbg = fit_gaussian_with_offset(roi_image.sum(axis=0))
@@ -371,7 +421,8 @@ class MainWindow(mw_Base, mw_Ui):
 
         else:
             centroid_x, centroid_y, xrms, yrms, pixelSum = 0, 0, 0, 0, 0
-
+        self.imageStats = {'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
+                           'roi_x':x1, 'roi_y':y1, 'roi_w':w, 'roi_h':h}
 
         # Print instantaneous beam stats and roi dimensions
         self.xcInstant.setText(self.format_units(centroid_x))
@@ -400,40 +451,17 @@ class MainWindow(mw_Base, mw_Ui):
         self.pixelSumAvg.setText(self.format_counts(computeQueueMean(self.pixelSumQueue)))
         self.avgLabel.setText(f'Avg. ({len(self.xcQueue)})')
 
-        self.currentStats = {}
-            #     # Timestamp
-            #     'current_time':datetime.now().strftime("%Y-%m-%d %H-%M-%S-%f"),
 
-            #     # Image stats
-            #     'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
-
-            #     # Settings
-            #     'filter_index':self.get_setting('filter_index'),
-            #     'gain':self.get_setting('gain'),
-            #     'exposure':self.get_setting('exposure'),
-            #     'camera':self.get_setting('label'),
-            #     'serial':self.get_setting('SN'),
-
-            #     # Magnet currents
-            #     'x1':self.magnets.X1.getCurrent(),
-            #     'y1':self.magnets.Y1.getCurrent(),
-            #     'x2':self.magnets.X2.getCurrent(),
-            #     'y2':self.magnets.Y2.getCurrent(),
-            #     'x3':self.magnets.X3.getCurrent(),
-            #     'y3':self.magnets.Y3.getCurrent(),
-            #     'x4':self.magnets.X4.getCurrent(),
-            #     'y4':self.magnets.Y4.getCurrent(),
-            # }
         
 
         # Append image stats and magnet values to scanData
         if self.scanFlag:
 
-            self.scanData.append(currentStats)
+            self.scanData.append(self.getStats())
 
             # Terminate if scanData > 100 shots (raise later)
             if len(self.scanData)>self.SCAN_MAX_SHOTS:
-                self.runscanButton.setChecked(False)
+                self.scanButton.setChecked(False)
                 self.toggleScan() # call callback function manually
 
 
@@ -455,6 +483,20 @@ class MainWindow(mw_Base, mw_Ui):
 
     def format_counts(self, count):
         return f'{count:.2e}'
+    
+    def getStats(self):
+        # Read camera settings
+        self.cameraStats = {
+                'timestamp':datetime.now().strftime("%Y-%m-%d %H-%M-%S"),
+                'filter_index':self.get_setting('filter_index'),
+                'gain':self.get_setting('gain'),
+                'exposure':self.get_setting('exposure'),
+                'camera':self.get_setting('label'),
+                'serial':self.get_setting('SN'),
+            }
+        # Return merged dictionaries
+        return (self.cameraStats | self.imageStats | getEpicsData())
+
             
     #----- Override close function -----#
     def closeEvent(self, event):

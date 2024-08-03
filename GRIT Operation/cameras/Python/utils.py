@@ -5,9 +5,23 @@ from scipy.optimize import curve_fit
 import serial
 import re
 import time
-from epics import caput, caget
+from epics import caput, caget, caget_many
 from PyQt6.QtCore import QThread, pyqtSignal
 from vimba import Vimba
+
+
+# Build list of pvs
+short_pv_names = ['gunphase', 'linacphase']
+full_pv_names = ['LLRF_AWG1_CH1_PhaseMan_SP', 'LLRF_AWG1_CH2_PhaseMan_SP']
+for num in [1,2,3,4]:
+    for coord in ['X', 'Y']:
+        short_pv_names.append(f'{coord}{num}')
+        full_pv_names.append(f'BUN1_STM0{num}_{coord}_Current_RB')
+def getEpicsData():
+    values = caget_many(full_pv_names)
+    return dict(zip(short_pv_names, values))
+
+
 
 class FilterWheel:
     def __init__(self, COM, TESTING):
@@ -76,7 +90,7 @@ class Camera(QThread):
                 image += 5*np.random.random(image.shape)
                 image = np.clip(image, 0, 255)
                 self.image_ready.emit([image.astype(np.uint8)])
-                time.sleep(.2)
+                time.sleep(1)
 
         else:
             # Actual data images
