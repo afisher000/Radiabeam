@@ -10,16 +10,27 @@ from PyQt6.QtCore import QThread, pyqtSignal
 from vimba import Vimba
 
 
-# Build list of pvs
-short_pv_names = ['gunphase', 'linacphase']
-full_pv_names = ['LLRF_AWG1_CH1_PhaseMan_SP', 'LLRF_AWG1_CH2_PhaseMan_SP']
-for num in [1,2,3,4]:
-    for coord in ['X', 'Y']:
-        short_pv_names.append(f'{coord}{num}')
-        full_pv_names.append(f'BUN1_STM0{num}_{coord}_Current_RB')
-def getEpicsData():
-    values = caget_many(full_pv_names)
-    return dict(zip(short_pv_names, values))
+
+def definePVs():
+    # Define pvs to read from epics
+    pvs = {
+        'gunphase':'LLRF_AWG1_CH1_PhaseMan_SP',
+        'linacphase':'LLRF_AWG1_CH2_PhaseMan_SP',
+        }
+
+    # Loop over steerings
+    for num in [1,2,3,4]:
+        for coord in ['X', 'Y']:
+            pvs[f'{coord}{num}'] = f'BUN1_STM0{num}_{coord}_Current_RB'
+    return pvs
+
+def getEpicsData(pvs, TESTING):
+    # Read values of epics PVs
+    short_names = list(pvs.keys())
+    long_names = list(pvs.values())
+
+    values = caget_many(long_names) if not TESTING else np.zeros(len(long_names))
+    return dict(zip(short_names, values))
 
 
 
@@ -73,6 +84,8 @@ class Camera(QThread):
         self.gain = 0
         self.exposure = 1000
         self.acqMode = 'FreeRun'
+        self.delay = 0
+        self.actionFlag = True #Set properties on startup
 
     def run(self):
         self.acquiring = True
@@ -90,7 +103,8 @@ class Camera(QThread):
                 image += 5*np.random.random(image.shape)
                 image = np.clip(image, 0, 255)
                 self.image_ready.emit([image.astype(np.uint8)])
-                time.sleep(1)
+                time.sleep(.1) #simulates 10Hz trigger
+                time.sleep(self.delay)
 
         else:
             # Actual data images
@@ -101,19 +115,24 @@ class Camera(QThread):
                     # Camera properties can only be changed within a "with" statement.
                     while self.acquiring:
 
-                        # Set features
-                        cam.get_feature_by_name('Gain').set(self.gain)
-                        cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
-                        if self.acqMode == 'FreeRun':
-                            cam.get_feature_by_name('TriggerMode').set('Off')
-                            time.sleep(.2)
-                        elif self.acqMode == 'Triggered':
-                            cam.get_feature_by_name('TriggerMode').set('On')
+                        # Set features if a value changed
+                        if self.actionFlag:
+                            self.actionFlag = False
+
+                            cam.get_feature_by_name('Gain').set(self.gain)
+                            cam.get_feature_by_name('ExposureTimeAbs').set(self.exposure)
+                            if self.acqMode == 'FreeRun':
+                                cam.get_feature_by_name('TriggerMode').set('Off')
+                                time.sleep(.2)
+                            elif self.acqMode == 'Triggered':
+                                cam.get_feature_by_name('TriggerMode').set('On')
+                            
 
                         # Get image and send to maingui 
                         frame = cam.get_frame()
                         image = frame.as_numpy_ndarray()
                         self.image_ready.emit([image])
+                        time.sleep(self.delay) # purposeful delay
 
 
     def stop(self):
@@ -123,59 +142,9 @@ class Camera(QThread):
 
     def set(self, attribute, value):
         setattr(self, attribute, value)
+        self.actionFlag = True
         print(f'Set {attribute} to {value}')
 
-
-class SteeringMagnets:
-    def __init__(self, TESTING):
-        if TESTING:
-            self.X1 = SteeringMagnetEmpty()
-            self.Y1 = SteeringMagnetEmpty()
-            self.X2 = SteeringMagnetEmpty()
-            self.Y2 = SteeringMagnetEmpty()
-            self.X3 = SteeringMagnetEmpty()
-            self.Y3 = SteeringMagnetEmpty()
-            self.X4 = SteeringMagnetEmpty()
-            self.Y4 = SteeringMagnetEmpty()
-        else:
-            self.X1 = SteeringMagnet('BUN1_STM01_X')
-            self.Y1 = SteeringMagnet('BUN1_STM01_Y')
-            self.X2 = SteeringMagnet('BUN1_STM02_X')
-            self.Y2 = SteeringMagnet('BUN1_STM02_Y')
-            self.X3 = SteeringMagnet('BUN1_STM03_X')
-            self.Y3 = SteeringMagnet('BUN1_STM03_Y')
-            self.X4 = SteeringMagnet('BUN1_STM04_X')
-            self.Y4 = SteeringMagnet('BUN1_STM04_Y')
-
-class SteeringMagnet:
-    def __init__(self, label):
-        self.label = label
-
-    def setStatus(self):
-        status = caget(self.label + '_SupplyOn_RB')
-        return status
-    
-    def getCurrent(self):
-        current = caget(self.label + '_Current_RB')
-        return current
-    
-    def setCurrent(self, current):
-        if abs(current)>4:
-            raise ValueError('Max current limit is 4 amps')
-        else:
-            caput(self.label+'_Setpoint_SET', current)
-            caput(self.label+'_Apply_SET.PROC', 1)
-            time.sleep(.1)
-            caput(self.label+'_Apply_SET.PROC', 1)
-
-
-class SteeringMagnetEmpty:
-    def getStatus(self):
-        return 0
-    def getCurrent(self):
-        return 0
-    def setCurrent(self):
-        return
 
 class Settings:
     def __init__(self, SN='', COM='', label='', ID='', calibration=None):
@@ -192,7 +161,6 @@ class Settings:
         self.filter_index = 0
         return
     
-
 def gaussian_with_offset(x, amplitude, mean, sigma, offset):
     return amplitude * np.exp(-((x-mean)**2)/(2*sigma**2)) + offset
 

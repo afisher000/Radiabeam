@@ -32,8 +32,3 @@ else:
 
 df.to_csv(csv_file, index=False)
 
-import matplotlib.pyplot as plt
-mask = df.integral_gain==.0001
-array = df[mask].groupby(by='prop_gain')['forward_power'].std()
-plt.plot(array)
-plt.show()

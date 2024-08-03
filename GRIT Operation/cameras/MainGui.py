@@ -1,44 +1,40 @@
-# %%
-test = 5
-
-# %%
 import sys
 import os
 import numpy as np
 
-from PyQt6.QtWidgets import QApplication, QInputDialog, QLineEdit
+from PyQt6.QtWidgets import QApplication, QMessageBox
 from PyQt6 import uic
 
 from PIL import Image
 from datetime import datetime
 from collections import deque
 from utils import fit_gaussian_with_offset, Settings, computeQueueMean, Camera, FilterWheel, getEpicsData
+import utils
 from scipy.ndimage import rotate
 
 import pyqtgraph as pg
 import pandas as pd
 import concurrent.futures
 
-''' 
-WORK TO BE DONE
- - Add info to scanData including calibration, camera label and SN, filterwheel
- - Ellipse fitting is very slow?
-'''
 
 # GUI Window Class
 mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
+    # Define constants
     TESTING = True
-    image_h = 1024
-    image_w = 1280
-    hist_min = 100
+    IMAGE_H = 1024
+    IMAGE_W = 1280
+    HIST_MIN = 200
     SCAN_MAX_SHOTS = 1000
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
 
-        # Read camera settings
+        # Read in epics pvs
+        self.PVs = utils.definePVs()
+
+        # Read camera settings, create settings and filterwheel objects
         camera_settings = pd.read_csv('camera_settings.csv')
         self.settings = [Settings(**row.to_dict()) for _, row in camera_settings.iterrows()]
         self.filter_wheels = [FilterWheel(COM, self.TESTING) for COM in camera_settings['COM']]
@@ -49,7 +45,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.colormapCombo.addItems(['viridis', 'turbo', 'plasma', 'inferno', 'magma'])
         self.filterCombo.addItems(['100%', '50%', '10%', '1%', '0%'])
 
-        # Setup 
+        # Setup functions
         self.setupGraphics() 
         self.setupQueues(self.shotsInput.value())
         self.setupDirectories()
@@ -65,7 +61,6 @@ class MainWindow(mw_Base, mw_Ui):
         self.acquireButton.clicked.connect(self.toggleAcquisition)
         self.acquireButton.setCheckable(True)
         self.acquireFlag = False
-        
         self.acqmodeCombo.currentIndexChanged.connect(self.changeAcqMode)
 
         # Camera
@@ -76,13 +71,13 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Background
         self.setButton.clicked.connect(self.setBackground)
+        self.setFlag = False
         self.subtractButton.clicked.connect(self.toggleBackgroundSubtraction)
         self.subtractButton.setCheckable(True)
         self.subtractFlag = False
-        self.setFlag = False
 
         # Saving
-        self.singleButton.clicked.connect(self.saveImage)
+        self.saveButton.clicked.connect(self.saveImage)
         self.imagescanButton.clicked.connect(self.toggleImageScan)
         self.imagescanButton.setCheckable(True)
         self.imagescanFlag = False
@@ -110,31 +105,31 @@ class MainWindow(mw_Base, mw_Ui):
         self.roiFlag = False
 
 
-
-
     #----- Setup Functions -----#
     def setupGraphics(self):
+        ''' Setup graphic objects including image, pixel histogram, ROI, and ellipse. '''
+
         # Set image widget to correct aspect ratio
         scale = .5
-        self.imageWidget.setFixedSize(int(self.image_w*scale), int(self.image_h*scale))
-        self.histWidget.setFixedSize(int(self.image_w*scale), int(0.2*self.image_h*scale))
+        self.imageWidget.setFixedSize(int(self.IMAGE_W*scale), int(self.IMAGE_H*scale))
+        self.histWidget.setFixedSize(int(self.IMAGE_W*scale), int(0.2*self.IMAGE_H*scale))
 
         # Create Image and pixel histogram
         self.imageView = pg.ImageView()
         self.imageLayout.addWidget(self.imageView)
-        self.imageView.setImage(np.zeros((self.image_w, self.image_h)), autoLevels=False, levels=(0,255), autoRange=False) 
+        self.imageView.setImage(np.zeros((self.IMAGE_W, self.IMAGE_H)), autoLevels=False, levels=(0,255), autoRange=False) 
 
         self.histPlot = pg.PlotWidget()
         self.histLayout.addWidget(self.histPlot)
         self.histPlot.clear()
         self.histPlot.plot(np.arange(257), np.zeros(256), stepMode=True, fillLevel=0, brush=(0, 0, 255, 150))
-        self.histPlot.setXRange(self.hist_min, 255)
+        self.histPlot.setXRange(self.HIST_MIN, 255)
         self.histPlot.setYRange(0, 1)
         self.histPlot.getAxis('bottom').setVisible(False)
         self.histPlot.getAxis('left').setVisible(False)
 
         # Create ROI
-        self.ROI = pg.RectROI([self.image_w//4, self.image_h//4], [self.image_w//2, self.image_h//2], pen='r')
+        self.ROI = pg.RectROI([self.IMAGE_W//4, self.IMAGE_H//4], [self.IMAGE_W//2, self.IMAGE_H//2], pen='r')
         self.ROI.setVisible(False)
         self.imageView.addItem(self.ROI)
 
@@ -148,15 +143,13 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Set image range and background
         view = self.imageView.getView()
-        view.setLimits(xMin=0, yMin=0, xMax=self.image_w, yMax=self.image_h)
-        view.setRange(xRange=(0, self.image_w), yRange=(0,self.image_h), padding=0)
+        view.setLimits(xMin=0, yMin=0, xMax=self.IMAGE_W, yMax=self.IMAGE_H)
+        view.setRange(xRange=(0, self.IMAGE_W), yRange=(0,self.IMAGE_H), padding=0)
         view.setBackgroundColor('w')
 
         # Ellipse
         self.ellipse = pg.PlotDataItem(pen=pg.mkPen(None), width=2)
         self.imageView.addItem(self.ellipse)
-
-
 
     def setupQueues(self, queue_size):
         ''' Setup Queues for image stat averages.'''
@@ -167,6 +160,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.pixelSumQueue = deque(maxlen=queue_size)
 
     def setupDirectories(self):
+        ''' Create directories for saving images and scans. '''
         datestamp = datetime.now().strftime("%Y-%m-%d")
 
         # Ensure image directory for today's date
@@ -232,9 +226,15 @@ class MainWindow(mw_Base, mw_Ui):
 
     #----- Saving Functions -----#
     def saveImage(self, imagescan=False):
-        pil_image = Image.fromarray(self.image)
+        '''(bool) imagescan: Whether saving as part of scan or single image. '''
+
+        # Display message box if no description
+        if not self.descriptionEdit.text():
+            self.show_warning('Enter a description...')
+            return
 
         # Save image and stats
+        pil_image = Image.fromarray(self.image)
         if imagescan:
             # Create scan directory
             scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
@@ -250,12 +250,18 @@ class MainWindow(mw_Base, mw_Ui):
             label = self.get_setting('label')
             timestamp = stats['timestamp']
             filepath = os.path.join(self.image_dir, f'{timestamp}_{label}_{self.descriptionEdit.text()}')
-            pd.Series(stats).to_csv(filepath + '.csv')
+            pd.Series(stats).to_csv(filepath + '.csv', header=False)
 
         pil_image.save(filepath + '.png')
         
 
     def toggleImageScan(self):
+        # Display message box if no description
+        if not self.descriptionEdit.text():
+            self.show_warning('Enter a description...')
+            self.imagescanButton.setChecked(False)
+            return
+        
         # Only allow click if scanButton not already clicked
         if self.scanButton.isChecked():
             self.imagescanButton.setChecked(False)
@@ -269,12 +275,22 @@ class MainWindow(mw_Base, mw_Ui):
                 self.saveScanData(imagescan=True)
             
     def toggleScanFlag(self):
-        # Lock descriptionEdit if currently scanning
         self.scanFlag = not self.scanFlag
+        
+        # Lock description input if currently scanning
         self.descriptionEdit.setReadOnly(self.scanFlag)
+
+        # Force delay to slow camera acquisition
+        self.camera.set('delay', 2*int(self.scanFlag))
 
 
     def toggleScan(self):
+        # Display message box if no description
+        if not self.descriptionEdit.text():
+            self.show_warning('Enter a description')
+            self.scanButton.setChecked(False)
+            return
+        
         # Only allow click if imagescanButton not already clicked
         if self.imagescanButton.isChecked():
             self.scanButton.setChecked(False)
@@ -287,22 +303,27 @@ class MainWindow(mw_Base, mw_Ui):
                 self.saveScanData(imagescan=False)
 
 
-
     def saveScanData(self, imagescan):
-        # Window to name file
+        '''(bool) imagescan: Whether scan was also saving images. '''
+
         timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+
+        # If imagescan, save to image directory. Else save as csv in Scans.
         if imagescan:
             scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
             filepath = os.path.join(scanimages_dir, 'settings.csv')
         else:
             filepath = os.path.join(self.scan_dir, f'{timestamp}_{self.descriptionEdit.text()}.csv')
+
         pd.DataFrame(self.scanData).to_csv(filepath, index=False)
 
 
     #----- Filter Wheel Functions -----#
     def changeFilter(self, filter_index):
+        #filter_index counts from 0, FilterWheel counts from 1
         camera_index = self.cameraCombo.currentIndex()
-        self.filter_wheels[camera_index].move(filter_index+1) #filter_index counts from 0, FilterWheel counts from 1
+        self.filter_wheels[camera_index].move(filter_index+1) 
+
         self.set_setting('filter_index', filter_index)
 
 
@@ -347,20 +368,10 @@ class MainWindow(mw_Base, mw_Ui):
         if not self.acquireFlag:
             return
 
-        # Warn about saturation
-        if self.image.max()>=255:
-            self.gainLabel.setStyleSheet("background-color: red; color: white;")
-        else:
-            self.gainLabel.setStyleSheet("background-color: white; color: black;")
-
         # Remove background (convert to int16 to handle negatives)
         if self.subtractFlag:
             difference = self.image.astype(np.int16) - self.background.astype(np.int16)
             self.image = np.clip(difference, 0, 255).astype(np.uint8)
-
-        # Save image
-        if self.imagescanFlag:
-           self.saveImage(imagescan=True)
 
         # Read ROI
         if self.roiFlag:
@@ -368,8 +379,8 @@ class MainWindow(mw_Base, mw_Ui):
             w, h = self.ROI.size()
             x1 = max(0, x1)
             y1 = max(0, y1)
-            w = min(self.image_w-x1, w)
-            h = min(self.image_h-y1, h)
+            w = min(self.IMAGE_W-x1, w)
+            h = min(self.IMAGE_H-y1, h)
         else:
             x1, y1 = 0, 0
             h, w = self.image.shape
@@ -378,7 +389,8 @@ class MainWindow(mw_Base, mw_Ui):
         # Show new image (use transpose as pyqtgraph plots [xaxis, yaxis] and numpy plots [yaxis, xaxis])
         self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
 
-        hist, bin_edges = np.histogram(roi_image, bins=256, range=(self.hist_min, 255))
+        # Plot pixel counts (to see saturation)
+        hist, bin_edges = np.histogram(roi_image, bins=256, range=(self.HIST_MIN, 255))
         hist_normalized = hist / max(1, hist.max())
         self.histPlot.clear()
         self.histPlot.plot(bin_edges, hist_normalized, stepMode=True, fillLevel=0, brush=(0, 0, 255, 150))
@@ -454,6 +466,10 @@ class MainWindow(mw_Base, mw_Ui):
 
         
 
+        # Save image
+        if self.imagescanFlag:
+           self.saveImage(imagescan=True)
+
         # Append image stats and magnet values to scanData
         if self.scanFlag:
 
@@ -465,8 +481,7 @@ class MainWindow(mw_Base, mw_Ui):
                 self.toggleScan() # call callback function manually
 
 
-
-    #----- Functions to access settings -----#    
+    #----- Functions to access current Setting object -----#    
     def get_setting(self, attribute):
         index = self.cameraCombo.currentIndex()
         return getattr(self.settings[index], attribute)
@@ -485,19 +500,32 @@ class MainWindow(mw_Base, mw_Ui):
         return f'{count:.2e}'
     
     def getStats(self):
-        # Read camera settings
-        self.cameraStats = {
+        # Read camera settings (this repeats, could be improved)
+        cameraStats = {
                 'timestamp':datetime.now().strftime("%Y-%m-%d %H-%M-%S"),
                 'filter_index':self.get_setting('filter_index'),
                 'gain':self.get_setting('gain'),
                 'exposure':self.get_setting('exposure'),
                 'camera':self.get_setting('label'),
                 'serial':self.get_setting('SN'),
+                'calibration':self.get_setting('calibration'),
             }
-        # Return merged dictionaries
-        return (self.cameraStats | self.imageStats | getEpicsData())
+        
+        # Read epics stats
+        epicsStats = getEpicsData(self.PVs, self.TESTING)
 
-            
+        # Return merged dictionaries
+        return (cameraStats | self.imageStats | epicsStats)
+
+    def show_warning(self, text):
+        ''' Show warning box. '''
+        msg_box = QMessageBox(self)
+        msg_box.setIcon(QMessageBox.Icon.Warning)
+        msg_box.setText(text)
+        msg_box.setWindowTitle('Warning')
+        msg_box.setStandardButtons(QMessageBox.StandardButton.Ok)
+        msg_box.exec()
+
     #----- Override close function -----#
     def closeEvent(self, event):
         # Stop cameras
