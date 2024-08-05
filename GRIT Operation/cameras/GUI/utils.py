@@ -7,7 +7,7 @@ import re
 import time
 from epics import caput, caget, caget_many
 from PyQt6.QtCore import QThread, pyqtSignal
-# from vimba import Vimba
+from vimba import Vimba
 
 
 

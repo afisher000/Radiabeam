@@ -536,8 +536,9 @@ class MainWindow(mw_Base, mw_Ui):
 
     #----- Override close function -----#
     def closeEvent(self, event):
-        # Stop cameras
+        # Stop camera and ICT
         self.camera.stop()
+        self.ICT.stop()
 
         # Close filter wheels in parallel (take 10sec for each connection to close)
         print('Closing filter wheels')
