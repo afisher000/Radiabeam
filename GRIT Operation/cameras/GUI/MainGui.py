@@ -8,7 +8,7 @@ from PyQt6 import uic
 from PIL import Image
 from datetime import datetime
 from collections import deque
-from utils import fit_gaussian_with_offset, Settings, computeQueueMean, Camera, FilterWheel, getEpicsData
+from utils import fit_gaussian_with_offset, Settings, computeQueueMean, Camera, FilterWheel, getEpicsData, ICT
 import utils
 from scipy.ndimage import rotate
 
@@ -55,6 +55,10 @@ class MainWindow(mw_Base, mw_Ui):
         self.camera.image_ready.connect(self.updateImage)
         self.camera.start()
 
+        # Connect to ICT, connect callback, and start
+        self.ICT = ICT(self.TESTING)
+        self.ICT.charge_ready.connect(self.updateCharge)
+        self.ICT.start()
 
         #----- Signals and slots (in order of gui) -----#
         # Acquisition
@@ -164,12 +168,12 @@ class MainWindow(mw_Base, mw_Ui):
         datestamp = datetime.now().strftime("%Y-%m-%d")
 
         # Ensure image directory for today's date
-        self.scan_dir = os.path.join('Scans', datestamp)
+        self.scan_dir = os.path.join('../Scans', datestamp)
         if not os.path.exists(self.scan_dir):
             os.makedirs(self.scan_dir)
 
         # Ensure image directory for today's date
-        self.image_dir = os.path.join('Images', datestamp)
+        self.image_dir = os.path.join('../Images', datestamp)
         if not os.path.exists(self.image_dir):
             os.makedirs(self.image_dir)
 
@@ -390,7 +394,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.imageView.setImage(self.image.T, autoLevels=False, levels=(0,255), autoRange=False) 
 
         # Plot pixel counts (to see saturation)
-        hist, bin_edges = np.histogram(roi_image, bins=256, range=(self.HIST_MIN, 255))
+        hist, bin_edges = np.histogram(roi_image, bins=255-self.HIST_MIN+1, range=(self.HIST_MIN, 255))
         hist_normalized = hist / max(1, hist.max())
         self.histPlot.clear()
         self.histPlot.plot(bin_edges, hist_normalized, stepMode=True, fillLevel=0, brush=(0, 0, 255, 150))
@@ -480,6 +484,9 @@ class MainWindow(mw_Base, mw_Ui):
                 self.scanButton.setChecked(False)
                 self.toggleScan() # call callback function manually
 
+    def updateCharge(self, charge):
+        self.charge = charge
+        self.chargeLabel.setText(f'Charge: {charge:.0f} pC')
 
     #----- Functions to access current Setting object -----#    
     def get_setting(self, attribute):
@@ -501,7 +508,7 @@ class MainWindow(mw_Base, mw_Ui):
     
     def getStats(self):
         # Read camera settings (this repeats, could be improved)
-        cameraStats = {
+        generalStats = {
                 'timestamp':datetime.now().strftime("%Y-%m-%d %H-%M-%S"),
                 'filter_index':self.get_setting('filter_index'),
                 'gain':self.get_setting('gain'),
@@ -509,13 +516,14 @@ class MainWindow(mw_Base, mw_Ui):
                 'camera':self.get_setting('label'),
                 'serial':self.get_setting('SN'),
                 'calibration':self.get_setting('calibration'),
+                'charge':round(self.charge, 2),
             }
         
         # Read epics stats
         epicsStats = getEpicsData(self.PVs, self.TESTING)
 
         # Return merged dictionaries
-        return (cameraStats | self.imageStats | epicsStats)
+        return (generalStats | self.imageStats | epicsStats)
 
     def show_warning(self, text):
         ''' Show warning box. '''

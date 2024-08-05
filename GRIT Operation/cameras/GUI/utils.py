@@ -7,7 +7,7 @@ import re
 import time
 from epics import caput, caget, caget_many
 from PyQt6.QtCore import QThread, pyqtSignal
-from vimba import Vimba
+# from vimba import Vimba
 
 
 
@@ -32,7 +32,69 @@ def getEpicsData(pvs, TESTING):
     values = caget_many(long_names) if not TESTING else np.zeros(len(long_names))
     return dict(zip(short_names, values))
 
+class ICT(QThread):
+    charge_ready = pyqtSignal(float)
 
+    def __init__(self, TESTING):
+        super().__init__()
+        self.delay = 0.5
+        self.acquiring = True
+        self.TESTING = TESTING
+
+        
+    def run(self):
+        if self.TESTING:
+            while self.acquiring:
+                charge = 100*np.random.random()
+                self.charge_ready.emit(charge)
+                time.sleep(self.delay) # purposeful delay
+        
+        else:
+            # ICT and serial settings
+            port = 'COM1'
+            baudrate = 115200
+            termination = '\n\0'
+            Qcal = 0.005 # picoCoulombs
+            Ucal = 0.8722100 # volts
+            try: 
+                with serial.Serial(port=port, baudrate=baudrate, timeout=1) as ser:
+                    # Wait for connection
+                    time.sleep(2)
+
+                    # Flush buffer
+                    ser.reset_input_buffer()
+                    ser.reset_output_buffer()
+
+                    # Continuously poll
+                    while self.acquiring:
+                        time.sleep(.05) #~10 Hz reprate
+                        if ser.in_waiting: # ie. byte in buffer
+                            buffer = ser.read_until(termination.encode()).decode('utf-8')
+                            
+                            # Maybe have received multiple responses
+                            for response in buffer.split(termination):
+
+                                # Voltage sample indicated by 'A' prefix
+                                # Ex: 'A0:0123=00123ABC\n\0'
+                                # or '{frame_type}{frame_number}:{4_char_counter}={8_char_value}{terminator}'
+                                if response[0]=='A':
+                                    hex_value = response[8:]
+                                    volts = int(hex_value, 16) # Convert from microVolts
+
+                                    # Apply calibration
+                                    charge = Qcal * 10**(volts / Ucal) #picoCoulombs
+                                    self.charge_ready.emit(charge)
+                                    time.sleep(self.delay) # purposeful delay
+
+            except serial.SerialException as e:
+                print(f"Serial exception: {e}")
+            except Exception as e:
+                print(f"An error occurred: {e}")
+    
+    def stop(self):
+        print(f'Stopping ICT')
+        self.acquiring = False
+        self.wait() #wait for thread to stop
 
 class FilterWheel:
     def __init__(self, COM, TESTING):

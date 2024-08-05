@@ -80,6 +80,22 @@
        </widget>
       </item>
       <item>
+       <widget class="QGroupBox" name="groupBox_7">
+        <property name="title">
+         <string>ICT</string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="chargeLabel">
+           <property name="text">
+            <string>Charge: 0 pC</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="groupBox_2">
         <property name="title">
          <string>Camera</string>
