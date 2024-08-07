@@ -40,3 +40,25 @@ class SteeringMagnet():
             caput(self.label+'_Apply_SET.PROC', 1)
             time.sleep(.1)
             caput(self.label+'_Apply_SET.PROC', 1)
+
+class QuadMagnet():
+    def __init__(self, num):
+        self.label = f'QUAD{num}'
+
+    def setStatus(self):
+        status = caget(self.label + '_SupplyOn_RB')
+        return status
+    
+    def getCurrent(self):
+        current = caget(self.label + '_Current_RB')
+        return current
+    
+    def setCurrent(self, current):
+        if abs(current)>4:
+            current = current/abs(current)*4
+            print('Saturated current at 4 amps')
+        else:
+            caput(self.label+'_Setpoint_SET', current)
+            caput(self.label+'_Apply_SET.PROC', 1)
+            time.sleep(.1)
+            caput(self.label+'_Apply_SET.PROC', 1)

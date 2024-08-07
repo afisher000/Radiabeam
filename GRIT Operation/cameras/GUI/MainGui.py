@@ -21,11 +21,12 @@ import concurrent.futures
 mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
     # Define constants
-    TESTING = True
+    TESTING = False
     IMAGE_H = 1024
     IMAGE_W = 1280
     HIST_MIN = 200
     SCAN_MAX_SHOTS = 1000
+    FILTER_TRANSMISSION = [1, 0.5, 0.1, 0.01]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,7 +36,8 @@ class MainWindow(mw_Base, mw_Ui):
         self.PVs = utils.definePVs()
 
         # Read camera settings, create settings and filterwheel objects
-        camera_settings = pd.read_csv('camera_settings.csv')
+        df = pd.read_csv('camera_settings.csv')
+        camera_settings = df[df.inuse=='yes']
         self.settings = [Settings(**row.to_dict()) for _, row in camera_settings.iterrows()]
         self.filter_wheels = [FilterWheel(COM, self.TESTING) for COM in camera_settings['COM']]
 
@@ -56,16 +58,21 @@ class MainWindow(mw_Base, mw_Ui):
         self.camera.start()
 
         # Connect to ICT, connect callback, and start
-        self.ICT = ICT(self.TESTING)
+        self.charge = 0
+        self.ICT = ICT(TESTING=True)
         self.ICT.charge_ready.connect(self.updateCharge)
-        self.ICT.start()
 
         #----- Signals and slots (in order of gui) -----#
         # Acquisition
-        self.acquireButton.clicked.connect(self.toggleAcquisition)
-        self.acquireButton.setCheckable(True)
-        self.acquireFlag = False
+        self.acqImageButton.clicked.connect(self.toggleImageAcq)
+        self.acqImageButton.setCheckable(True)
+        self.acqImageFlag = False
         self.acqmodeCombo.currentIndexChanged.connect(self.changeAcqMode)
+
+        # Charge Acquisition
+        self.acqChargeButton.clicked.connect(self.toggleChargeAcq)
+        self.acqChargeButton.setCheckable(True)
+        self.acqChargeFlag = False
 
         # Camera
         self.cameraCombo.currentIndexChanged.connect(self.changeCamera)
@@ -162,6 +169,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsQueue = deque(maxlen=queue_size)
         self.yrmsQueue = deque(maxlen=queue_size)
         self.pixelSumQueue = deque(maxlen=queue_size)
+        self.correctedSumQueue = deque(maxlen=queue_size)
 
     def setupDirectories(self):
         ''' Create directories for saving images and scans. '''
@@ -177,14 +185,22 @@ class MainWindow(mw_Base, mw_Ui):
         if not os.path.exists(self.image_dir):
             os.makedirs(self.image_dir)
 
-    #----- Acquisition Functions -----#
-    def toggleAcquisition(self):
-        self.acquireFlag = not self.acquireFlag
+    #----- Image Acqiusition Functions -----#
+    def toggleImageAcq(self):
+        self.acqImageFlag = not self.acqImageFlag
 
     def changeAcqMode(self, index):
         acqmode = self.acqmodeCombo.itemText(index)
         print(f'{acqmode}')
         self.camera.set('acqMode', acqmode)
+
+    #----- Charge Acquisition Function -----#
+    def toggleChargeAcq(self):
+        self.acqChargeFlag = not self.acqChargeFlag
+        if self.acqChargeFlag:
+            self.ICT.start()
+        else:
+            self.ICT.stop()
 
     #----- Camera Functions -----#
     def changeCamera(self):
@@ -285,7 +301,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.descriptionEdit.setReadOnly(self.scanFlag)
 
         # Force delay to slow camera acquisition
-        self.camera.set('delay', 2*int(self.scanFlag))
+        self.camera.set('delay', 1*int(self.scanFlag))
 
 
     def toggleScan(self):
@@ -363,14 +379,20 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsQueue.clear()
         self.yrmsQueue.clear()
         self.pixelSumQueue.clear()
-    
+        self.pixelSumQueue.clear()
     #----- Main Image acquisition -----#
 
     def updateImage(self, image):
         # Had to be list for PyQt Signal, reorder dimensions
         self.image = image[0].squeeze()
-        if not self.acquireFlag:
+        if not self.acqImageFlag:
             return
+
+        if self.get_setting('fliplr'):
+            self.image = np.fliplr(self.image)
+        
+        if self.get_setting('flipud'):
+            self.image = np.flipud(self.image)
 
         # Remove background (convert to int16 to handle negatives)
         if self.subtractFlag:
@@ -437,6 +459,12 @@ class MainWindow(mw_Base, mw_Ui):
 
         else:
             centroid_x, centroid_y, xrms, yrms, pixelSum = 0, 0, 0, 0, 0
+
+        # Compute corrected sum
+        gain = self.get_setting('gain')
+        filter_trans = self.FILTER_TRANSMISSION[self.get_setting('filter_index')]
+        correctedSum = pixelSum / 10**(gain/20) / filter_trans
+
         self.imageStats = {'xc':centroid_x, 'yc':centroid_y, 'xrms':xrms, 'yrms':yrms, 'sum':pixelSum,
                            'roi_x':x1, 'roi_y':y1, 'roi_w':w, 'roi_h':h}
 
@@ -446,6 +474,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsInstant.setText(self.format_units(xrms))
         self.yrmsInstant.setText(self.format_units(yrms))
         self.pixelSumInstant.setText(self.format_counts(pixelSum))
+        self.correctedSumInstant.setText(self.format_counts(correctedSum))
         if self.roiFlag:
             self.deltaxInstant.setText(self.format_units(w))
             self.deltayInstant.setText(self.format_units(h))
@@ -460,15 +489,15 @@ class MainWindow(mw_Base, mw_Ui):
         self.xrmsQueue.append(xrms)
         self.yrmsQueue.append(yrms)
         self.pixelSumQueue.append(pixelSum)
+        self.correctedSumQueue.append(correctedSum)
         self.xcAvg.setText(self.format_units(computeQueueMean(self.xcQueue)))
         self.ycAvg.setText(self.format_units(computeQueueMean(self.ycQueue)))
         self.xrmsAvg.setText(self.format_units(computeQueueMean(self.xrmsQueue)))
         self.yrmsAvg.setText(self.format_units(computeQueueMean(self.yrmsQueue))) 
         self.pixelSumAvg.setText(self.format_counts(computeQueueMean(self.pixelSumQueue)))
+        self.correctedSumAvg.setText(self.format_counts(computeQueueMean(self.correctedSumQueue)))
         self.avgLabel.setText(f'Avg. ({len(self.xcQueue)})')
 
-
-        
 
         # Save image
         if self.imagescanFlag:
@@ -536,14 +565,16 @@ class MainWindow(mw_Base, mw_Ui):
 
     #----- Override close function -----#
     def closeEvent(self, event):
-        # Stop camera and ICT
+        # Stop camera
         self.camera.stop()
-        self.ICT.stop()
-
+        
         # Close filter wheels in parallel (take 10sec for each connection to close)
         print('Closing filter wheels')
         with concurrent.futures.ThreadPoolExecutor() as executor:
             executor.map(lambda conn:conn.closeConnection(), self.filter_wheels)
+
+        # Stop ICT
+        self.ICT.stop()
 
         print('Closing window')
         event.accept()

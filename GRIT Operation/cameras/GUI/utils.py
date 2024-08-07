@@ -5,7 +5,7 @@ from scipy.optimize import curve_fit
 import serial
 import re
 import time
-from epics import caput, caget, caget_many
+from epics import caget_many
 from PyQt6.QtCore import QThread, pyqtSignal
 from vimba import Vimba
 
@@ -16,12 +16,17 @@ def definePVs():
     pvs = {
         'gunphase':'LLRF_AWG1_CH1_PhaseMan_SP',
         'linacphase':'LLRF_AWG1_CH2_PhaseMan_SP',
+        # 'linac1_temp':'HP1_CHILL1_DISC_TEMP_RB',
         }
 
     # Loop over steerings
     for num in [1,2,3,4]:
         for coord in ['X', 'Y']:
             pvs[f'{coord}{num}'] = f'BUN1_STM0{num}_{coord}_Current_RB'
+
+    # Loop over quads
+    for num in [1,2,3,4,5]:
+        pvs[f'Q{num}'] = f'QUAD{num}_Current_RB'
     return pvs
 
 def getEpicsData(pvs, TESTING):
@@ -38,11 +43,11 @@ class ICT(QThread):
     def __init__(self, TESTING):
         super().__init__()
         self.delay = 0.5
-        self.acquiring = True
         self.TESTING = TESTING
 
         
     def run(self):
+        self.acquiring = True
         if self.TESTING:
             while self.acquiring:
                 charge = 100*np.random.random()
@@ -51,11 +56,11 @@ class ICT(QThread):
         
         else:
             # ICT and serial settings
-            port = 'COM1'
+            port = 'COM12'
             baudrate = 115200
             termination = '\n\0'
-            Qcal = 0.005 # picoCoulombs
-            Ucal = 0.8722100 # volts
+            Qcal = 0.01036 #0.005 # picoCoulombs
+            Ucal = 0.85802 #0.8722100 # volts
             try: 
                 with serial.Serial(port=port, baudrate=baudrate, timeout=1) as ser:
                     # Wait for connection
@@ -78,7 +83,7 @@ class ICT(QThread):
                                 # Ex: 'A0:0123=00123ABC\n\0'
                                 # or '{frame_type}{frame_number}:{4_char_counter}={8_char_value}{terminator}'
                                 if response[0]=='A':
-                                    hex_value = response[8:]
+                                    hex_value = response[8:10]
                                     volts = int(hex_value, 16) # Convert from microVolts
 
                                     # Apply calibration
@@ -101,7 +106,7 @@ class FilterWheel:
         self.TESTING = TESTING
         self.COM = COM if COM!='None' else None
         self.baud_rate = 19200
-        self.timeout = 5
+        self.timeout = 2
 
         
         if not self.TESTING and self.COM:
@@ -209,13 +214,16 @@ class Camera(QThread):
 
 
 class Settings:
-    def __init__(self, SN='', COM='', label='', ID='', calibration=None):
+    def __init__(self, SN='', COM='', label='', ID='', 
+                 fliplr=False, flipud=False, calibration=None, **kwargs):
         # Camera inputs
         self.SN = SN
         self.COM = COM
         self.label = label
         self.ID = ID
         self.calibration = calibration
+        self.fliplr = fliplr
+        self.flipud = flipud
         
         # GUI parameters
         self.gain = 0
