@@ -74,22 +74,25 @@ class ICT(QThread):
                     while self.acquiring:
                         time.sleep(.05) #~10 Hz reprate
                         if ser.in_waiting: # ie. byte in buffer
-                            buffer = ser.read_until(termination.encode()).decode('utf-8')
-                            
+                            buffer = ser.read_all().decode('utf-8')           
+                            charge = 0                 
+
                             # Maybe have received multiple responses
                             for response in buffer.split(termination):
-
+                                print(response)
                                 # Voltage sample indicated by 'A' prefix
                                 # Ex: 'A0:0123=00123ABC\n\0'
                                 # or '{frame_type}{frame_number}:{4_char_counter}={8_char_value}{terminator}'
-                                if response[0]=='A':
-                                    hex_value = response[8:10]
-                                    volts = int(hex_value, 16) # Convert from microVolts
-
+                                if response and response[0]=='A':
+                                    hex_value = response[8:]
+                                    volts = int(hex_value, 16)*1e-6 # Convert from microVolts
+                                    
                                     # Apply calibration
-                                    charge = Qcal * 10**(volts / Ucal) #picoCoulombs
-                                    self.charge_ready.emit(charge)
-                                    time.sleep(self.delay) # purposeful delay
+                                    charge = 0.001*volts
+                                    # charge = Qcal * 10**(volts / Ucal) #picoCoulombs
+
+                            self.charge_ready.emit(charge)
+                            time.sleep(self.delay) # purposeful delay
 
             except serial.SerialException as e:
                 print(f"Serial exception: {e}")

@@ -59,7 +59,7 @@ class MainWindow(mw_Base, mw_Ui):
 
         # Connect to ICT, connect callback, and start
         self.charge = 0
-        self.ICT = ICT(TESTING=True)
+        self.ICT = ICT(TESTING=self.TESTING)
         self.ICT.charge_ready.connect(self.updateCharge)
 
         #----- Signals and slots (in order of gui) -----#
@@ -515,6 +515,7 @@ class MainWindow(mw_Base, mw_Ui):
 
     def updateCharge(self, charge):
         self.charge = charge
+        print(f'Charge = {charge}pC')
         self.chargeLabel.setText(f'Charge: {charge:.0f} pC')
 
     #----- Functions to access current Setting object -----#    
