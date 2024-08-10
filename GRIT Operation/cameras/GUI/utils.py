@@ -79,17 +79,18 @@ class ICT(QThread):
 
                             # Maybe have received multiple responses
                             for response in buffer.split(termination):
-                                print(response)
+                                
                                 # Voltage sample indicated by 'A' prefix
                                 # Ex: 'A0:0123=00123ABC\n\0'
                                 # or '{frame_type}{frame_number}:{4_char_counter}={8_char_value}{terminator}'
                                 if response and response[0]=='A':
                                     hex_value = response[8:]
-                                    volts = int(hex_value, 16)*1e-6 # Convert from microVolts
-                                    
+                                    microvolts = int(hex_value, 16) # Convert from microVolts
+                                    # print(response)
+                                    # print(microvolts)
                                     # Apply calibration
-                                    charge = 0.001*volts
-                                    # charge = Qcal * 10**(volts / Ucal) #picoCoulombs
+                                    charge = 0.001*microvolts
+                                    # charge = Qcal * 10**(microvolts*1e-6 / Ucal) #picoCoulombs
 
                             self.charge_ready.emit(charge)
                             time.sleep(self.delay) # purposeful delay

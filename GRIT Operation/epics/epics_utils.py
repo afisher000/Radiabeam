@@ -32,7 +32,7 @@ class SteeringMagnet():
         return current
     
     def setCurrent(self, current):
-        if abs(current)>4:
+        if abs(current)>5:
             current = current/abs(current)*4
             print('Saturated current at 4 amps')
         else:

@@ -300,8 +300,8 @@ class MainWindow(mw_Base, mw_Ui):
         # Lock description input if currently scanning
         self.descriptionEdit.setReadOnly(self.scanFlag)
 
-        # Force delay to slow camera acquisition
-        self.camera.set('delay', 1*int(self.scanFlag))
+        # Force delay to slow camera acquisition when using images
+        # self.camera.set('delay', 1*int(self.scanFlag))
 
 
     def toggleScan(self):
