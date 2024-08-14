@@ -3,7 +3,8 @@ import numpy as np
 import os
 
 # Specify directory of csvs (saved from series)
-quadscan_dir = '../Scans/2024-08-09/Quadscan'
+quadscan_dir = '../../Scans/2024-08-13/Quadscan'
+
 
 # Read into dataframes
 dfs = []

@@ -45,12 +45,12 @@ def current_calc(Quad, k, rigidity):
 
 
 
-def compute_transport_matrix(I1, I2, I3, rigidity):
+def compute_transport_matrix(I1, I2, I3, rigidity, cam):
     # Drift lengths
     D0 = .27663
     D1 = .0376
     D2 = .0379
-    D3 = .5849
+    D3 = .5849 if cam=='cam4' else .5849 + .236 #popin 5 is .236 beyond popin4
 
     #Quadropole Lengths and Peak Currents
     Q216 = {'length':0.072, 'peak_current':7.4, 'peak_gradient':20}
