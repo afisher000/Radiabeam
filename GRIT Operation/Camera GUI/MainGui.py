@@ -270,7 +270,7 @@ class MainWindow(mw_Base, mw_Ui):
             label = self.get_setting('label')
             timestamp = stats['timestamp']
             filepath = os.path.join(self.image_dir, f'{timestamp}_{label}_{self.descriptionEdit.text()}')
-            pd.Series(stats).to_csv(filepath + '.csv', header=False)
+            pd.DataFrame([stats]).to_csv(filepath + '.csv', index=False)
 
         pil_image.save(filepath + '.png')
         
