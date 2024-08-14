@@ -531,7 +531,7 @@ class MainWindow(mw_Base, mw_Ui):
     def format_units(self, pixels):
         #Return as mm or um.
         dist = pixels * self.get_setting('calibration')
-        return f'{dist:.2f}mm' if dist>=1 else f'{dist*1000:.0f}um'
+        return f'{dist/1000:.2f}mm' if dist>=1 else f'{dist:.0f}um'
 
     def format_counts(self, count):
         return f'{count:.2e}'
