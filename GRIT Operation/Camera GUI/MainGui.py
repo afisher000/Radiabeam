@@ -262,7 +262,7 @@ class MainWindow(mw_Base, mw_Ui):
                 os.makedirs(scanimages_dir)
 
             label = self.get_setting('label')
-            timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+            timestamp = datetime.now().strftime("%H-%M-%S")
             filepath = os.path.join(scanimages_dir, f'{timestamp}_{label}')
 
         else:
@@ -440,15 +440,14 @@ class MainWindow(mw_Base, mw_Ui):
                 rot135image = rotate(roi_image, 135, cval = bg)
                 _, _, sigma135, _ = fit_gaussian_with_offset(rot135image.sum(axis=0))
 
-
-                sigmaxy     = np.abs((sigma45**2-sigma135**2)/2)
+                sigmaxy     = (sigma135**2-sigma45**2)/2
                 beam_matrix = np.array([[xrms**2, -sigmaxy], [-sigmaxy, yrms**2]])
                 eigvalues, eigvectors = np.linalg.eig(beam_matrix)
 
                 # Draw ellipse
                 semi_major = np.sqrt(np.abs(eigvalues[0]))
                 semi_minor = np.sqrt(np.abs(eigvalues[1]))
-                angle = np.degrees(np.arctan2(eigvectors[1, 0], eigvectors[0, 0]))
+                angle = np.arctan2(eigvectors[1, 0], eigvectors[0, 0])
 
                 t = np.linspace(0, 2*np.pi, 100)
                 x = semi_major*np.cos(t)
@@ -458,7 +457,7 @@ class MainWindow(mw_Base, mw_Ui):
                 self.ellipse.setData(xpoints, ypoints)
 
         else:
-            centroid_x, centroid_y, xrms, yrms, pixelSum = 0, 0, 0, 0, 0
+            centroid_x, centroid_y, xrms, yrms, sigmaxy, pixelSum = 0, 0, 0, 0, 0, 0
 
         # Compute corrected sum
         gain = self.get_setting('gain')

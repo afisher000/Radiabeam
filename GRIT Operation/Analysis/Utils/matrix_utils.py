@@ -50,7 +50,14 @@ def compute_transport_matrix(I1, I2, I3, rigidity, cam):
     D0 = .27663
     D1 = .0376
     D2 = .0379
-    D3 = .5849 if cam=='cam4' else .5849 + .236 #popin 5 is .236 beyond popin4
+    if cam=='cam4':
+        D3 = .5849
+    elif cam=='cam5':
+        D3 = .5849 + .236 #popin 5 is .236 beyond popin4
+    elif cam=='cam6':
+        D3 = .5849 + 1.481 
+    else:
+        raise ValueError('Not a valid "cam" input')
 
     #Quadropole Lengths and Peak Currents
     Q216 = {'length':0.072, 'peak_current':7.4, 'peak_gradient':20}

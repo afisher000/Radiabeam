@@ -144,6 +144,19 @@ class FilterWheel:
             self.conn.close()
 
 
+
+def gaussian_2d_with_correlation(x, y, mu_x, mu_y, sigma_x, sigma_y, rho):   
+    # Exponent part
+    exponent = -1 / (2 * (1 - rho**2)) * (
+        (x - mu_x)**2 / sigma_x**2 +
+        (y - mu_y)**2 / sigma_y**2 -
+        2 * rho * (x - mu_x) * (y - mu_y) / (sigma_x * sigma_y)
+    )
+    
+    # Return the 2D Gaussian function value
+    return np.exp(exponent)
+
+
 class Camera(QThread):
     image_ready = pyqtSignal(list)
 
@@ -169,8 +182,10 @@ class Camera(QThread):
                 height = 1024                
                 X, Y = np.meshgrid( np.arange(width), np.arange(height))
                 xc, yc = np.array([height//2, width//2]) + 0*100*np.random.random(2)
-                xrms, yrms = np.array([20,20]) + 0*2*np.random.random(2)
-                image = (10 + 1.5**self.gain) * np.exp(-((X - xc)**2 / (2 * xrms**2) + (Y - yc)**2 / (2 * yrms**2)))
+                xrms, yrms = np.array([30,20]) + 0*2*np.random.random(2)
+                rho = 0.4 + .3*np.random.random() #correlation
+                image = (10 + 1.5**self.gain) * gaussian_2d_with_correlation(X, Y, xc, yc, xrms, yrms, rho)
+
                 image += 5*np.random.random(image.shape)
                 image = np.clip(image, 0, 255)
                 self.image_ready.emit([image.astype(np.uint8)])
