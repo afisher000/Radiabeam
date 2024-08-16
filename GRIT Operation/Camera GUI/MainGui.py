@@ -27,7 +27,7 @@ class MainWindow(mw_Base, mw_Ui):
     HIST_MIN = 200
     SCAN_MAX_SHOTS = 1000
     FILTER_TRANSMISSION = [1, 0.5, 0.1, 0.01]
-
+    
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
@@ -50,7 +50,6 @@ class MainWindow(mw_Base, mw_Ui):
         # Setup functions
         self.setupGraphics() 
         self.setupQueues(self.shotsInput.value())
-        self.setupDirectories()
 
         # Connect to camera, connect callback, and start
         self.camera = Camera(self.get_setting('ID'), self.TESTING)
@@ -171,20 +170,6 @@ class MainWindow(mw_Base, mw_Ui):
         self.pixelSumQueue = deque(maxlen=queue_size)
         self.correctedSumQueue = deque(maxlen=queue_size)
 
-    def setupDirectories(self):
-        ''' Create directories for saving images and scans. '''
-        datestamp = datetime.now().strftime("%Y-%m-%d")
-
-        # Ensure image directory for today's date
-        self.scan_dir = os.path.join('../Scans', datestamp)
-        if not os.path.exists(self.scan_dir):
-            os.makedirs(self.scan_dir)
-
-        # Ensure image directory for today's date
-        self.image_dir = os.path.join('../Images', datestamp)
-        if not os.path.exists(self.image_dir):
-            os.makedirs(self.image_dir)
-
     #----- Image Acqiusition Functions -----#
     def toggleImageAcq(self):
         self.acqImageFlag = not self.acqImageFlag
@@ -253,11 +238,16 @@ class MainWindow(mw_Base, mw_Ui):
             self.show_warning('Enter a description...')
             return
 
+        # Create directory
+        image_dir = os.path.join('../Images', self.getDate())
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
+
         # Save image and stats
         pil_image = Image.fromarray(self.image)
         if imagescan:
             # Create scan directory
-            scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
+            scanimages_dir = os.path.join(image_dir, self.descriptionEdit.text())
             if not os.path.exists(scanimages_dir):
                 os.makedirs(scanimages_dir)
 
@@ -269,7 +259,7 @@ class MainWindow(mw_Base, mw_Ui):
             stats = self.getStats()
             label = self.get_setting('label')
             timestamp = stats['timestamp']
-            filepath = os.path.join(self.image_dir, f'{timestamp}_{label}_{self.descriptionEdit.text()}')
+            filepath = os.path.join(image_dir, f'{timestamp}_{label}_{self.descriptionEdit.text()}')
             pd.DataFrame([stats]).to_csv(filepath + '.csv', index=False)
 
         pil_image.save(filepath + '.png')
@@ -325,12 +315,21 @@ class MainWindow(mw_Base, mw_Ui):
 
     def saveScanData(self, imagescan):
         '''(bool) imagescan: Whether scan was also saving images. '''
+        timestamp = datetime.now().strftime("%H-%M-%S")
 
-        timestamp = datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+        # Create directories
+        image_dir = os.path.join('../Images', self.getDate())
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
+
+        # Create directories
+        scan_dir = os.path.join('../Scans', self.getDate())
+        if not os.path.exists(scan_dir):
+            os.makedirs(scan_dir)
 
         # If imagescan, save to image directory. Else save as csv in Scans.
         if imagescan:
-            scanimages_dir = os.path.join(self.image_dir, self.descriptionEdit.text())
+            scanimages_dir = os.path.join(self.image_dir, f'{timestamp}_{self.descriptionEdit.text()}')
             filepath = os.path.join(scanimages_dir, 'settings.csv')
         else:
             filepath = os.path.join(self.scan_dir, f'{timestamp}_{self.descriptionEdit.text()}.csv')
@@ -534,6 +533,12 @@ class MainWindow(mw_Base, mw_Ui):
 
     def format_counts(self, count):
         return f'{count:.2e}'
+    
+    def getDate(self):
+        return datetime.now().strftime("%Y-%m-%d")
+
+    def getTime(self):
+        return datetime.now().strftime("%H-%M-%S")
     
     def getStats(self):
         # Read camera settings (this repeats, could be improved)
