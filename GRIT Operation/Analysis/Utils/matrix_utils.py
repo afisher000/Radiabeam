@@ -38,10 +38,10 @@ def prop_matrix(C, S, Cp, Sp):
     ])
     return beam_matrix
 
-def current_calc(Quad, k, rigidity):
+def compute_current(Quad, k, rigidity):
     gradient = k*rigidity
-    current = gradient * Quad['peak_current']/Quad['peak_gradient']
-    return current
+    I = gradient * Quad['peak_current']/Quad['peak_gradient']
+    return I
 
 
 
