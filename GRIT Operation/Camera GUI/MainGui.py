@@ -15,11 +15,12 @@ from scipy.ndimage import rotate
 import pyqtgraph as pg
 import pandas as pd
 import concurrent.futures
-
+import matplotlib.cm as cm
 
 # GUI Window Class
 mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
+
     # Define constants
     TESTING = False
     IMAGE_H = 1024
@@ -35,7 +36,7 @@ class MainWindow(mw_Base, mw_Ui):
         # Read in epics pvs
         self.PVs = utils.definePVs()
 
-        # Read camera settings, create settings and filterwheel objects
+        # Read camera settings, create Settings and FilterWheel objects
         df = pd.read_csv('camera_settings.csv')
         camera_settings = df[df.inuse=='yes']
         self.settings = [Settings(**row.to_dict()) for _, row in camera_settings.iterrows()]
@@ -44,7 +45,7 @@ class MainWindow(mw_Base, mw_Ui):
         # Fill combo menus
         self.cameraCombo.addItems([label for label in camera_settings['label']])
         self.acqmodeCombo.addItems(["FreeRun", "Triggered"])
-        self.colormapCombo.addItems(['viridis', 'turbo', 'plasma', 'inferno', 'magma'])
+        # self.colormapCombo.addItems(['viridis', 'turbo', 'plasma', 'inferno', 'magma'])
         self.filterCombo.addItems(['100%', '50%', '10%', '1%', '0%'])
 
         # Setup functions
@@ -144,7 +145,7 @@ class MainWindow(mw_Base, mw_Ui):
         self.imageView.addItem(self.ROI)
 
         # Create colormap
-        self.imageView.setColorMap(pg.colormap.get(self.colormapCombo.currentText()))
+        self.imageView.setColorMap(pg.colormap.get('nipy_spectral', source='matplotlib')) #self.colormapCombo.currentText()
 
         # Remove default pyqtgraph options
         self.imageView.ui.roiBtn.hide()  # Hide default ROI button
