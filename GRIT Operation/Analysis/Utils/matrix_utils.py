@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 def focusing_matrix(Quad, I, rigidity):
     gradient =  I * Quad['peak_gradient']/Quad['peak_current']
@@ -77,3 +77,7 @@ def compute_transport_matrix(I1, I2, I3, rigidity, cam):
     for matrix in matrices:
         curr_matrix = matrix.dot(curr_matrix)
     return curr_matrix
+
+def unpack_series(csv_path):
+    df = pd.read_csv(csv_path, index_col=0, header=None).squeeze('columns').to_frame().T
+    df.to_csv(csv_path)

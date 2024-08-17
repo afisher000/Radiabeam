@@ -16,6 +16,7 @@ def definePVs():
     pvs = {
         'gunphase':'LLRF_AWG1_CH1_PhaseMan_SP',
         'linacphase':'LLRF_AWG1_CH2_PhaseMan_SP',
+        'solenoid':'HPI_SOLN1_MeasCurrent_RB',
         # 'linac1_temp':'HP1_CHILL1_DISC_TEMP_RB',
         }
 

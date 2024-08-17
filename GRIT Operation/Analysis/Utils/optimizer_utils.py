@@ -1,7 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from Utils import matrix_utils as mu
+import pandas as pd
+import os
 
+
+def merge_csvs(directory):
+    # Read into dataframes
+    paths = [os.path.join(directory, file) for file in os.listdir(directory)]
+    dfs = [pd.read_csv(path) for path in paths]
+
+    # Combine and drop indices
+    df = pd.concat(dfs, axis=0).reset_index(drop=True)
+    return df
 
 def parse_inputs(x):
     beta, alpha, emittance = x
@@ -10,18 +21,18 @@ def parse_inputs(x):
     emittance = emittance*1e-7
     return beta, alpha, gamma, emittance
 
-def print_results(x, energy, coord):
+def print_results(x, energy):
     rel_gamma = energy / 511000
     beta, alpha, gamma, emittance = parse_inputs(x)
 
-    print(f'---------- {coord} ----------')
+    print(f'Optimized = {x}')
     print(f'Emittance: {emittance:.2e}')
     print(f'Norm. Emittance: {rel_gamma*emittance:.2e}')
     print(f'Beta Twiss: {beta:.2f}')
     print(f'Alpha Twiss: {alpha:.2f}')
     return
 
-def errorfcn(x, measurements, energy, cam):
+def errorfcn(x, measurements, energy, camera):
     beta, alpha, gamma, emittance = parse_inputs(x)
 
     beam_initial = emittance * np.array([
@@ -32,14 +43,14 @@ def errorfcn(x, measurements, energy, cam):
     rigidity = energy / 299792458
     error = 0
     for _, meas in measurements.iterrows():
-        full_matrix = mu.compute_transport_matrix(meas.Q1, meas.Q2, meas.Q3, rigidity, cam)
+        full_matrix = mu.compute_transport_matrix(meas.Q1, meas.Q2, meas.Q3, rigidity, camera)
         beam_final = full_matrix.dot(beam_initial.dot(full_matrix.T))
         pred_spotsize = np.sqrt(beam_final[0,0])*1e6 if beam_final[0,0]>0 else 1000
         error += ((meas.spotsize_mean - pred_spotsize)/meas.spotsize_std)**2
 
     return error
 
-def plot_fit_vs_data(x, measurements, energy, cam):
+def plot_fit_vs_data(x, measurements, energy, camera):
     beta, alpha, gamma, emittance = parse_inputs(x)
 
     beam_initial = emittance * np.array([
@@ -50,7 +61,7 @@ def plot_fit_vs_data(x, measurements, energy, cam):
     rigidity = energy / 299792458
     pred_spotsizes = []
     for _, meas in measurements.iterrows():
-        full_matrix = mu.compute_transport_matrix(meas.Q1, meas.Q2, meas.Q3, rigidity, cam)
+        full_matrix = mu.compute_transport_matrix(meas.Q1, meas.Q2, meas.Q3, rigidity, camera)
         beam_final = full_matrix.dot(beam_initial.dot(full_matrix.T))
         pred_spotsizes.append(np.sqrt(beam_final[0,0])*1e6)
     measurements['pred_spotsize'] = pred_spotsizes
