@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_KlystronPPSState" Id="{20eddc40-e1dd-4797-955d-19de2033185d}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_KlystronPPSState :
+(
+	Off := 0,
+	StandbyMode := 1,
+	HVMode := 2,
+	TrigMode := 3,
+	NoSignal := 4
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

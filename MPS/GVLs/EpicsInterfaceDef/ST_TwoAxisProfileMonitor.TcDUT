@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_TwoAxisProfileMonitor" Id="{322a1629-3152-4258-8057-3e5a137f5b1c}">
+    <Declaration><![CDATA[TYPE ST_TwoAxisProfileMonitor :
+STRUCT
+	//Controls
+	InsertAxis1Cmd : BOOL;
+	InsertAxis2Cmd : BOOL;
+	RetractCmd : BOOL;
+	
+	//Statuses
+	InsertedAxis1St : BOOL;
+	InsertedAxis2St : BOOL;
+	RetractedSt : BOOL;
+	
+	InterlockSt :BOOL;
+	
+	StateSt : E_3PosMonState;
+	
+	DisableButtonsSt :BOOL;
+		
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

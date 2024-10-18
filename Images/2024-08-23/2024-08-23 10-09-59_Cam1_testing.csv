@@ -1,0 +1,2 @@
+timestamp,filter_index,gain,exposure,camera,serial,calibration,charge,xc,yc,xrms,yrms,sum,roi_x,roi_y,roi_w,roi_h,gunphase,linacphase,solenoid,X1,Y1,X2,Y2,X3,Y3,X4,Y4,Q1,Q2,Q3,Q4,Q5
+2024-08-23 10-09-59,0,13,1000,Cam1,50-0537011139,21.1,0,0,0,0,0,0,0,0,1280,1024,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0

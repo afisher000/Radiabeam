@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_EpicsMeasurement" Id="{c62d77d7-8e70-4bc1-ba22-64985e093039}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_EpicsMeasurement
+VAR_INPUT
+	InterlockActive_IN : BOOL;
+END_VAR
+VAR_OUTPUT
+	Interlock : BOOL;
+	MeasurementValue_OUT : LREAL;
+END_VAR
+VAR
+	MeasurementValue : LREAL;
+	MeasurementLowThreshold : LREAL;
+	MeasurementHighThreshold : LREAL;
+	State : E_EpicsMeasurementState;
+	ConnectionTimer : TON;
+	Timeout : TIME := T#1.2S;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF State <> E_EpicsMeasurementState.isOkay AND State <> E_EpicsMeasurementState.isInactive THEN
+	Interlock := FALSE;
+END_IF
+
+IF InterlockActive_IN THEN
+	IF  MeasurementValue > CONSTANTS.MINIMUM_LREAL_THRESHOLD THEN
+		MeasurementValue_OUT := MeasurementValue;
+		IF MeasurementValue < MeasurementLowThreshold OR MeasurementValue > MeasurementHighThreshold THEN
+			State := E_EpicsMeasurementState.isOutOfRange;
+		END_IF
+		MeasurementValue := CONSTANTS.MINIMUM_LREAL;
+		ConnectionTimer(IN := FALSE);
+	ELSE
+		ConnectionTimer(IN := TRUE);
+	END_IF
+	
+	ConnectionTimer(PT := Timeout);
+	
+	IF ConnectionTimer.Q THEN
+		State := E_EpicsMeasurementState.hasTimeout;	
+	END_IF
+ELSE
+	State := E_EpicsMeasurementState.isInactive;
+END_IF]]></ST>
+    </Implementation>
+    <Method Name="Acknowledge" Id="{2f37e7c4-adc7-4eed-8844-ee69afdbf18f}">
+      <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Interlock := TRUE;
+State := E_EpicsMeasurementState.isOkay;
+ConnectionTimer(IN := FALSE);]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{56378782-c85a-483a-80f3-9a480c56e45f}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_EpicsMeasurement;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[MeasurementValue := structure.MeasurementValueSt;
+structure.InterlockSt := Interlock;
+MeasurementLowThreshold := structure.MeasurementLowThresholdSt;
+MeasurementHighThreshold := structure.MeasurementHighThresholdSt;
+structure.MeasurementValueSt := CONSTANTS.MINIMUM_LREAL;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_EpicsMeasurement">
+      <LineId Id="343" Count="2" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="346" Count="1" />
+      <LineId Id="378" Count="0" />
+      <LineId Id="349" Count="13" />
+      <LineId Id="192" Count="0" />
+      <LineId Id="395" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_EpicsMeasurement.Acknowledge">
+      <LineId Id="7" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_EpicsMeasurement.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="19" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

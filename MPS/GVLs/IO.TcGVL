@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="IO" Id="{59ee0f18-4711-41ad-81b9-fd2a08c9df2a}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	
+BUN1_PULS01_REPRATE_IN   AT %I* : UDINT;   //   Pulse generator repetition rate
+BUN1_PULS01_INHIBIT_OUT   AT %Q* : BOOL;   //Pulse generator inhibit
+HPI_SHUTR01_OPEN_OUT   AT %Q* : BOOL;   //MPS Shutter, located before the HPI, opens the shutter
+HPI_SHUTR02_OPEN_OUT   AT %Q* : BOOL;   //MPS Shutter, located before the HPI, opens the shutter
+HPI_VGCC01_PRESSILK_IN   AT %I* : BOOL;   //   Vacuum gauge controller pressure interlock
+HPI_IONP01_PRESSILK_IN   AT %I* : BOOL;   //   Ion pump controller pressure interlock
+HPI_HPI01_FS1_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_HPI01_FS2_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_HPI01_FS3_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_HPI01_FS4_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_HPI01_FS5_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_HPI01_FS6_IN   AT %I* : BOOL;   //   Photoinjector water flow
+HPI_RFNET01_FS1_IN   AT %I* : BOOL;   //   RF network (loads and windows) water flow
+HPI_RFNET02_FS1_IN   AT %I* : BOOL;   //   RF network (loads and windows) water flow
+HPI_RFNET02_FS2_IN   AT %I* : BOOL;   //   RF network (loads and windows) water flow
+HPI_RFNET02_FS3_IN   AT %I* : BOOL;   //   RF network (loads and windows) water flow
+HPI_SOLN01_FS1_IN   AT %I* : BOOL;   //   Solenoid water flow
+HPI_SOLN01_FS2_IN   AT %I* : BOOL;   //   Solenoid water flow
+HPI_SOLN01_FS3_IN   AT %I* : BOOL;   //   Solenoid water flow
+HPI_VALV01_CLOSED_IN   AT %I* : BOOL;   //   Fast acting gate valve
+HPI_VALV01_OPEN_IN   AT %I* : BOOL;   //   Fast acting gate valve
+HPI_KLY01_STANDBY_OUT    AT %Q* : BOOL;   //Allow Standby
+HPI_KLY01_HVMODE_OUT    AT %Q* : BOOL;   //Allow HV mode
+HPI_KLY01_TRIGMODE_OUT    AT %Q* : BOOL;   //Allow Trig mode
+HPI_KLY02_STANDBY_OUT    AT %Q* : BOOL;   //Allow Standby
+HPI_KLY02_HVMODE_OUT    AT %Q* : BOOL;   //Allow HV mode
+HPI_KLY02_TRIGMODE_OUT    AT %Q* : BOOL;   //Allow Trig mode
+HPI_SOLN01_ENABLE_OUT   AT %Q* : BOOL;   //Enable Solenoid PSU
+HPI_DIP01_ENABLE_OUT   AT %Q* : BOOL;   //Enable Dipole PSU
+HPI_SOLN01_TEMPILK1_IN   AT %I* : BOOL;   //   Solenoid thermal cutoff
+HPI_SOLN01_TEMPILK2_IN   AT %I* : BOOL;   //   Solenoid thermal cutoff
+HPI_SOLN01_TEMPILK3_IN   AT %I* : BOOL;   //   Solenoid thermal cutoff
+DUMP_DIP01_TEMPILK1_IN   AT %I* : BOOL;   //   Dipole thermal cutoff
+
+TBL_POPIN01_RETRACTED_POS1_IN	AT %I* : BOOL;   //Pop in 01 retracted position 1
+TBL_POPIN01_INSERTED_POS2_IN	AT %I* : BOOL;   //Pop in 01 inserted position 2
+TBL_POPIN01_INSERTED_POS3_IN	AT %I* : BOOL;   //Pop in 01 inserted position 3
+TBL_POPIN01_INSERT_POS2_OUT	AT %Q* : BOOL;   //Insert position 2
+TBL_POPIN01_INSERT_POS3_OUT	AT %Q* : BOOL;   //Insert position 3
+
+TBL_POPIN02_RETRACTED_POS1_IN	AT %I* : BOOL;   //Pop in 02 retracted position 1
+TBL_POPIN02_INSERTED_POS2_IN	AT %I* : BOOL;   //Pop in 02 inserted position 2
+TBL_POPIN02_INSERT_POS2_OUT	AT %Q* : BOOL;   //Insert position 2
+
+TBL_POPIN03_AX1_RETRACTED_POS1_IN   AT %I* : BOOL;   //   Axis1 slit retracted position 1
+TBL_POPIN03_AX1_INSERTED_POS2_IN   AT %I* : BOOL;   //   Axis1 slit inserted position 2
+TBL_POPIN03_AX1_INSERT_POS2_OUT   AT %Q* : BOOL;   //Axis1 insert position 2
+TBL_POPIN03_AX2_RETRACTED_POS1_IN   AT %I* : BOOL;   //   Axis2 slit retracted 1
+TBL_POPIN03_AX2_INSERTED_POS2_IN   AT %I* : BOOL;   //   Axis2 slit inserted 2
+TBL_POPIN03_AX2_INSERT_POS2_OUT   AT %Q* : BOOL;   //Axis2 insert position 2
+
+TBL_POPIN04_RETRACTED_POS1_IN	AT %I* : BOOL;   //Pop in 04 retracted position 1
+TBL_POPIN04_INSERTED_POS2_IN	AT %I* : BOOL;   //Pop in 04 inserted position 2
+TBL_POPIN04_INSERTED_POS3_IN	AT %I* : BOOL;   //Pop in 04 inserted position 3
+TBL_POPIN04_INSERT_POS2_OUT	AT %Q* : BOOL;   //Insert position 2
+TBL_POPIN04_INSERT_POS3_OUT	AT %Q* : BOOL;   //Insert position 3
+
+TBL_POPIN05_AX1_RETRACTED_POS1_IN   AT %I* : BOOL;   //   Axis1 slit retracted position 1
+TBL_POPIN05_AX1_INSERTED_POS2_IN   AT %I* : BOOL;  //   Axis1 slit inserted position 2
+TBL_POPIN05_AX1_INSERT_POS2_OUT   AT %Q* : BOOL;   //Axis1 insert position 2
+TBL_POPIN05_AX2_RETRACTED_POS1_IN   AT %I* : BOOL;   //   Axis2 slit retracted 1
+TBL_POPIN05_AX2_INSERTED_POS2_IN   AT %I* : BOOL;   //   Axis2 slit inserted 2
+TBL_POPIN05_AX2_INSERT_POS2_OUT   AT %Q* : BOOL;   //Axis2 insert position 2
+
+TBL_POPIN06_RETRACTED_POS1_IN	AT %I* : BOOL;   //Pop in 06 retracted position 1
+TBL_POPIN06_INSERTED_POS2_IN	AT %I* : BOOL;   //Pop in 06 inserted position 2
+TBL_POPIN06_INSERT_POS2_OUT	AT %Q* : BOOL;   //Insert position 2
+
+
+LIN1_FS1_IN  AT %I* : BOOL;   //   Linac 1 water flow
+LIN1_FS2_IN  AT %I* : BOOL;   //   Linac 1 water flow
+LIN1_FS3_IN  AT %I* : BOOL;   //   Linac 1 water flow
+LIN1_FS4_IN  AT %I* : BOOL;   //   Linac 1 water flow
+
+
+TBL_RTD01_TEMP   AT %I* : INT;   //   RTD temperature sensor
+TBL_RTD02_TEMP   AT %I* : INT;   //   RTD temperature sensor
+TBL_RTD03_TEMP   AT %I* : INT;   //   RTD temperature sensor
+TBL_RTD04_TEMP   AT %I* : INT;   //   RTD temperature sensor
+TBL_RTD05_TEMP   AT %I* : INT;   //   RTD temperature sensor
+TBL_RTD06_TEMP   AT %I* : INT;   //   RTD temperature sensor
+
+BUN1_IOLINK_CH01_IN AT %I* : ARRAY[0..7] OF BYTE;
+BUN1_IOLINK_CH02_IN AT %I* : ARRAY[0..7] OF BYTE;
+BUN1_IOLINK_CH03_IN AT %I* : ARRAY[0..7] OF BYTE;
+BUN1_IOLINK_CH04_IN AT %I* : ARRAY[0..7] OF BYTE;
+BUN1_IOLINK_CH05_IN AT %I* : ARRAY[0..7] OF BYTE;
+BUN1_IOLINK_CH06_IN AT %I* : ARRAY[0..7] OF BYTE;
+
+
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

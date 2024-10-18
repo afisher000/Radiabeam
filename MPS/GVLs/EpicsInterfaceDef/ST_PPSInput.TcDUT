@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_PPSInput" Id="{acff5309-4edd-4960-baf9-81ea89743e17}">
+    <Declaration><![CDATA[TYPE ST_PPSInput :
+STRUCT
+	EnableFB_IN : BOOL;
+	AllowFB_IN : BOOL;
+	RFPowerFB_IN : BOOL;
+	
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

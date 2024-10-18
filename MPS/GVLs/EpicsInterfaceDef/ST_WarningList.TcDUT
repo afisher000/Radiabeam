@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_WarningList" Id="{9622729c-bf0a-4b5f-9363-02f614ebda0d}">
+    <Declaration><![CDATA[TYPE ST_WarningList :
+STRUCT
+	Warning_1St : E_MpsWarning;
+	Warning_2St : E_MpsWarning;
+	Warning_3St : E_MpsWarning;
+	Warning_4St : E_MpsWarning; 
+	Warning_5St : E_MpsWarning; 
+	Warning_6St : E_MpsWarning;
+	Warning_7St : E_MpsWarning;
+	Warning_8St : E_MpsWarning;
+	Warning_9St : E_MpsWarning;
+	Warning_10St : E_MpsWarning;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

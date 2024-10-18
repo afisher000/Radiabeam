@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_2PosMonState" Id="{26f079e1-639d-448a-9e89-1bd660472313}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_2PosMonState :
+(
+	Nan := 0,
+	isINSERTED := 1,
+	isRETRACTED := 2,
+	isMOVING := 3,
+	isBROKEN := 4,
+	isForcedOut := 5
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

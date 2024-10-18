@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_StateController" Id="{8ef2e647-4fd6-47c8-9532-909366c2dce2}">
+    <Declaration><![CDATA[TYPE ST_StateController :
+STRUCT
+	StateSt : E_MpsState;
+	EpicsStateSt : E_MpsState;
+	TargetStateEpicsSt : E_MpsState;
+	TargetStateSt : E_MpsState;
+	
+	Klystron01CCPSVolt01St : LREAL;
+	Klystron01CCPSVolt02St : LREAL;
+	Klystron01StateSt : E_KlystronState;
+	Klystron01PPSStateSt : E_KlystronPPSState;
+	
+	Klystron02CCPSVolt01St : LREAL;
+	Klystron02CCPSVolt02St : LREAL;
+	Klystron02StateSt : E_KlystronState;
+	Klystron02PPSStateSt : E_KlystronPPSState;
+	
+	FaultSeveritySt : E_MpsFaultSeverity;
+	SetTargetStateSt : BOOL;
+	ManualModeSt : BOOL;
+	AutomaticModeSt : BOOL;
+	AllowEnergyProfileLoadSt : BOOL;
+	AllowLowRepRateBeamOnSt : BOOL;
+	AllowFullBeamOnSt : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

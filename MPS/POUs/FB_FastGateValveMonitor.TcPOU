@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_FastGateValveMonitor" Id="{f82cf651-a3e6-45ef-bb4c-75d6a05fbdb0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FastGateValveMonitor
+VAR_INPUT
+	Closed : BOOL;
+	Open : BOOL;
+END_VAR
+VAR_OUTPUT
+	Interlock : BOOL; // MPS shutter
+END_VAR
+VAR
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Fast acting gate valve - The gate valve will get its instructions from the pressure monitoring, the MPS will only monitor
+
+Interlock := Open AND NOT Closed;
+
+
+]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{59485de2-f841-4986-948b-d2329e7b50ec}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_FastGateValveMonitor;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.ClosedSt:=Closed;
+structure.OpenSt:=Open;
+structure.InterlockSt:=Interlock;
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_FastGateValveMonitor">
+      <LineId Id="9" Count="0" />
+      <LineId Id="15" Count="3" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FastGateValveMonitor.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="8" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

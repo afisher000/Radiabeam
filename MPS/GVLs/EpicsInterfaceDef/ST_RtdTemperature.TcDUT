@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.5">
+  <DUT Name="ST_RtdTemperature" Id="{9a3b30fb-302c-47f5-95f6-456bbcabb100}">
+    <Declaration><![CDATA[TYPE ST_RtdTemperature :
+STRUCT
+	TBL_RTD01_TEMP : REAL;
+	TBL_RTD02_TEMP : REAL;
+	TBL_RTD03_TEMP : REAL;
+	TBL_RTD04_TEMP : REAL;
+	TBL_RTD05_TEMP : REAL;
+	TBL_RTD06_TEMP : REAL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_MpsFault" Id="{20fdc10c-0076-4b3e-befb-f8a2dcacbae2}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_MpsFault :
+(
+	NoFault := 0,
+	StandbyPPSInterlock := 10,
+	StandbyMPSInterlock := 11,
+	HVPPSInterlock := 20,
+	HVPressureInterlock := 21,
+	HVDipoleFlowInterlock := 22,
+	HVDipoleThermalInterlock := 23,
+	HVRFNetwork02FlowInterlock := 24,
+	RFPPSInterlock := 30,
+	RFMPSInterlock := 31,
+	BeamSolenoidFlowInterlock := 40,
+	BeamSolenoidThermalInterock := 41,
+	BeamGunFlowInterlock := 42,
+	BeamRFNetwork01FlowInterlock := 43,
+	BeamPopInInterlock := 44
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

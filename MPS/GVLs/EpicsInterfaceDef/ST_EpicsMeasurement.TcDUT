@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_EpicsMeasurement" Id="{887f4c87-c971-4f3e-a54c-53bb29200391}">
+    <Declaration><![CDATA[TYPE ST_EpicsMeasurement :
+STRUCT
+	MeasurementValueSt : LREAL := CONSTANTS.MINIMUM_LREAL;
+	MeasurementLowThresholdSt : LREAL := CONSTANTS.MINIMUM_LREAL;
+	MeasurementHighThresholdSt : LREAL := CONSTANTS.MINIMUM_LREAL;
+	InterlockSt : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_FlowMeter" Id="{3b063f1b-f9fb-419a-bc44-8d420b7d467a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_FlowMeter
+VAR_INPUT
+	FlowChannel_IN : ARRAY[0..7] OF BYTE;
+END_VAR
+VAR_OUTPUT
+	FlowInterlock_OUT : BOOL;
+	TemperatureInterlock_OUT : BOOL;
+	Flow_OUT : LREAL;
+	Temperature_OUT : LREAL;
+END_VAR
+VAR
+	FlowRaw : INT;
+	TemperatureRaw : INT;
+END_VAR
+
+VAR CONSTANT
+	FLOW_COEF : LREAL := 0.04;
+	TEMP_COEF : LREAL := 0.1;
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[FlowInterlock_OUT := FlowChannel_IN[5].0;
+TemperatureInterlock_OUT := FlowChannel_IN[5].1;
+TemperatureRaw := BYTE_TO_INT(FlowChannel_IN[2]) * 256 + BYTE_TO_INT(FlowChannel_IN[3]);
+FlowRaw := BYTE_TO_INT(FlowChannel_IN[0]) * 256 + BYTE_TO_INT(FlowChannel_IN[1]);
+Temperature_OUT := INT_TO_LREAL(TemperatureRaw) * TEMP_COEF;
+Flow_OUT := INT_TO_LREAL(FlowRaw) * FLOW_COEF;]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{bafd30b2-0110-4a11-93a8-ed9ee769c43a}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_FlowMeter;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.FlowInterlockSt := FlowInterlock_OUT;
+structure.TemperatureInterlockSt := TemperatureInterlock_OUT;
+structure.FlowSt := Flow_OUT;
+structure.TemperatureSt := Temperature_OUT;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_FlowMeter">
+      <LineId Id="216" Count="4" />
+      <LineId Id="32" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_FlowMeter.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="2" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

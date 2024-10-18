@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_LatchingAND" Id="{a8f31edc-9a2c-47e2-b60c-a4267589cfbe}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_LatchingAND
+VAR_INPUT
+	IN_1 : BOOL :=TRUE;
+	IN_2 : BOOL :=TRUE;
+	IN_3 : BOOL :=TRUE;
+	IN_4 : BOOL :=TRUE;
+	IN_5 : BOOL :=TRUE;
+	IN_6 : BOOL :=TRUE;
+	IN_7 : BOOL :=TRUE;
+	IN_8 : BOOL :=TRUE;
+	IN_9 : BOOL :=TRUE;
+	IN_10 : BOOL :=TRUE;
+END_VAR
+
+VAR_OUTPUT
+	Interlock : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+IF NOT (IN_1 AND IN_2 AND IN_3 AND IN_4 AND IN_5 AND IN_6 AND IN_7 AND IN_8 AND IN_9 AND IN_10) THEN
+	Interlock := FALSE;
+END_IF		]]></ST>
+    </Implementation>
+    <Method Name="Acknowledge" Id="{04f01bc6-128c-4b09-87ca-4ebed532c660}">
+      <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Interlock := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{9edd41ab-89ed-4855-af7e-d75db6a6c343}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_LatchingAND;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.IN_1St:= IN_1;
+structure.IN_2St:=  IN_2;
+structure.IN_3St := IN_3;
+structure.IN_4St  :=IN_4;
+structure.IN_5St := IN_5;
+structure.IN_6St:=  IN_6;
+structure.IN_7St:=  IN_7;
+structure.IN_8St:=  IN_8;
+structure.IN_9St:=  IN_9;
+structure.IN_10St:=  IN_10;
+structure.InterlockSt := Interlock;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_LatchingAND">
+      <LineId Id="13" Count="2" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_LatchingAND.Acknowledge">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_LatchingAND.Control">
+      <LineId Id="6" Count="8" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

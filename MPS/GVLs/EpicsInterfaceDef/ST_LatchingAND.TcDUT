@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_LatchingAND" Id="{4fc18c56-30a4-405a-8ba8-008d588fefb6}">
+    <Declaration><![CDATA[TYPE ST_LatchingAND :
+STRUCT
+	IN_1St : BOOL;
+	IN_2St : BOOL;
+	IN_3St : BOOL;
+	IN_4St : BOOL; 
+	IN_5St : BOOL; 
+	IN_6St : BOOL;
+	IN_7St : BOOL;
+	IN_8St : BOOL;
+	IN_9St : BOOL;
+	IN_10St : BOOL;
+	InterlockSt : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

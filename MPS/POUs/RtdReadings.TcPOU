@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="RtdReadings" Id="{c7d6eca6-3114-48f2-ade9-4d051967e7a0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK RtdReadings
+
+VAR
+	Rtd01 : FB_Pt100;
+	Rtd02 : FB_Pt100;
+	Rtd03 : FB_Pt100;
+	Rtd04 : FB_Pt100;
+	Rtd05 : FB_Pt100;
+	Rtd06 : FB_Pt100;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Instances of PT100, temperature measurement
+Rtd01(Raw := IO.TBL_RTD01_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD01_TEMP);
+Rtd02(Raw := IO.TBL_RTD02_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD02_TEMP);
+Rtd03(Raw := IO.TBL_RTD03_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD03_TEMP);
+Rtd04(Raw := IO.TBL_RTD04_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD04_TEMP);
+Rtd05(Raw := IO.TBL_RTD05_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD05_TEMP);
+Rtd06(Raw := IO.TBL_RTD06_TEMP,TempFaranheit =>G_Epics.RtdTemperature.TBL_RTD06_TEMP);]]></ST>
+    </Implementation>
+    <LineIds Name="RtdReadings">
+      <LineId Id="32" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="17" Count="4" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

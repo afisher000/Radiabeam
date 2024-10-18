@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.5">
+  <DUT Name="ST_Pressure" Id="{da5f1f5a-107b-4839-97a5-5b6f39fdd832}">
+    <Declaration><![CDATA[TYPE ST_Pressure :
+STRUCT
+	IN_1St : BOOL;
+	IN_2St : BOOL;
+	InterlockSt : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MpsLogicTest" Id="{c227ea13-2625-4c43-852f-104003d2bb2e}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MpsLogicTest
+VAR
+	StateController : FB_StateController;
+	StandbyEnabled : BOOL;
+	HVEnabled : BOOL;
+	BeamEnabled : BOOL;
+	ManualModeEnabled : BOOL;
+	AutomaticModeEnabled : BOOL;
+	
+	MpsStateList : ARRAY[0..17] OF E_MpsState := [E_MpsState.OFF, E_MpsState.STANDBY, E_MpsState.EnteringStandby, E_MpsState.ExitingStandby, E_MpsState.HV, E_MpsState.EnteringHV, E_MpsState.ExitingHV, E_MpsState.SafeRoutine, E_MpsState.ManualMode, E_MpsState.EnteringManualMode, E_MpsState.SelectingEnergySetpoint, E_MpsState.ApplyingEnergyProfile, E_MpsState.LowRepRateBeamOn, E_MpsState.FullBeamOn];
+	MpsSelectedTargetState : INT;
+	MpsSelectedEPICSState : INT;
+	KlystronStateList : ARRAY[0..9] OF E_KlystronState := [E_KlystronState.Off, E_KlystronState.StandbyOffRequested, E_KlystronState.StamdbyOnRequested, E_KlystronState.Standby, E_KlystronState.HVOffRequested, E_KlystronState.HVOnRequested, E_KlystronState.HV, E_KlystronState.TrigOffRequested, E_KlystronState.TrigOnRequested, E_KlystronState.Trig];
+	
+	SetTargetStateEPICS : BOOL;
+	SetEPICSState : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[IF G_Epics.General.AcknowledgeAllCmd THEN
+	G_Epics.General.AcknowledgeAllCmd := FALSE;
+END_IF
+
+
+//======================== EPICS exchange of data =================
+StateController.Control(structure := G_Epics.StateController);
+
+//======================== ELEMENT INSTANCES ======================	
+StateController(StandbyEnabled_OUT => StandbyEnabled,
+				HVEnabled_OUT => HVEnabled,
+				BeamEnabled_OUT => BeamEnabled);]]></ST>
+    </Implementation>
+    <LineIds Name="MpsLogicTest">
+      <LineId Id="63" Count="9" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MAIN" Id="{1f25c106-3603-4b66-a9dc-d624e71d8258}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	MpsLogicUpgrade : MpsLogicUpgrade;
+	RtdReadings : RtdReadings;
+	//MpsLogicTest : MpsLogicTest;
+	
+END_VAR
+
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//EPICS test
+
+MpsLogicUpgrade();
+RtdReadings();
+
+//MpsLogicTest();]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="66" Count="1" />
+      <LineId Id="48" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="47" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

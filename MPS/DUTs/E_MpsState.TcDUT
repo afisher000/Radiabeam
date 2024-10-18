@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_MpsState" Id="{2ac8780b-3afe-40e5-8f0e-b1ecd2a8f922}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_MpsState :
+(
+	OFF := 0,
+	ExitingStandby := 1,
+	EnteringStandby := 2,
+	STANDBY := 3,
+	ExitingHV := 4,
+	EnteringHV := 5,
+	HV := 6,
+	SafeRoutine := 7,
+	EnteringManualMode := 8,
+	ManualMode := 9,
+	EnteringAutomaticMode := 10,
+	AutomaticMode := 11,
+	SelectingEnergySetpoint := 12,
+	ApplyingEnergyProfile := 13,
+	LowRepRateBeamOn := 14,
+	FullBeamOn := 15
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

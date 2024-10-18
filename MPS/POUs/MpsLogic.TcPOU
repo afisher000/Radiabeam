@@ -1,0 +1,147 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MpsLogic" Id="{e9a60f38-1611-4ac4-92bc-1df48de2526f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MpsLogic
+
+VAR
+	RepetitionRate : FB_RepetitionRate;	
+
+	Pressure : FB_Pressure;
+	GunFlowSwitches : FB_LatchingAND;
+	FastGateValve : FB_FastGateValveMonitor;
+	RfNetworkFlowSwitches : FB_LatchingAND;
+	SolenoidFlow : FB_LatchingAND;
+	SolenoidThermalSwitches : FB_LatchingAND;
+	DipoleFlow : FB_LatchingAND;
+	
+	DipoleCurrent : FB_EpicsMeasurement;
+	MagnetField : FB_EpicsMeasurement;
+	
+	Prof01 : FB_TwoAxisPopIn;
+	Prof02 : FB_TwoAxisPopIn;
+	
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Acknowledge interlocks for the FB that needs it
+IF G_Epics.General.AcknowledgeAllCmd THEN
+	G_Epics.General.AcknowledgeAllCmd := FALSE;
+	GunFlowSwitches.Acknowledge();
+	RfNetworkFlowSwitches.Acknowledge();
+	SolenoidThermalSwitches.Acknowledge();
+	SolenoidFlow.Acknowledge();
+	//DipoleFlow.Acknowledge();
+	DipoleCurrent.Acknowledge();
+	//MagnetField.Acknowledge();
+END_IF
+
+//======================== EPICS exchange of data ======================	
+RepetitionRate.Control(structure:=G_Epics.RepetitionRate);
+Pressure.Control(structure:=G_Epics.Pressure);
+GunFlowSwitches.Control(structure:=G_Epics.GunFlowSwitches);
+FastGateValve.Control(structure:=G_Epics.FastGateValve);
+RfNetworkFlowSwitches.Control(structure:=G_Epics.RfNetworkFlowSwitches);
+SolenoidFlow.Control(structure:=G_Epics.SolenoidFlow);
+SolenoidThermalSwitches.Control(structure:=G_Epics.SolenoidThermalSwitches);
+//DipoleFlow.Control(structure:=G_Epics.DipoleFlow);
+DipoleCurrent.Control(structure:=G_Epics.DipoleCurrent);
+//MagnetField.Control(structure:=G_Epics.MagnetField);
+	
+
+Prof01.Control(structure:=G_Epics.PopIn03);
+Prof02.Control(structure:=G_Epics.PopIn05);
+
+
+G_EPICS.InterlockOutput.HPI_KLY01_STANDBY_OUT:=IO.HPI_KLY01_STANDBY_OUT;
+G_EPICS.InterlockOutput.HPI_KLY01_HVMODE_OUT:=IO.HPI_KLY01_HVMODE_OUT;
+G_EPICS.InterlockOutput.HPI_KLY01_TRIGMODE_OUT:=IO.HPI_KLY01_TRIGMODE_OUT;
+G_EPICS.InterlockOutput.HPI_SHUTR01_OPEN_OUT:=IO.HPI_SHUTR01_OPEN_OUT;
+G_EPICS.InterlockOutput.HPI_SOLN01_ENABLE_OUT:=IO.HPI_SOLN01_ENABLE_OUT;
+
+//======================== ELEMENT INSTANCES ======================	
+
+//Repetition rate calculation and comparison
+RepetitionRate(frequencyRaw := IO.BUN1_PULS01_REPRATE_IN, Inhibit => IO.BUN1_PULS01_INHIBIT_OUT);
+
+//Profile monitors and eslits instances	
+Prof01(RepRate:=RepetitionRate.AboveThreshold,
+		Axis1_RetractedPos1_IN:=IO.TBL_POPIN03_AX1_RETRACTED_POS1_IN,
+		Axis1_InsertedPos2_IN:=IO.TBL_POPIN03_AX1_INSERTED_POS2_IN,
+		Axis1_InsertPos2_OUT=>IO.TBL_POPIN03_AX1_INSERT_POS2_OUT,
+		Axis2_RetractedPos1_IN:=IO.TBL_POPIN03_AX2_RETRACTED_POS1_IN,
+		Axis2_InsertedPos2_IN:=IO.TBL_POPIN03_AX2_INSERTED_POS2_IN,
+		Axis2_InsertPos2_OUT=>IO.TBL_PROF01_V_INSERT_OUT );
+		
+Prof02(RepRate:=RepetitionRate.AboveThreshold,
+		Axis1_RetractedPos1_IN:=IO.TBL_POPIN05_AX1_RETRACTED_POS1_IN,
+		Axis1_InsertedPos2_IN:=IO.TBL_POPIN05_AX1_INSERTED_POS2_IN,
+		Axis1_InsertPos2_OUT=>IO.TBL_POPIN05_AX1_INSERT_POS2_OUT,
+		Axis2_RetractedPos1_IN:=IO.TBL_POPIN05_AX2_RETRACTED_POS1_IN,
+		Axis2_InsertedPos2_IN:=IO.TBL_POPIN05_AX2_INSERTED_POS2_IN,
+		Axis2_InsertPos2_OUT=>IO.TBL_POPIN05_AX2_INSERT_POS2_OUT );				
+
+//Pressure interlock
+Pressure(IN_1 := IO.HPI_VGCC01_PRESSILK_IN,  IN_2 := IO.HPI_IONP01_PRESSILK_IN);
+
+//Gun flow switches interlock		 
+GunFlowSwitches(IN_1 := IO.HPI_HPI01_FS1_IN,
+				IN_2 := IO.HPI_HPI01_FS2_IN,
+				IN_3 := IO.HPI_HPI01_FS3_IN,
+				IN_4 := IO.HPI_HPI01_FS4_IN,
+				IN_5 := IO.HPI_HPI01_FS5_IN,
+				IN_6 := IO.HPI_HPI01_FS6_IN );
+
+// RF network, solenoid flow switches...		 
+RfNetworkFlowSwitches(IN_1 := IO.HPI_RFNET01_FS_IN, IN_2 := IO.HPI_RFNET02_FS_IN, IN_3 := IO.HPI_RFNET03_FS_IN);
+
+SolenoidFlow(IN_1 := IO.HPI_SOLN01_FS1_IN, IN_2 := IO.HPI_SOLN01_FS2_IN, IN_3 := IO.HPI_SOLN01_FS3_IN);
+
+SolenoidThermalSwitches(IN_1:=IO.HPI_SOLN01_TEMPILK1_IN, IN_2:=IO.HPI_SOLN01_TEMPILK2_IN, IN_3:=IO.HPI_SOLN01_TEMPILK3_IN);
+
+//What does HPI stand for?? Maybe Hardware Protection Interlock?
+//DipoleFlow(IN = IO.HPI_DPM01_FS1_IN);		
+
+MagnetField();
+		
+FastGateValve(Closed:=IO.HPI_VALV01_CLOSED_IN, Open:=IO.HPI_VALV01_OPEN_IN);		
+
+//======================== INTERLOCKS ======================		
+		
+//Combining inputs for Shutter Interlock output
+IO.HPI_SHUTR01_OPEN_OUT:=Pressure.Interlock AND FastGateValve.Interlock AND SolenoidFlow.Interlock AND 
+						SolenoidThermalSwitches.Interlock AND DipoleFlow.Interlock AND IO.HPI_SOLN01_ENABLE_OUT AND GunFlowSwitches.Interlock AND
+						Prof01.Interlock AND Prof02.Interlock AND RfNetworkFlowSwitches.Interlock;
+
+//Combining inputs for  Solenoid interlock output
+IO.HPI_SOLN01_ENABLE_OUT:=SolenoidFlow.Interlock AND SolenoidThermalSwitches.Interlock;
+
+//Combining inputs for  Klystron interlock outputs
+IO.HPI_KLY01_STANDBY_OUT := TRUE;
+IO.HPI_KLY01_HVMODE_OUT :=Pressure.Interlock AND SolenoidFlow.Interlock AND GunFlowSwitches.Interlock AND 
+						SolenoidThermalSwitches.Interlock AND DipoleFlow.Interlock AND RfNetworkFlowSwitches.Interlock;
+IO.HPI_KLY01_TRIGMODE_OUT := IO.HPI_KLY01_HVMODE_OUT;
+
+
+]]></ST>
+    </Implementation>
+    <LineIds Name="MpsLogic">
+      <LineId Id="685" Count="7" />
+      <LineId Id="864" Count="0" />
+      <LineId Id="862" Count="0" />
+      <LineId Id="693" Count="10" />
+      <LineId Id="865" Count="0" />
+      <LineId Id="704" Count="3" />
+      <LineId Id="711" Count="14" />
+      <LineId Id="833" Count="2" />
+      <LineId Id="837" Count="0" />
+      <LineId Id="839" Count="1" />
+      <LineId Id="731" Count="4" />
+      <LineId Id="737" Count="0" />
+      <LineId Id="739" Count="2" />
+      <LineId Id="760" Count="31" />
+      <LineId Id="793" Count="10" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

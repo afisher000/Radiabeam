@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_InterlockOutput" Id="{47e6cd29-02d2-4ac8-b4b7-9d0e7b15b169}">
+    <Declaration><![CDATA[TYPE ST_InterlockOutput :
+STRUCT
+	HPI_SHUTR01_OPEN_OUT : BOOL;
+	HPI_SHUTR02_OPEN_OUT : BOOL;
+	HPI_SOLN01_ENABLE_OUT : BOOL;
+	HPI_DIP01_ENABLE_OUT : BOOL;
+	HPI_KLY01_STANDBY_OUT : BOOL;
+	HPI_KLY01_HVMODE_OUT : BOOL;
+	HPI_KLY01_TRIGMODE_OUT : BOOL;
+	HPI_KLY02_STANDBY_OUT : BOOL;
+	HPI_KLY02_HVMODE_OUT : BOOL;
+	HPI_KLY02_TRIGMODE_OUT : BOOL;
+	
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

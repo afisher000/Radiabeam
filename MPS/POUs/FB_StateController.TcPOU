@@ -1,0 +1,406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_StateController" Id="{75a9f593-799d-4cb7-ac88-06769e008afd}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_StateController
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+	StandbyEnabled_OUT : BOOL := FALSE;
+	HVEnabled_OUT : BOOL := FALSE;
+	HVRampDown_OUT : BOOL := FALSE;
+	BeamEnabled_OUT : BOOL := FALSE;
+	BeamRampDown_OUT : BOOL := FALSE;
+	ManualModeEnabled_OUT : BOOL := FALSE;
+	AutomaticModeEnabled_OUT : BOOL := FALSE;
+	Fault_OUT : ARRAY[0..CONSTANTS.MAX_NUMBER_OF_FAULTS] OF E_MpsFault;
+	Warning_OUT : ARRAY[0..CONSTANTS.MAX_NUMBER_OF_FAULTS] OF E_MpsWarning;
+	FaultSeverity_OUT : E_MpsFaultSeverity;
+	
+END_VAR
+VAR
+	State : E_MpsState;
+	TargetState : E_MpsState;
+	EpicsState_RB : E_MpsState;
+	
+	
+	NumberOfFaults : UINT := 0;
+	NumberOfWarnings : UINT := 0;
+	Klystron01CCPSVolt01_RB : LREAL := 0;
+	Klystron01CCPSVolt02_RB : LREAL := 0;
+	Klystron01State_RB : E_KlystronState;
+	Klystron01PPSState_RB : E_KlystronPPSState;
+	
+	Klystron02State_RB : E_KlystronState;
+	Klystron02CCPSVolt01_RB : LREAL := 0;
+	Klystron02CCPSVolt02_RB : LREAL := 0;
+	Klystron02PPSState_RB : E_KlystronPPSState;
+	
+	ManualMode_SET : BOOL := FALSE;
+	AutomaticMode_SET : BOOL := FALSE;
+	AllowEnergyProfileLoad_SET : BOOL := FALSE;
+	AllowLowRepRateBeamOn_SET : BOOL := FALSE;
+	AllowFullBeamOn_SET : BOOL := FALSE;
+	
+END_VAR]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Handles state tranistion and configures state outputs
+IF State = E_MpsState.OFF THEN
+	StandbyEnabled_OUT := FALSE;
+	HVEnabled_OUT := FALSE;
+	HVRampDown_OUT := FALSE;
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	ManualModeEnabled_OUT := FALSE;
+	AutomaticModeEnabled_OUT := FALSE;
+	ManualMode_SET := FALSE;
+	AutomaticMode_SET := FALSE;
+
+//When the klystron state in any state above OFF changes to Off or StandbyOff requested
+//The system will move to exiting Standby state
+//The same applies for the readback of the EPICS state
+ELSIF State = E_MpsState.ExitingStandby THEN
+	//IF Klystron01State_RB = E_KlystronState.Off AND 
+	IF TRUE THEN //Klystron02State_RB = E_KlystronState.Off THEN
+		TargetState := E_MpsState.OFF;
+		State := E_MpsState.OFF;
+	END_IF
+	StandbyEnabled_OUT := FALSE;
+	HVEnabled_OUT := FALSE;
+	HVRampDown_OUT := FALSE;
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	ManualMode_SET := FALSE;
+	AutomaticMode_SET := FALSE;
+
+//Move to standby when the klystrons reach standby
+ELSIF State = E_MpsState.EnteringStandby AND FaultSeverity_OUT <> E_MpsFaultSeverity.StandbyFault THEN
+	StandbyEnabled_OUT := TRUE;
+	IF EpicsState_RB = E_MpsState.STANDBY AND //Klystron01State_RB = E_KlystronState.Standby AND 
+	    	Klystron02State_RB = E_KlystronState.Standby THEN
+		State := E_MpsState.STANDBY;
+	END_IF
+	
+ELSIF Klystron02State_RB = E_KlystronState.Off OR Klystron02State_RB = E_KlystronState.StandbyOffRequested OR
+	  //Klystron01State_RB = E_KlystronState.Off OR Klystron01State_RB = E_KlystronState.StandbyOffRequested
+		//OR Klystron01PPSState_RB = E_KlystronPPSState.Off OR Klystron01PPSState_RB = E_KlystronPPSState.NoSignal
+		//OR Klystron02PPSState_RB = E_KlystronPPSState.Off OR Klystron02PPSState_RB = E_KlystronPPSState.NoSignal
+		//EpicsState_RB = E_MpsState.OFF OR 
+		EpicsState_RB = E_MpsState.ExitingStandby OR
+		FaultSeverity_OUT = E_MpsFaultSeverity.StandbyFault THEN 	
+	State := E_MpsState.ExitingStandby;
+	
+ELSIF State = E_MpsState.STANDBY THEN
+	StandbyEnabled_OUT := TRUE;
+	HVEnabled_OUT := FALSE;
+	HVRampDown_OUT := FALSE;
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	ManualMode_SET := FALSE;
+	AutomaticMode_SET := FALSE;
+
+//When the klystron state in any state above STANDBY changes to Standby or HV Off
+//The system will move to exiting HV state
+//The same applies for the readback of the EPICS state
+ELSIF State = E_MpsState.ExitingHV THEN
+	//IF Klystron01State_RB = E_KlystronState.Standby AND
+	IF Klystron02State_RB = E_KlystronState.Standby AND 
+		Klystron02CCPSVolt01_RB <= CONSTANTS.APPROXIMATE_ZERO AND Klystron02CCPSVolt02_RB <= CONSTANTS.APPROXIMATE_ZERO THEN
+		State := E_MpsState.STANDBY;
+		TargetState := E_MpsState.STANDBY;
+	END_IF 
+	HVEnabled_OUT := FALSE;
+	HVRampDown_OUT := TRUE;
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	ManualMode_SET := FALSE;
+	AutomaticMode_SET := FALSE;
+
+//Move to HV when the klystrons reach HV
+ELSIF State = E_MpsState.EnteringHV AND FaultSeverity_OUT <> E_MpsFaultSeverity.HVFault THEN
+	HVEnabled_OUT := TRUE;
+	IF EpicsState_RB = E_MpsState.HV AND //Klystron01State_RB = E_KlystronState.Standby AND
+			Klystron02State_RB = E_KlystronState.HV THEN
+		State := E_MpsState.HV;
+	END_IF
+
+ELSIF Klystron02State_RB = E_KlystronState.Standby OR Klystron02State_RB = E_KlystronState.HVOffRequested
+		OR EpicsState_RB = E_MpsState.STANDBY OR EpicsState_RB = E_MpsState.ExitingHV 
+		OR FaultSeverity_OUT = E_MpsFaultSeverity.HVFault THEN	
+	State := E_MpsState.ExitingHV;	
+
+//Case structure manages transition to higher states
+ELSIF State = E_MpsState.HV THEN
+	StandbyEnabled_OUT := TRUE;
+	HVEnabled_OUT := TRUE;
+	HVRampDown_OUT := FALSE;
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	
+	IF ManualMode_SET = TRUE THEN
+		State := E_MpsState.EnteringManualMode;
+	ELSIF AutomaticMode_SET = TRUE THEN
+		State := E_MpsState.EnteringAutomaticMode;
+	END_IF
+
+ELSIF State = E_MpsState.EnteringManualMode AND FaultSeverity_OUT <> E_MpsFaultSeverity.RFFault THEN
+	IF (ManualMode_SET = FALSE) THEN
+		State := E_MpsState.SafeRoutine;
+	END_IF
+	ManualModeEnabled_OUT := TRUE;
+	AutomaticModeEnabled_OUT := FALSE;
+	IF EpicsState_RB = E_MpsState.HV AND//Klystron01State_RB = E_KlystronState.Standby AND
+			Klystron02State_RB = E_KlystronState.Trig THEN
+		State := E_MpsState.ManualMode;
+	END_IF
+	
+ELSIF State = E_MpsState.SafeRoutine THEN
+	IF EpicsState_RB = E_MpsState.HV AND Klystron02State_RB = E_KlystronState.HV THEN
+		State := E_MpsState.HV;
+	END_IF
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := TRUE;
+	ManualMode_SET := FALSE;
+	AutomaticMode_SET := FALSE;
+	ManualModeEnabled_OUT := FALSE;
+	AutomaticModeEnabled_OUT := FALSE;
+	
+ELSIF State = E_MpsState.EnteringAutomaticMode AND FaultSeverity_OUT <> E_MpsFaultSeverity.RFFault THEN	
+	IF (AutomaticMode_SET = FALSE) THEN
+		State := E_MpsState.SafeRoutine;
+	END_IF
+	BeamEnabled_OUT := TRUE;
+	BeamRampDown_OUT := FALSE;
+	ManualModeEnabled_OUT := FALSE;
+	AutomaticModeEnabled_OUT := TRUE;
+	IF EpicsState_RB = E_MpsState.HV AND Klystron01State_RB = E_KlystronState.Trig
+			AND Klystron02State_RB = E_KlystronState.Trig THEN
+		State := E_MpsState.AutomaticMode;
+	END_IF	
+
+ELSIF Klystron02State_RB = E_KlystronState.HV OR Klystron02State_RB = E_KlystronState.TrigOffRequested
+		OR FaultSeverity_OUT = E_MpsFaultSeverity.RFFault OR (ManualMode_SET = FALSE AND AutomaticMode_SET = FALSE) THEN	
+	State := E_MpsState.SafeRoutine;	
+	
+ELSIF State = E_MpsState.ManualMode THEN
+	BeamEnabled_OUT := FALSE;
+	BeamRampDown_OUT := FALSE;
+	ManualModeEnabled_OUT := TRUE;
+	AutomaticModeEnabled_OUT := FALSE;
+	
+ELSIF Klystron01State_RB = E_KlystronState.HV OR Klystron01State_RB = E_KlystronState.TrigOffRequested
+		OR Klystron02State_RB = E_KlystronState.HV OR Klystron02State_RB = E_KlystronState.TrigOffRequested
+		OR FaultSeverity_OUT = E_MpsFaultSeverity.RFFault THEN	
+	State := E_MpsState.SafeRoutine;
+	
+ELSIF State = E_MpsState.AutomaticMode THEN
+	BeamEnabled_OUT := TRUE;
+	BeamRampDown_OUT := FALSE;
+	ManualModeEnabled_OUT := FALSE;
+	AutomaticModeEnabled_OUT := TRUE;
+	
+END_IF
+]]></ST>
+    </Implementation>
+    <Method Name="Acknowledge" Id="{e4937abd-6f2c-4869-9159-cc7b537a10fa}">
+      <Declaration><![CDATA[METHOD Acknowledge : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	DefaultFault : ARRAY[0..CONSTANTS.MAX_NUMBER_OF_FAULTS] OF E_MpsFault;
+	DefaultWarning : ARRAY[0..CONSTANTS.MAX_NUMBER_OF_WARNINGS] OF E_MpsWarning; 
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[FaultSeverity_OUT := E_MpsFaultSeverity.NoFault;
+Fault_OUT := DefaultFault;
+Warning_OUT := DefaultWarning;
+NumberOfFaults := 0;
+NumberOfWarnings := 0;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddFault" Id="{42ff99f5-35c7-4d6f-8e5a-93f0224bfbf2}">
+      <Declaration><![CDATA[METHOD AddFault : BOOL
+VAR_INPUT
+	Fault_IN : E_MpsFault;
+	FaultType_IN : E_MpsFaultSeverity;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NumberOfFaults >= CONSTANTS.MAX_NUMBER_OF_FAULTS THEN
+	NumberOfFaults := CONSTANTS.MAX_NUMBER_OF_FAULTS - 1; 
+END_IF
+Fault_OUT[NumberOfFaults] := Fault_IN;
+
+//System fault severity - severity of the most severe active fault
+IF FaultSeverity_OUT = E_MpsFaultSeverity.NoFault THEN
+	FaultSeverity_OUT := FaultType_IN;
+ELSIF FaultSeverity_OUT = E_MpsFaultSeverity.StandbyFault THEN
+	FaultSeverity_OUT := E_MpsFaultSeverity.StandbyFault;
+ELSIF FaultSeverity_OUT = E_MpsFaultSeverity.HVFault THEN
+	IF FaultType_IN = E_MpsFaultSeverity.StandbyFault THEN
+		FaultSeverity_OUT := E_MpsFaultSeverity.StandbyFault;
+	END_IF
+ELSIF FaultSeverity_OUT = E_MpsFaultSeverity.RFFault THEN
+	IF FaultType_IN = E_MpsFaultSeverity.StandbyFault OR FaultType_IN = E_MpsFaultSeverity.HVFault THEN
+		FaultSeverity_OUT := FaultType_IN;
+	END_IF
+ELSIF FaultSeverity_OUT = E_MpsFaultSeverity.BeamFault THEN
+	IF FaultType_IN <> E_MpsFaultSeverity.NoFault THEN
+		FaultSeverity_OUT := FaultType_IN;
+	END_IF 
+END_IF
+
+NumberOfFaults := NumberOfFaults + 1;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="AddWarning" Id="{9808014b-40df-48ee-bcde-f93d6aff4f9a}">
+      <Declaration><![CDATA[METHOD AddWarning : BOOL
+VAR_INPUT
+	Warning_IN : E_MpsWarning;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF NumberOfWarnings >= CONSTANTS.MAX_NUMBER_OF_WARNINGS THEN
+	NumberOfWarnings := CONSTANTS.MAX_NUMBER_OF_WARNINGS - 1; 
+END_IF
+Warning_OUT[NumberOfWarnings] := Warning_IN;
+NumberOfWarnings := NumberOfWarnings + 1;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Control" Id="{44a0f6ed-6bdf-47ce-88d5-e53ebb29915e}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_StateController;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.StateSt := State;
+structure.TargetStateSt := TargetState;
+EpicsState_RB := structure.EpicsStateSt;
+Klystron01CCPSVolt01_RB := structure.Klystron01CCPSVolt01St;
+Klystron01CCPSVolt02_RB := structure.Klystron01CCPSVolt02St;
+Klystron01State_RB := structure.Klystron01StateSt;
+Klystron01PPSState_RB := structure.Klystron01PPSStateSt;
+
+Klystron02CCPSVolt01_RB := structure.Klystron02CCPSVolt01St;
+Klystron02CCPSVolt02_RB := structure.Klystron02CCPSVolt02St;
+Klystron02State_RB := structure.Klystron02StateSt;
+Klystron02PPSState_RB := structure.Klystron02PPSStateSt;
+structure.FaultSeveritySt := FaultSeverity_OUT;
+IF ManualMode_SET = TRUE THEN
+	ManualMode_SET := structure.ManualModeSt;
+	IF structure.AutomaticModeSt = TRUE THEN
+		AddWarning(Warning_IN := E_MpsWarning.AutomaticModeUnreachable);
+	END_IF
+ELSIF AutomaticMode_SET = TRUE THEN
+	AutomaticMode_SET := structure.AutomaticModeSt;
+	AllowEnergyProfileLoad_SET := structure.AllowEnergyProfileLoadSt;
+	AllowLowRepRateBeamOn_SET := structure.AllowLowRepRateBeamOnSt;
+	AllowFullBeamOn_SET := structure.AllowFullBeamOnSt;
+	IF ManualMode_SET = TRUE THEN
+		AddWarning(Warning_IN := E_MpsWarning.ManualModeUnreachable);
+	END_IF
+ELSE	
+	ManualModeEnabled_OUT := FALSE;
+	AutomaticModeEnabled_OUT := FALSE;
+	AllowEnergyProfileLoad_SET := FALSE;
+	AllowLowRepRateBeamOn_SET := FALSE;
+	AllowFullBeamOn_SET := FALSE;
+	IF structure.ManualModeSt = TRUE THEN
+		ManualMode_SET := TRUE;
+	ELSIF structure.AutomaticModeSt = TRUE THEN
+		AutomaticMode_SET := TRUE;
+	END_IF
+END_IF
+
+IF structure.SetTargetStateSt THEN
+	G_EPICS.StateController.SetTargetStateSt := FALSE;
+	TransitionToTargetState(RequestedTargetState_IN := structure.TargetStateEpicsSt);
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="TransitionToTargetState" Id="{32d53949-1787-4330-a975-b77cea1a5b51}">
+      <Declaration><![CDATA[METHOD TransitionToTargetState : BOOL
+VAR_INPUT
+	RequestedTargetState_IN : E_MpsState;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Reject transition to transition states
+IF RequestedTargetState_IN <> E_MpsState.OFF AND RequestedTargetState_IN <> E_MpsState.STANDBY
+   AND RequestedTargetState_IN <> E_MpsState.HV THEN
+	AddWarning(Warning_IN := E_MpsWarning.InvalidStateRequested);
+	RETURN;
+END_IF
+
+IF RequestedTargetState_IN = E_MpsState.OFF THEN
+	TargetState := RequestedTargetState_IN;
+	State := E_MpsState.ExitingStandby;
+END_IF
+
+IF RequestedTargetState_IN = E_MpsState.STANDBY THEN
+	IF State = E_MpsState.OFF THEN
+		State := E_MpsState.EnteringStandby;
+		TargetState := RequestedTargetState_IN;
+	ELSIF State = E_MpsState.ExitingStandby THEN
+		AddWarning(Warning_IN := E_MpsWarning.InvalidStateRequested);
+	ELSIF State <> E_MpsState.STANDBY AND State <> E_MpsState.EnteringStandby THEN
+		State := E_MpsState.ExitingHV;
+		TargetState := RequestedTargetState_IN;
+	END_IF
+END_IF
+
+IF RequestedTargetState_IN = E_MpsState.HV THEN
+	IF State = E_MpsState.STANDBY THEN
+		State := E_MpsState.EnteringHV;
+		TargetState := RequestedTargetState_IN;
+	ELSIF State = E_MpsState.OFF OR State = E_MpsState.EnteringStandby
+			OR State = E_MpsState.ExitingStandby OR State = E_MpsState.ExitingHV THEN
+		AddWarning(Warning_IN := E_MpsWarning.InvalidStateRequested);
+	ELSIF State <> E_MpsState.HV AND State <> E_MpsState.EnteringHV THEN
+		State := E_MpsState.SafeRoutine;
+		TargetState := RequestedTargetState_IN;
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_StateController">
+      <LineId Id="1574" Count="155" />
+      <LineId Id="578" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StateController.Acknowledge">
+      <LineId Id="24" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StateController.AddFault">
+      <LineId Id="6" Count="3" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="37" Count="2" />
+      <LineId Id="42" Count="0" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="45" Count="5" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StateController.AddWarning">
+      <LineId Id="9" Count="2" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StateController.Control">
+      <LineId Id="137" Count="41" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_StateController.TransitionToTargetState">
+      <LineId Id="103" Count="34" />
+      <LineId Id="50" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

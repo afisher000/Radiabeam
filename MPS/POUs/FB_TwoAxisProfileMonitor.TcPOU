@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TwoAxisProfileMonitor" Id="{461e73f8-4536-482b-98aa-cbdeec6122b0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TwoAxisProfileMonitor
+VAR_INPUT
+	RepRate : BOOL;
+	Retracted_IN :BOOL;
+	Inserted_Axis_1_IN : BOOL;
+	Inserted_Axis_2_IN : BOOL;
+END_VAR
+VAR
+	NegativeEdge : F_TRIG;
+	MoveDelayTimer : TON;
+	DelayBetweenMoves : TIME := T#2S;
+END_VAR	
+
+VAR_OUTPUT
+	Insert_Axis_1_OUT: BOOL;
+	Insert_Axis_2_OUT : BOOL;
+	Interlock : BOOL;
+	State : E_3PosMonState;
+	DisableButtons : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Map the input states to enum
+IF Inserted_Axis_1_IN AND (NOT Inserted_Axis_2_IN) AND (NOT Retracted_IN)  THEN
+	State:=E_3PosMonState.isInserted1;
+ELSIF (NOT Inserted_Axis_1_IN) AND Inserted_Axis_2_IN AND (NOT Retracted_IN)  THEN
+	State:=E_3PosMonState.isInserted2;
+ELSIF (NOT Inserted_Axis_1_IN) AND (NOT Inserted_Axis_2_IN) AND Retracted_IN  THEN
+	State:=E_3PosMonState.isRetracted;
+ELSIF (NOT Inserted_Axis_1_IN) AND (NOT Inserted_Axis_2_IN) AND Retracted_IN  THEN
+	State:=E_3PosMonState.isRetracted;
+ELSIF (NOT Inserted_Axis_1_IN) AND (NOT Inserted_Axis_2_IN) AND (NOT Retracted_IN)  THEN
+	State:=E_3PosMonState.isMoving;
+	
+ELSIF Inserted_Axis_1_IN AND Inserted_Axis_2_IN AND Retracted_IN  THEN
+	State:=E_3PosMonState.isBroken;
+ELSIF NOT Inserted_Axis_1_IN AND Inserted_Axis_2_IN AND Retracted_IN  THEN
+	State:=E_3PosMonState.isBroken;
+ELSIF Inserted_Axis_1_IN AND NOT Inserted_Axis_2_IN AND Retracted_IN  THEN
+	State:=E_3PosMonState.isBroken;
+ELSIF Inserted_Axis_1_IN AND Inserted_Axis_2_IN AND NOT Retracted_IN  THEN
+	State:=E_3PosMonState.isBroken;
+END_IF
+
+
+//Shutter interlock behaviour
+IF State = E_3PosMonState.isInserted1 AND (NOT RepRate) THEN 
+	Interlock := TRUE;
+ELSIF State = E_3PosMonState.isInserted2 AND (NOT RepRate) THEN 
+	Interlock := TRUE;
+ELSIF State = E_3PosMonState.isRetracted  THEN 
+	Interlock := TRUE;
+ELSE 
+	Interlock := FALSE;	
+END_IF
+
+
+// Air solenoid behaviour
+IF RepRate THEN
+	Retract();	
+	State := E_3PosMonState.isForcedOut;
+END_IF
+
+
+// Timeout in between moves
+
+NegativeEdge(CLK:=State = E_3PosMonState.isMOVING);
+MoveDelayTimer(PT:=DelayBetweenMoves);
+
+IF NegativeEdge.Q THEN
+	MoveDelayTimer(IN:=TRUE);
+	DisableButtons := TRUE;
+ELSIF MoveDelayTimer.Q THEN
+	MoveDelayTimer(IN:=FALSE);
+	DisableButtons:=FALSE;
+END_IF
+
+
+
+]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{b38e851e-5f29-469c-9b24-95c932c4266c}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure: ST_ThreePositionPopIn;
+END_VAR
+
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF structure.InsertPos2Cmd THEN
+	structure.InsertPos2Cmd := FALSE;
+	InsertAxis1();	
+END_IF
+
+IF structure.InsertPos3Cmd THEN
+	structure.InsertPos3Cmd := FALSE;
+	InsertAxis2();	
+END_IF
+
+IF structure.RetractPos1Cmd THEN
+	structure.RetractPos1Cmd := FALSE;
+	Retract();	
+END_IF
+
+structure.StateSt := State;
+
+structure.InsertedPos2St:=Inserted_Axis_1_IN;
+structure.InsertedPos3St:=Inserted_Axis_2_IN;
+structure.RetractedPos1St:=Retracted_IN;
+
+structure.InterlockSt:=Interlock;
+
+structure.DisableButtonsSt:=DisableButtons;
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertAxis1" Id="{2f3bac42-09d3-43fc-8eec-e89995526db8}">
+      <Declaration><![CDATA[METHOD InsertAxis1 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State <> E_3PosMonState.isRetracted THEN
+	RETURN;
+END_IF
+
+Insert_Axis_1_OUT := TRUE;	
+Insert_Axis_2_OUT := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertAxis2" Id="{688892af-591c-4ae3-bd1c-2775795a6360}">
+      <Declaration><![CDATA[METHOD InsertAxis2 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF State <> E_3PosMonState.isRetracted THEN
+	RETURN;
+END_IF
+
+Insert_Axis_1_OUT := FALSE;
+Insert_Axis_2_OUT := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Retract" Id="{256d11ec-3dcb-43c0-9626-51ad88d90d4e}">
+      <Declaration><![CDATA[METHOD Retract : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Insert_Axis_1_OUT := FALSE;	
+Insert_Axis_2_OUT := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TwoAxisProfileMonitor">
+      <LineId Id="286" Count="56" />
+      <LineId Id="123" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisProfileMonitor.Control">
+      <LineId Id="93" Count="25" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisProfileMonitor.InsertAxis1">
+      <LineId Id="11" Count="3" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisProfileMonitor.InsertAxis2">
+      <LineId Id="15" Count="2" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisProfileMonitor.Retract">
+      <LineId Id="6" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

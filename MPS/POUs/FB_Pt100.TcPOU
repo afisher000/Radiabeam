@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.9">
+  <POU Name="FB_Pt100" Id="{9ce2ec01-883c-4d32-95bb-2a3410b18095}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Pt100
+VAR_INPUT
+	Raw : INT;
+END_VAR
+VAR_OUTPUT
+	TempCelsius : REAL;
+	TempFaranheit : REAL;
+END_VAR
+
+// Card settings: 3-wire, 0,1°C precision, pt100
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[TempCelsius:= Raw/10;
+TempFaranheit := (TempCelsius*9/5)+32;]]></ST>
+    </Implementation>
+    <LineIds Name="FB_Pt100">
+      <LineId Id="9" Count="0" />
+      <LineId Id="20" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

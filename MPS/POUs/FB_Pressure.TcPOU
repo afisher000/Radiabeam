@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_Pressure" Id="{72f1ff6f-5ad0-4281-8a39-5087777248b0}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Pressure
+VAR_INPUT
+	IN_1 : BOOL :=TRUE;
+	IN_2 : BOOL :=TRUE;
+	
+END_VAR
+VAR_OUTPUT
+	Interlock : BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Interlock := IN_1 AND IN_2;]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{682224f5-42da-4faf-bcae-9f57ba126053}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_Pressure;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.IN_1St := IN_1;
+structure.IN_2St := IN_2;
+structure.InterlockSt := Interlock;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Pressure">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Pressure.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="10" Count="1" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

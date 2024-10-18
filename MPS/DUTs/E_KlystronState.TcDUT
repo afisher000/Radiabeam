@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_KlystronState" Id="{ec4c7137-984b-47aa-b1b1-54a0ab2e9aaa}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_KlystronState :
+(
+	Off := 1,
+	StandbyOffRequested := 3,
+	StamdbyOnRequested := 4,
+	Standby := 5,
+	HVOffRequested := 7,
+	HVOnRequested := 8,
+	HV := 9,
+	TrigOffRequested := 11,
+	TrigOnRequested := 12,
+	Trig := 13
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_TwoAxisPopIn" Id="{9069e37b-4aba-4a81-824e-dc86e63eb0bf}">
+    <Declaration><![CDATA[TYPE ST_TwoAxisPopIn :
+STRUCT
+	//Controls
+	Axis1_InsertPos2Cmd :BOOL;
+	Axis1_RetractPos1Cmd : BOOL;
+	
+	Axis2_InsertPos2Cmd: BOOL;
+	Axis2_RetractPos1Cmd : BOOL;
+	
+	//Statuses
+	
+	Axis1_IsInsertedPos2St : BOOL;
+	Axis1_IsRetractedPos1St : BOOL;
+	
+	Axis2_IsInsertedPos2St : BOOL;
+	Axis2_IsRetractedPos1St : BOOL;
+	
+	InterlockSt : BOOL;
+	
+	Axis1StateSt : E_2PosMonState;
+	Axis2StateSt : E_2PosMonState;
+	
+	DisableButtonsSt :BOOL;
+	
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

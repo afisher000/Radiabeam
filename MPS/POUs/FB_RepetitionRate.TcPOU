@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_RepetitionRate" Id="{423750c0-d8f4-43bf-b0d4-b19db13c840f}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_RepetitionRate
+VAR_INPUT
+	frequencyRaw : UDINT;
+END_VAR
+VAR_OUTPUT
+	Inhibit : BOOL;
+	AboveThreshold : BOOL;
+END_VAR
+VAR
+	RepetitionRateHz : REAL;
+END_VAR
+VAR CONSTANT
+	ScalingFactor: REAL := 100; // Scaling of raw input frequency
+	Threshold : REAL := 10.0; // set this for determening AboveThreshold
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+//check the card how to scale the input and how to set the frequency in configuration
+RepetitionRateHz := UDINT_TO_REAL(frequencyRaw)/ScalingFactor;
+
+AboveThreshold := RepetitionRateHz > Threshold;
+]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{2f00e7fb-7844-4f70-857f-b164c8112c6a}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_RepetitionRate;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[structure.RepetitionRateHzSt := RepetitionRateHz;
+structure.RepRateAboveThresholdSt := AboveThreshold;
+structure.RepetitionRateHzThreshold := Threshold;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_RepetitionRate">
+      <LineId Id="87" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="89" Count="0" />
+      <LineId Id="88" Count="0" />
+      <LineId Id="85" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_RepetitionRate.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="G_EPICS" Id="{58980f63-2e76-4d6b-bf82-612369e3ef53}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+
+	RepetitionRate : ST_RepetitionRate;	
+	
+	StateController : ST_StateController;
+	StateOutput : ST_StateOutput;
+
+	Pressure : ST_Pressure;
+	GunFlowSwitches : ST_LatchingAND;
+	FastGateValve : ST_FastGateValveMonitor;
+	RfNetwork01FlowSwitches : ST_LatchingAND;
+	RfNetwork02FlowSwitches : ST_LatchingAND;
+	SolenoidFlow : ST_LatchingAND;
+	SolenoidThermalSwitches : ST_LatchingAND;
+	DipoleThermalSwitches : ST_LatchingAND;
+	DipoleFlow : ST_LatchingAND;
+	MagnetField : ST_EpicsMeasurement;
+	DipoleCurrent : ST_EpicsMeasurement; 
+	
+	PopIn01 : ST_ThreePositionPopIn;
+	PopIn02 : ST_TwoPositionPopIn;
+	PopIn03 : ST_TwoAxisPopIn;
+	PopIn04 : ST_ThreePositionPopIn;
+	PopIn05 : ST_TwoAxisPopIn;
+	PopIn06 : ST_TwoPositionPopIn;
+	
+	InterlockOutput :ST_InterlockOutput;
+	PPSInput : ST_PPSInput;
+	
+	FaultList : ST_FaultList;
+	WarningList : ST_WarningList;
+	
+	General : ST_General;
+	
+	RtdTemperature	: ST_RtdTemperature;
+	
+	Linac1Flow : ST_LatchingAND;
+	
+	Linac2FlowMeter01 : ST_FlowMeter;
+	Linac2FlowMeter02 : ST_FlowMeter;
+	Linac2FlowMeter03 : ST_FlowMeter;
+	Linac2FlowMeter04 : ST_FlowMeter;
+	Linac2FlowMeter05 : ST_FlowMeter;
+	Linac2Flow : ST_LatchingAND;
+	
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

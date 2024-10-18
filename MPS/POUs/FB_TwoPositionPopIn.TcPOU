@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TwoPositionPopIn" Id="{9e4b88f4-9d6f-4a56-97df-c904e208c07a}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TwoPositionPopIn
+VAR_INPUT
+	RepRate : BOOL; // TRUE - above RepRate Threshold
+	Retracted_Pos1_IN :BOOL;
+	Inserted_Pos2_IN : BOOL;
+END_VAR
+	
+VAR_OUTPUT
+	Insert_Pos2_OUT : BOOL;
+	Interlock : BOOL; // MPS shutter
+	State : E_2PosMonState;
+	Error : BOOL; // timer expired
+END_VAR
+
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[//Map the inputs to enum
+IF Inserted_Pos2_IN AND Retracted_Pos1_IN THEN
+	State:=E_2PosMonState.isBroken;
+ELSIF Inserted_Pos2_IN AND NOT Retracted_Pos1_IN THEN
+	State:=E_2PosMonState.isInserted;
+ELSIF NOT Inserted_Pos2_IN AND Retracted_Pos1_IN THEN
+	State:=E_2PosMonState.isRetracted;
+ELSIF NOT Inserted_Pos2_IN AND NOT Retracted_Pos1_IN THEN
+	State:=E_2PosMonState.isMoving;
+END_IF
+
+
+//Shutter interlock behaviour
+IF State = E_2PosMonState.isBroken THEN //Broken
+	Interlock := FALSE;
+ELSIF State = E_2PosMonState.isMoving THEN //Moving
+	Interlock := FALSE;
+ELSIF State = E_2PosMonState.isInserted AND RepRate THEN
+	Interlock := FALSE;	
+ELSE 
+	Interlock := TRUE;	
+END_IF
+
+
+// Air solenoid behaviour
+IF RepRate THEN
+	Retract();
+	State := E_2PosMonState.isForcedOut;
+END_IF
+
+]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{76e1e668-265e-40f9-9c2f-c94d784ab45b}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure: ST_TwoPositionPopIn;
+END_VAR
+
+VAR
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF structure.InsertPos2Cmd THEN
+	structure.InsertPos2Cmd := FALSE;
+	Insert();	
+END_IF
+
+
+IF structure.RetractPos1Cmd THEN
+	structure.RetractPos1Cmd := FALSE;
+	Retract();	
+END_IF
+
+structure.StateSt := State;
+
+structure.InsertedPos2St:=Inserted_Pos2_IN;
+structure.RetractedPos1St:=Retracted_Pos1_IN;
+
+structure.InterlockSt:=Interlock;
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Insert" Id="{6b27388e-dc96-4819-95a7-068dca6e0e24}">
+      <Declaration><![CDATA[METHOD Insert : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF RepRate THEN
+	RETURN;
+END_IF
+
+Insert_Pos2_OUT := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Retract" Id="{35ab9696-0cb4-4f7b-9473-5cef272e1475}">
+      <Declaration><![CDATA[METHOD Retract : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Insert_Pos2_OUT := FALSE;]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TwoPositionPopIn">
+      <LineId Id="101" Count="1" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="111" Count="3" />
+      <LineId Id="116" Count="0" />
+      <LineId Id="115" Count="0" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="108" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="52" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="40" Count="2" />
+      <LineId Id="54" Count="1" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="146" Count="1" />
+      <LineId Id="50" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoPositionPopIn.Control">
+      <LineId Id="5" Count="0" />
+      <LineId Id="9" Count="1" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="17" Count="3" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="42" Count="1" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="32" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="27" Count="1" />
+      <LineId Id="23" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoPositionPopIn.Insert">
+      <LineId Id="9" Count="0" />
+      <LineId Id="11" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoPositionPopIn.Retract">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

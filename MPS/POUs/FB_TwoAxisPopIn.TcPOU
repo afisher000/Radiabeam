@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_TwoAxisPopIn" Id="{d9ee7f31-afa1-410b-aa2b-f47d1398c395}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_TwoAxisPopIn
+VAR_INPUT
+	RepRate : BOOL;
+	
+	Axis1_InsertedPos2_IN : BOOL;
+	Axis1_RetractedPos1_IN : BOOL;
+	
+	Axis2_InsertedPos2_IN : BOOL;
+	Axis2_RetractedPos1_IN : BOOL;
+END_VAR
+VAR_OUTPUT
+	Interlock : BOOL;
+	Axis1_State : E_2PosMonState;
+	Axis2_State : E_2PosMonState;
+	
+	Axis1_InsertPos2_OUT : BOOL;
+	Axis2_InsertPos2_OUT : BOOL;
+END_VAR
+VAR
+	Axis1 : FB_TwoPositionPopIn;
+	Axis2 : FB_TwoPositionPopIn;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Instances of 2 and 3 position monitor
+Axis1(RepRate := RepRate, 	
+			Inserted_Pos2_IN := Axis1_InsertedPos2_IN,	
+			Retracted_Pos1_IN := Axis1_RetractedPos1_IN,
+			Insert_Pos2_OUT => Axis1_InsertPos2_OUT,
+			State => Axis1_State );
+			
+Axis2(RepRate := RepRate,  
+		Inserted_Pos2_IN := Axis2_InsertedPos2_IN, 	
+		Retracted_Pos1_IN := Axis2_RetractedPos1_IN,
+		Insert_Pos2_OUT => Axis2_InsertPos2_OUT, 
+		State => Axis2_State);
+
+//Handle Horizontal -  RET Air solenoid - three way position monitor collisions
+
+IF Axis1.State = E_2PosMonState.isBROKEN AND Axis2.State= E_2PosMonState.isINSERTED THEN 
+	Axis1.Retract();
+ELSIF Axis1.State = E_2PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	Axis1.Retract();
+ELSIF Axis1.State = E_2PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isINSERTED THEN 
+	Axis1.Retract();
+ELSIF Axis1.State = E_2PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isMOVING THEN 
+	Axis1.Retract();
+ELSIF Axis1.State = E_2PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isINSERTED THEN 
+	Axis1.Retract();
+ELSIF Axis1.State = E_2PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	Axis1.Retract();
+END_IF
+			
+//Handle vertical 		two way position monitor collisions	
+IF Axis1.State = E_2PosMonState.isBROKEN AND Axis2.State = E_2PosMonState.isRETRACTED THEN 
+	Axis2.Retract();
+ELSIF Axis1.State = E_2PosMonState.isBROKEN AND Axis2.State = E_2PosMonState.isMOVING THEN 
+	Axis2.Retract();
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	Axis2.Retract();
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isRETRACTED THEN 
+	Axis2.Retract();
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isMOVING THEN 
+	Axis2.Retract();
+ELSIF Axis1.State = E_2PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isRETRACTED THEN 
+	Axis2.Retract();
+END_IF
+
+// Handle MPS shutter Interlock output
+Interlock := Axis2.Interlock AND Axis1.Interlock AND 
+			(Axis1.State = E_2PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isINSERTED) OR
+			(Axis1.State = E_2PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isRETRACTED) OR
+			(Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State= E_2PosMonState.isRETRACTED);
+			
+
+
+
+]]></ST>
+    </Implementation>
+    <Method Name="Control" Id="{1f5ffb39-0a2a-4919-bac2-be91234102e9}">
+      <Declaration><![CDATA[METHOD Control : BOOL
+VAR_IN_OUT
+	structure : ST_TwoAxisPopIn;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//Commands
+IF structure.Axis1_InsertPos2Cmd THEN
+	structure.Axis1_InsertPos2Cmd:=FALSE;
+	InsertAxis1();
+END_IF
+
+IF structure.Axis1_RetractPos1Cmd THEN
+	structure.Axis1_RetractPos1Cmd:=FALSE;
+	RetractAxis1();
+END_IF
+
+IF structure.Axis2_InsertPos2Cmd THEN
+	structure.Axis2_InsertPos2Cmd:=FALSE;
+	InsertAxis2();
+END_IF
+
+IF structure.Axis2_RetractPos1Cmd THEN
+	structure.Axis2_RetractPos1Cmd:=FALSE;
+	RetractAxis2();
+END_IF
+
+//Statuses
+
+structure.Axis1_IsInsertedPos2St:=Axis1.Inserted_Pos2_IN;
+structure.Axis1_IsRetractedPos1St:=Axis1.Retracted_Pos1_IN;
+
+structure.Axis2_IsInsertedPos2St:=Axis2.Inserted_Pos2_IN;
+structure.Axis2_IsRetractedPos1St:=Axis2.Retracted_Pos1_IN;
+
+structure.InterlockSt:=Interlock;
+
+structure.Axis1StateSt:=Axis1_State;
+structure.Axis2StateSt:=Axis2_State;
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertAxis1" Id="{5f8f7f28-7413-462b-8c88-d0be6ceee2d9}">
+      <Declaration><![CDATA[METHOD InsertAxis1 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Axis1.State = E_3PosMonState.isBROKEN AND Axis2.State= E_2PosMonState.isINSERTED THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isINSERTED THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isRETRACTED AND Axis2.State = E_2PosMonState.isMOVING THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isINSERTED THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	RETURN;
+END_IF
+
+Axis1.Insert();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InsertAxis2" Id="{b39fcb84-0e40-4b23-b1a7-c6b365f7c82c}">
+      <Declaration><![CDATA[METHOD InsertAxis2 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF Axis1.State = E_2PosMonState.isBROKEN AND Axis2.State= E_2PosMonState.isRETRACTED THEN 
+	RETURN;
+ELSIF Axis1.State = E_2PosMonState.isBROKEN AND Axis2.State= E_2PosMonState.isMOVING THEN 
+	RETURN;
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isBROKEN THEN 
+	RETURN;
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isRETRACTED THEN 
+	RETURN;
+ELSIF Axis1.State = E_2PosMonState.isINSERTED AND Axis2.State = E_2PosMonState.isMOVING THEN 
+	RETURN;
+ELSIF Axis1.State = E_3PosMonState.isMOVING AND Axis2.State = E_2PosMonState.isRETRACTED THEN 
+	RETURN;
+END_IF
+
+Axis2.Insert();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RetractAxis1" Id="{4a8e9af8-f62b-4608-ba07-70548710f69d}">
+      <Declaration><![CDATA[METHOD RetractAxis1 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Axis1.Retract();]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="RetractAxis2" Id="{7248571d-9ddf-49b7-8d83-635fd627b605}">
+      <Declaration><![CDATA[METHOD RetractAxis2 : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[Axis2.Retract();]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_TwoAxisPopIn">
+      <LineId Id="1402" Count="52" />
+      <LineId Id="36" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisPopIn.Control">
+      <LineId Id="303" Count="34" />
+      <LineId Id="84" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisPopIn.InsertAxis1">
+      <LineId Id="19" Count="11" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="11" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisPopIn.InsertAxis2">
+      <LineId Id="18" Count="8" />
+      <LineId Id="33" Count="2" />
+      <LineId Id="8" Count="1" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisPopIn.RetractAxis1">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_TwoAxisPopIn.RetractAxis2">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

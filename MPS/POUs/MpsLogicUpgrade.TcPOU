@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="MpsLogicUpgrade" Id="{79ab73a7-5d8f-4534-826f-cced79de1e17}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK MpsLogicUpgrade
+
+VAR
+	RepetitionRate : FB_RepetitionRate;	
+
+	StateController : FB_StateController;
+	StandbyEnabled : BOOL;
+	HVEnabled : BOOL;
+	HVRampDown : BOOL;
+	BeamEnabled : BOOL;
+	BeamRampDown : BOOL;
+	ManualModeEnabled : BOOL;
+	AutomaticModeEnabled : BOOL;
+	
+	//Interlock conditions
+	StandbyInterlock :  BOOL;
+	HVInterlock : BOOL;
+	RFInterlock : BOOL;
+	BeamInterlock : BOOL;
+	
+	Pressure : FB_Pressure;
+	GunFlowSwitches : FB_LatchingAND;
+	FastGateValve : FB_FastGateValveMonitor;
+	RfNetwork01FlowSwitches : FB_LatchingAND;
+	RfNetwork02FlowSwitches : FB_LatchingAND;
+	SolenoidFlow : FB_LatchingAND;
+	SolenoidThermalSwitches : FB_LatchingAND;
+	DipoleThermalSwitches : FB_LatchingAND;
+	DipoleFlow : FB_LatchingAND;
+	DipoleCurrent : FB_EpicsMeasurement;
+	MagnetField : FB_EpicsMeasurement;
+	
+	PopIn01 : FB_ThreePositionPopIn;
+	PopIn02 : FB_TwoPositionPopIn;
+	PopIn03 : FB_TwoAxisPopIn;
+	PopIn04 : FB_ThreePositionPopIn;
+	PopIn05 : FB_TwoAxisPopIn;
+	PopIn06 : FB_TwoPositionPopIn;
+	
+	Linac1Flow : FB_LatchingAND;
+	
+	Linac2FlowMeter01 : FB_FlowMeter;
+	Linac2FlowMeter02 : FB_FlowMeter;
+	Linac2FlowMeter03 : FB_FlowMeter;
+	Linac2FlowMeter04 : FB_FlowMeter;
+	Linac2FlowMeter05 : FB_FlowMeter;
+	Linac2Flow : FB_LatchingAND;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[// Acknowledge interlocks for the FB that needs it
+IF G_Epics.General.AcknowledgeAllCmd THEN
+	G_Epics.General.AcknowledgeAllCmd := FALSE;
+	StateController.Acknowledge();
+	GunFlowSwitches.Acknowledge();
+	RfNetwork01FlowSwitches.Acknowledge();
+	RfNetwork02FlowSwitches.Acknowledge();
+	SolenoidThermalSwitches.Acknowledge();
+	DipoleThermalSwitches.Acknowledge();
+	SolenoidFlow.Acknowledge();
+	DipoleFlow.Acknowledge();
+	DipoleCurrent.Acknowledge();
+	MagnetField.Acknowledge();
+	Linac1Flow.Acknowledge();
+	Linac2Flow.Acknowledge();
+END_IF
+
+//======================== EPICS exchange of data =======================
+StateController.Control(structure := G_Epics.StateController);
+
+RepetitionRate.Control(structure:=G_Epics.RepetitionRate);
+Pressure.Control(structure:=G_Epics.Pressure);
+GunFlowSwitches.Control(structure:=G_Epics.GunFlowSwitches);
+FastGateValve.Control(structure:=G_Epics.FastGateValve);
+RfNetwork01FlowSwitches.Control(structure:=G_Epics.RfNetwork01FlowSwitches);
+RfNetwork02FlowSwitches.Control(structure:=G_Epics.RfNetwork02FlowSwitches);
+SolenoidFlow.Control(structure:=G_Epics.SolenoidFlow);
+SolenoidThermalSwitches.Control(structure:=G_Epics.SolenoidThermalSwitches);
+DipoleThermalSwitches.Control(structure:=G_Epics.DipoleThermalSwitches);
+DipoleFlow.Control(structure:=G_Epics.DipoleFlow);
+DipoleCurrent.Control(structure:=G_Epics.DipoleCurrent);
+MagnetField.Control(structure:=G_Epics.MagnetField);
+Linac1Flow.Control(structure:=G_Epics.Linac1Flow);
+Linac2Flow.Control(structure:=G_Epics.Linac2Flow);
+	
+
+PopIn01.Control(structure:=G_Epics.PopIn01);
+PopIn02.Control(structure:=G_Epics.PopIn02);
+PopIn03.Control(structure:=G_Epics.PopIn03);
+PopIn04.Control(structure:=G_Epics.PopIn04);
+PopIn05.Control(structure:=G_Epics.PopIn05);
+PopIn06.Control(structure:=G_Epics.PopIn06);
+
+Linac2FlowMeter01.Control(structure := G_EPICS.Linac2FlowMeter01);
+Linac2FlowMeter02.Control(structure := G_EPICS.Linac2FlowMeter02);
+Linac2FlowMeter03.Control(structure := G_EPICS.Linac2FlowMeter03);
+Linac2FlowMeter04.Control(structure := G_EPICS.Linac2FlowMeter04);
+Linac2FlowMeter05.Control(structure := G_EPICS.Linac2FlowMeter05);
+
+//Transfer interlock outputs
+G_EPICS.InterlockOutput.HPI_KLY01_STANDBY_OUT:=IO.HPI_KLY01_STANDBY_OUT;
+G_EPICS.InterlockOutput.HPI_KLY01_HVMODE_OUT:=IO.HPI_KLY01_HVMODE_OUT;
+G_EPICS.InterlockOutput.HPI_KLY01_TRIGMODE_OUT:=IO.HPI_KLY01_TRIGMODE_OUT;
+G_EPICS.InterlockOutput.HPI_KLY02_STANDBY_OUT:=IO.HPI_KLY02_STANDBY_OUT;
+G_EPICS.InterlockOutput.HPI_KLY02_HVMODE_OUT:=IO.HPI_KLY02_HVMODE_OUT;
+G_EPICS.InterlockOutput.HPI_KLY02_TRIGMODE_OUT:=IO.HPI_KLY02_TRIGMODE_OUT;
+G_EPICS.InterlockOutput.HPI_SHUTR01_OPEN_OUT:=IO.HPI_SHUTR01_OPEN_OUT;
+G_EPICS.InterlockOutput.HPI_SHUTR02_OPEN_OUT:=IO.HPI_SHUTR02_OPEN_OUT;
+G_EPICS.InterlockOutput.HPI_SOLN01_ENABLE_OUT:=IO.HPI_SOLN01_ENABLE_OUT;
+G_EPICS.InterlockOutput.HPI_DIP01_ENABLE_OUT:=IO.HPI_DIP01_ENABLE_OUT;
+
+//Transfer state information
+G_EPICS.StateOutput.StandbyEnabled_OUT := StandbyEnabled;
+G_EPICS.StateOutput.HVEnabled_OUT := HVEnabled;
+G_EPICS.StateOutput.BeamEnabled_OUT := BeamEnabled;
+G_EPICS.StateOutput.ManualModeEnabled_OUT := ManualModeEnabled;
+G_EPICS.StateOutput.AutomaticModeEnabled_OUT := AutomaticModeEnabled;
+
+//Transfer faults and warnings
+G_EPICS.FaultList.Fault_1St := StateController.Fault_OUT[0];
+G_EPICS.FaultList.Fault_2St := StateController.Fault_OUT[1];
+G_EPICS.FaultList.Fault_3St := StateController.Fault_OUT[2];
+G_EPICS.FaultList.Fault_4St := StateController.Fault_OUT[3];
+G_EPICS.FaultList.Fault_5St := StateController.Fault_OUT[4];
+G_EPICS.FaultList.Fault_6St := StateController.Fault_OUT[5];
+G_EPICS.FaultList.Fault_7St := StateController.Fault_OUT[6];
+G_EPICS.FaultList.Fault_8St := StateController.Fault_OUT[7];
+G_EPICS.FaultList.Fault_9St := StateController.Fault_OUT[8];
+G_EPICS.FaultList.Fault_10St := StateController.Fault_OUT[9];
+
+G_EPICS.WarningList.Warning_1St := StateController.Warning_OUT[0];
+G_EPICS.WarningList.Warning_2St := StateController.Warning_OUT[1];
+G_EPICS.WarningList.Warning_3St := StateController.Warning_OUT[2];
+G_EPICS.WarningList.Warning_4St := StateController.Warning_OUT[3];
+G_EPICS.WarningList.Warning_5St := StateController.Warning_OUT[4];
+G_EPICS.WarningList.Warning_6St := StateController.Warning_OUT[5];
+G_EPICS.WarningList.Warning_7St := StateController.Warning_OUT[6];
+G_EPICS.WarningList.Warning_8St := StateController.Warning_OUT[7];
+G_EPICS.WarningList.Warning_9St := StateController.Warning_OUT[8];
+G_EPICS.WarningList.Warning_10St := StateController.Warning_OUT[9];
+
+//======================== ELEMENT INSTANCES ======================	
+
+//State controller
+StateController(StandbyEnabled_OUT => StandbyEnabled,
+				HVEnabled_OUT => HVEnabled,
+				HVRampDown_OUT => HVRampDown,
+				BeamEnabled_OUT => BeamEnabled,
+				BeamRampDown_OUT => BeamRampDown,
+				ManualModeEnabled_OUT => ManualModeEnabled,
+				AutomaticModeEnabled_OUT => AutomaticModeEnabled);
+
+//Repetition rate calculation and comparison
+RepetitionRate(frequencyRaw := IO.BUN1_PULS01_REPRATE_IN, Inhibit => IO.BUN1_PULS01_INHIBIT_OUT);
+
+//Pop ins
+PopIn01(RepRate := RepetitionRate.AboveThreshold,
+		Retracted_Pos1_IN := IO.TBL_POPIN01_RETRACTED_POS1_IN,
+		Inserted_Pos2_IN := IO.TBL_POPIN01_INSERTED_POS2_IN,
+		Inserted_Pos3_IN := IO.TBL_POPIN01_INSERTED_POS3_IN,
+		Insert_Pos2_OUT => IO.TBL_POPIN01_INSERT_POS2_OUT,
+		Insert_Pos3_OUT => IO.TBL_POPIN01_INSERT_POS3_OUT);
+
+PopIn02(RepRate := RepetitionRate.AboveThreshold,
+		Retracted_Pos1_IN := IO.TBL_POPIN02_RETRACTED_POS1_IN,
+		Inserted_Pos2_IN := IO.TBL_POPIN02_INSERTED_POS2_IN,
+		Insert_Pos2_OUT => IO.TBL_POPIN02_INSERT_POS2_OUT);
+
+PopIn03(RepRate:=RepetitionRate.AboveThreshold,
+		Axis1_RetractedPos1_IN:=IO.TBL_POPIN03_AX1_RETRACTED_POS1_IN,
+		Axis1_InsertedPos2_IN:=IO.TBL_POPIN03_AX1_INSERTED_POS2_IN,
+		Axis1_InsertPos2_OUT=>IO.TBL_POPIN03_AX1_INSERT_POS2_OUT,
+		Axis2_RetractedPos1_IN:=IO.TBL_POPIN03_AX2_RETRACTED_POS1_IN,
+		Axis2_InsertedPos2_IN:=IO.TBL_POPIN03_AX2_INSERTED_POS2_IN,
+		Axis2_InsertPos2_OUT=>IO.TBL_POPIN03_AX2_INSERT_POS2_OUT);
+
+PopIn04(RepRate := RepetitionRate.AboveThreshold,
+		Retracted_Pos1_IN := IO.TBL_POPIN04_RETRACTED_POS1_IN,
+		Inserted_Pos2_IN := IO.TBL_POPIN04_INSERTED_POS2_IN,
+		Inserted_Pos3_IN := IO.TBL_POPIN04_INSERTED_POS3_IN,
+		Insert_Pos2_OUT => IO.TBL_POPIN04_INSERT_POS2_OUT,
+		Insert_Pos3_OUT => IO.TBL_POPIN04_INSERT_POS3_OUT);
+	
+PopIn05(RepRate:=RepetitionRate.AboveThreshold,
+		Axis1_RetractedPos1_IN:=IO.TBL_POPIN05_AX1_RETRACTED_POS1_IN,
+		Axis1_InsertedPos2_IN:=IO.TBL_POPIN05_AX1_INSERTED_POS2_IN,
+		Axis1_InsertPos2_OUT=>IO.TBL_POPIN05_AX1_INSERT_POS2_OUT,
+		Axis2_RetractedPos1_IN:=IO.TBL_POPIN05_AX2_RETRACTED_POS1_IN,
+		Axis2_InsertedPos2_IN:=IO.TBL_POPIN05_AX2_INSERTED_POS2_IN,
+		Axis2_InsertPos2_OUT=>IO.TBL_POPIN05_AX2_INSERT_POS2_OUT );				
+		
+PopIn06(RepRate := RepetitionRate.AboveThreshold,
+		Retracted_Pos1_IN := IO.TBL_POPIN06_RETRACTED_POS1_IN,
+		Inserted_Pos2_IN := IO.TBL_POPIN06_INSERTED_POS2_IN,
+		Insert_Pos2_OUT => IO.TBL_POPIN06_INSERT_POS2_OUT);			
+
+//Pressure interlock
+Pressure(IN_1 := IO.HPI_VGCC01_PRESSILK_IN,  IN_2 := IO.HPI_IONP01_PRESSILK_IN);
+
+//Gun flow switches interlock		 
+GunFlowSwitches(IN_1 := IO.HPI_HPI01_FS1_IN,
+				IN_2 := IO.HPI_HPI01_FS2_IN,
+				IN_3 := IO.HPI_HPI01_FS3_IN,
+				IN_4 := IO.HPI_HPI01_FS4_IN,
+				//IN_5 := IO.HPI_HPI01_FS5_IN,
+				IN_6 := IO.HPI_HPI01_FS6_IN );
+
+// RF network, solenoid flow switches...		 
+RfNetwork01FlowSwitches(IN_1 := IO.HPI_RFNET01_FS1_IN);
+RfNetwork02FlowSwitches(IN_1 := IO.HPI_RFNET02_FS1_IN, IN_2 := IO.HPI_RFNET02_FS2_IN);// IN_3 := IO.HPI_RFNET02_FS3_IN);
+
+SolenoidFlow(IN_1 := IO.HPI_SOLN01_FS1_IN, IN_2 := IO.HPI_SOLN01_FS2_IN, IN_3 := IO.HPI_SOLN01_FS3_IN);
+
+SolenoidThermalSwitches(IN_1:=IO.HPI_SOLN01_TEMPILK1_IN, IN_2:=IO.HPI_SOLN01_TEMPILK2_IN, IN_3:=IO.HPI_SOLN01_TEMPILK3_IN);
+
+DipoleThermalSwitches(IN_1:=IO.DUMP_DIP01_TEMPILK1_IN);
+
+//HPI - Photon injector, TBL - Test beam line
+DipoleFlow();//IN_1 := Linac2FlowMeter05.FlowInterlock_OUT);		
+
+DipoleCurrent(InterlockActive_IN:=AutomaticModeEnabled, MeasurementValue_OUT => G_Epics.MagnetField.MeasurementValueSt);
+MagnetField(InterlockActive_IN:=AutomaticModeEnabled, MeasurementValue_OUT => G_Epics.MagnetField.MeasurementValueSt);
+
+FastGateValve(Closed:=IO.HPI_VALV01_CLOSED_IN, Open:=IO.HPI_VALV01_OPEN_IN);
+
+Linac1Flow(IN_1 := IO.LIN1_FS1_IN, IN_2 := IO.LIN1_FS2_IN); // IN_3 := IO.LIN1_FS3_IN, IN_4 := IO.LIN1_FS4_IN);
+
+Linac2FlowMeter01(FlowChannel_IN := IO.BUN1_IOLINK_CH06_IN);
+Linac2FlowMeter02(FlowChannel_IN := IO.BUN1_IOLINK_CH02_IN);
+Linac2FlowMeter03(FlowChannel_IN := IO.BUN1_IOLINK_CH03_IN);
+Linac2FlowMeter04(FlowChannel_IN := IO.BUN1_IOLINK_CH04_IN);
+Linac2FlowMeter05(FlowChannel_IN := IO.BUN1_IOLINK_CH05_IN);
+Linac2Flow(IN_1 := Linac2FlowMeter01.FlowInterlock_OUT, IN_2 := Linac2FlowMeter02.FlowInterlock_OUT);
+					  //IN_3 := Linac2FlowMeter03.FlowInterlock_OUT, IN_4 := Linac2FlowMeter04.FlowInterlock_OUT,
+					  //IN_5 := Linac2FlowMeter05.FlowInterlock_OUT);
+
+//======================== INTERLOCKS ======================		
+//StandbyInterlock := G_EPICS.PPSInput.EnableFB_IN;
+StandbyInterlock := G_EPICS.PPSInput.EnableFB_IN;
+HVInterlock := StandbyInterlock AND  Pressure.Interlock AND RfNetwork02FlowSwitches.Interlock AND
+			DipoleFlow.Interlock AND DipoleThermalSwitches.Interlock AND Linac1Flow.Interlock AND Linac2Flow.Interlock AND
+			G_EPICS.PPSInput.AllowFB_IN;
+RFInterlock := HVEnabled AND HVInterlock AND 
+			G_EPICS.PPSInput.RFPowerFB_IN;
+BeamInterlock := RFInterlock AND //FastGateValve.Interlock AND 
+			SolenoidFlow.Interlock AND SolenoidThermalSwitches.Interlock AND GunFlowSwitches.Interlock AND
+			RfNetwork01FlowSwitches.Interlock AND DipoleCurrent.Interlock AND MagnetField.Interlock;
+			//Prof01.Interlock AND Prof02.Interlock AND Prof03.Interlock AND Prof04.Interlock AND Prof05.Interlock AND Prof06.Interlock
+
+
+//Combining inputs for Shutter Interlock output
+IO.HPI_SHUTR01_OPEN_OUT := AutomaticModeEnabled AND BeamInterlock;
+IO.HPI_SHUTR02_OPEN_OUT := AutomaticModeEnabled AND BeamInterlock;
+
+//Combining inputs for solenoid and dipole interlock output
+IO.HPI_SOLN01_ENABLE_OUT := HVEnabled AND HVInterlock;
+IO.HPI_DIP01_ENABLE_OUT := HVEnabled AND HVInterlock;
+
+//Combining inputs for  Klystron interlock outputs
+IO.HPI_KLY01_STANDBY_OUT := StandbyInterlock;
+//IO.HPI_KLY01_STANDBY_OUT := StandbyEnabled AND StandbyInterlock;
+IO.HPI_KLY01_HVMODE_OUT := (AutomaticModeEnabled OR BeamRampDown) AND BeamInterlock;
+IO.HPI_KLY01_TRIGMODE_OUT := (AutomaticModeEnabled OR BeamRampDown)AND BeamInterlock;
+
+IO.HPI_KLY02_STANDBY_OUT := StandbyInterlock;
+//IO.HPI_KLY02_STANDBY_OUT := StandbyEnabled AND StandbyInterlock;
+IO.HPI_KLY02_HVMODE_OUT := (HVEnabled OR HVRampDown) AND HVInterlock;
+IO.HPI_KLY02_TRIGMODE_OUT := (ManualModeEnabled OR AutomaticModeEnabled OR BeamRampDown) AND RFInterlock;
+
+IF StandbyEnabled AND NOT StandbyInterlock THEN
+	IF NOT  G_EPICS.PPSInput.EnableFB_IN THEN
+		StateController.AddFault(E_MpsFault.StandbyPPSInterlock, E_MpsFaultSeverity.StandbyFault);
+	ELSE
+		StateController.AddFault(E_MpsFault.StandbyMPSInterlock, E_MpsFaultSeverity.StandbyFault);
+	END_IF
+END_IF
+
+IF HVEnabled AND NOT HVInterlock THEN
+	IF NOT  G_EPICS.PPSInput.AllowFB_IN THEN
+		StateController.AddFault(E_MpsFault.HVPPSInterlock, E_MpsFaultSeverity.HVFault);
+	ELSIF NOT Pressure.Interlock THEN
+		StateController.AddFault(E_MpsFault.HVPressureInterlock, E_MpsFaultSeverity.HVFault);
+	ELSIF NOT DipoleFlow.Interlock THEN
+		StateController.AddFault(E_MpsFault.HVDipoleFlowInterlock, E_MpsFaultSeverity.HVFault);
+	ELSIF NOT DipoleThermalSwitches.Interlock THEN
+		StateController.AddFault(E_MpsFault.HVDipoleThermalInterlock, E_MpsFaultSeverity.HVFault);
+	ELSIF NOT RfNetwork02FlowSwitches.Interlock THEN
+		StateController.AddFault(E_MpsFault.HVRFNetwork02FlowInterlock, E_MpsFaultSeverity.HVFault);
+	END_IF
+END_IF
+
+IF (ManualModeEnabled OR AutomaticModeEnabled) AND NOT RFInterlock THEN
+	IF NOT G_EPICS.PPSInput.RFPowerFB_IN THEN
+		StateController.AddFault(E_MpsFault.RFPPSInterlock, E_MpsFaultSeverity.RFFault);
+	ELSE
+		StateController.AddFault(E_MpsFault.RFMPSInterlock, E_MpsFaultSeverity.RFFault);
+	END_IF
+END_IF
+
+IF AutomaticModeEnabled AND NOT BeamInterlock THEN
+	IF NOT SolenoidFlow.Interlock THEN
+		StateController.AddFault(E_MpsFault.BeamSolenoidFlowInterlock, E_MpsFaultSeverity.BeamFault);
+	ELSIF NOT SolenoidThermalSwitches.Interlock THEN
+		StateController.AddFault(E_MpsFault.BeamSolenoidThermalInterock, E_MpsFaultSeverity.BeamFault);
+	ELSIF NOT GunFlowSwitches.Interlock THEN
+		StateController.AddFault(E_MpsFault.BeamGunFlowInterlock, E_MpsFaultSeverity.BeamFault);
+	ELSIF NOT RFNetwork01FlowSwitches.Interlock THEN
+		StateController.AddFault(E_MpsFault.BeamRFNetwork01FlowInterlock, E_MpsFaultSeverity.BeamFault);
+	ELSE
+		StateController.AddFault(E_MpsFault.BeamPopInInterlock, E_MpsFaultSeverity.BeamFault);
+	END_IF
+END_IF
+]]></ST>
+    </Implementation>
+    <LineIds Name="MpsLogicUpgrade">
+      <LineId Id="5434" Count="0" />
+      <LineId Id="5123" Count="164" />
+      <LineId Id="5289" Count="95" />
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

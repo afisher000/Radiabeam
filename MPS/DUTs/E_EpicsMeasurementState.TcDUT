@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="E_EpicsMeasurementState" Id="{d7318978-7860-4b6a-9b49-14a489c1eeaf}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+{attribute 'strict'}
+TYPE E_EpicsMeasurementState :
+(
+	Nan := 0,
+	isOkay := 1,
+	isInactive := 2,
+	isOutOfRange := 3,
+	hasTimeout := 4
+);
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

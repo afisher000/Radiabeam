@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<VarLinks>
+	<OwnerA Name="InputDst" Prefix="TIPC^MPS^MPS Instance" Type="1">
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 12 (EL3218-0000)">
+			<Link VarA="IO.TBL_RTD01_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 1^Value"/>
+			<Link VarA="IO.TBL_RTD02_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 2^Value"/>
+			<Link VarA="IO.TBL_RTD03_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 3^Value"/>
+			<Link VarA="IO.TBL_RTD04_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 4^Value"/>
+			<Link VarA="IO.TBL_RTD05_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 5^Value"/>
+			<Link VarA="IO.TBL_RTD06_TEMP" GrpA="PlcTask Inputs" TypeA="INT" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000006}" VarB="RTD Inputs Channel 6^Value"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 2 (EL1008)">
+			<Link VarA="IO.HPI_IONP01_PRESSILK_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.HPI_RFNET01_FS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Input" Size="1"/>
+			<Link VarA="IO.HPI_RFNET02_FS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Input" Size="1"/>
+			<Link VarA="IO.HPI_RFNET02_FS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Input" Size="1"/>
+			<Link VarA="IO.HPI_RFNET02_FS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Input" Size="1"/>
+			<Link VarA="IO.HPI_VALV01_CLOSED_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.HPI_VALV01_OPEN_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+			<Link VarA="IO.HPI_VGCC01_PRESSILK_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 3 (EL1008)">
+			<Link VarA="IO.HPI_HPI01_FS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.HPI_HPI01_FS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Input" Size="1"/>
+			<Link VarA="IO.HPI_HPI01_FS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Input" Size="1"/>
+			<Link VarA="IO.HPI_HPI01_FS4_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Input" Size="1"/>
+			<Link VarA="IO.HPI_HPI01_FS5_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_FS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_FS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_FS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 4 (EL1008)">
+			<Link VarA="IO.HPI_HPI01_FS6_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_TEMPILK1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_TEMPILK2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Input" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_TEMPILK3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Input" Size="1"/>
+			<Link VarA="IO.LIN1_FS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1"/>
+			<Link VarA="IO.LIN1_FS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+			<Link VarA="IO.LIN1_FS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.LIN1_FS4_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 5 (EL1008)">
+			<Link VarA="IO.DUMP_DIP01_TEMPILK1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN01_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN01_INSERTED_POS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN01_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN02_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN02_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN03_AX1_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 6 (EL1008)">
+			<Link VarA="IO.TBL_POPIN03_AX1_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN03_AX2_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN03_AX2_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN04_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN04_INSERTED_POS3_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN04_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN05_AX1_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN05_AX1_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 7 (EL1008)">
+			<Link VarA="IO.TBL_POPIN05_AX2_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN05_AX2_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN06_INSERTED_POS2_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Input" Size="1"/>
+			<Link VarA="IO.TBL_POPIN06_RETRACTED_POS1_IN" GrpA="PlcTask Inputs" TypeA="BOOL" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Input" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 4 (EtherCAT)^Box 14 (ifm IO-Link Master AL1332)">
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH01_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 1 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH02_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 2 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH03_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 3 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH04_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 4 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH05_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 5 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[0]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 0"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[1]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 1"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[2]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 2"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[3]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 3"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[4]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 4"/>
+			<Link VarA="IO.BUN1_IOLINK_CH06_IN[5]" GrpA="PlcTask Inputs" TypeA="BYTE" InOutA="0" GuidA="{18071995-0000-0000-0000-000000000001}" VarB="Module 6 (IOL_In_8Byte)^TxPDO^input byte 5"/>
+		</OwnerB>
+	</OwnerA>
+	<OwnerA Name="OutputSrc" Prefix="TIPC^MPS^MPS Instance" Type="2">
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 10 (EL2008)">
+			<Link VarA="IO.TBL_POPIN04_INSERT_POS3_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN05_AX1_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN05_AX2_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN06_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Output" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 8 (EL2008)">
+			<Link VarA="IO.BUN1_PULS01_INHIBIT_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Output" Size="1"/>
+			<Link VarA="IO.HPI_KLY01_HVMODE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Output" Size="1"/>
+			<Link VarA="IO.HPI_KLY01_TRIGMODE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Output" Size="1"/>
+			<Link VarA="IO.HPI_KLY02_HVMODE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Output" Size="1"/>
+			<Link VarA="IO.HPI_KLY02_STANDBY_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Output" Size="1"/>
+			<Link VarA="IO.HPI_KLY02_TRIGMODE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Output" Size="1"/>
+			<Link VarA="IO.HPI_SHUTR01_OPEN_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Output" Size="1"/>
+			<Link VarA="IO.HPI_SHUTR02_OPEN_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Output" Size="1"/>
+		</OwnerB>
+		<OwnerB Name="TIID^Device 1 (EtherCAT)^Term 1 (EK1200)^Term 9 (EL2008)">
+			<Link VarA="IO.HPI_DIP01_ENABLE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 2^Output" Size="1"/>
+			<Link VarA="IO.HPI_SOLN01_ENABLE_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 1^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN01_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 3^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN01_INSERT_POS3_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 4^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN02_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 5^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN03_AX1_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 6^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN03_AX2_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 7^Output" Size="1"/>
+			<Link VarA="IO.TBL_POPIN04_INSERT_POS2_OUT" GrpA="PlcTask Outputs" TypeA="BOOL" InOutA="1" GuidA="{18071995-0000-0000-0000-000000000030}" VarB="Channel 8^Output" Size="1"/>
+		</OwnerB>
+	</OwnerA>
+</VarLinks>

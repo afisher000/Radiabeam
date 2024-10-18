@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <GVL Name="CONSTANTS" Id="{74a91afc-c17a-48cf-bcf1-e7361085b2d2}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL CONSTANT
+	MINIMUM_LREAL : LREAL := -1.7976931348623157E+308;
+	MINIMUM_LREAL_THRESHOLD : LREAL := -1.7976931348623157E+300;
+	APPROXIMATE_ZERO : LREAL := 0.01;
+	MAX_NUMBER_OF_FAULTS : UINT := 10;
+	MAX_NUMBER_OF_WARNINGS : UINT := 10;
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>

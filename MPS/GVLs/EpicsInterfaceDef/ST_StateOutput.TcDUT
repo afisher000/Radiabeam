@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <DUT Name="ST_StateOutput" Id="{0d8e5433-8e71-4f82-824b-464195bc56e5}">
+    <Declaration><![CDATA[TYPE ST_StateOutput :
+STRUCT
+	StandbyEnabled_OUT : BOOL;
+	HVEnabled_OUT : BOOL;
+	BeamEnabled_OUT : BOOL;
+	ManualModeEnabled_OUT : BOOL;
+	AutomaticModeEnabled_OUT : BOOL;
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

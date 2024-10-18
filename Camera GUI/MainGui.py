@@ -22,7 +22,7 @@ mw_Ui, mw_Base = uic.loadUiType('window.ui')
 class MainWindow(mw_Base, mw_Ui):
 
     # Define constants
-    TESTING = False
+    TESTING = True
     IMAGE_H = 1024
     IMAGE_W = 1280
     HIST_MIN = 200
